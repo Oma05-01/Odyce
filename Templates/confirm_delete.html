@@ -1,0 +1,33 @@
+{% extends 'dashboard.html'%}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Delete</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+</head>
+
+
+<body>
+    <div class="container mt-5">
+        <h3>Are you sure you want to delete "{{ product.name }}"?</h3>
+        <p>This action cannot be undone.</p>
+
+        <form method="POST" action="{% url 'delete_product' product.id %}">
+            {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            {% if product.is_for_men%}
+                <a href="{% url 'product_list' %}" class="btn btn-secondary">Cancel</a>
+            {% else %}
+                <a href="{% url 'product_list' %}" class="btn btn-secondary">Cancel</a>
+            {% endif %}
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+{% endblock %}

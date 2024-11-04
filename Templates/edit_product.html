@@ -1,0 +1,38 @@
+{% extends 'dashboard.html' %}
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Edit Product </h2>
+    <form method="POST" action="{% url 'edit_product' product.id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <label for="name">Perfume Name:</label>
+        <input type="text" id="name" name="name" value="{{ product.name }}" required>
+
+        <label for="scent">Scent:</label>
+        <input type="text" id="scent" name="scent" value="{{ product.scent }}" required>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" rows="4" required>{{ product.description }}</textarea>
+
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" step="0.01" value="{{ product.price }}" required>
+
+        <label for="myfile">Upload Image in JPG format only:</label>
+        <input type="file" id="myfile" name="myfile" accept="image/*">
+
+        <button type="submit">Update Perfume</button>
+    </form>
+
+    <div id="message">
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+
+{% endblock %}

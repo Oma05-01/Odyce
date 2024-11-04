@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Odyce - Become a Distributor{% endblock %}
+
+{% block content %}
+<div class="supplier-container">
+    <header class="supplier-header">
+        <h1>Become a Distributor</h1>
+        <p>Join us as a distributor and contribute to our range of exquisite perfumes.</p>
+    </header>
+
+    <section class="supplier-info">
+        <h2>Who is a Distributor?</h2>
+        <p>[Your description here]</p>
+
+        <h3>Quantity of Units</h3>
+        <p>[Description of units available]</p>
+
+        <div class="supplier-button">
+            <a href="{% url 'become_distributor' %}" class="button">Become a Distributor</a>
+        </div>
+    </section>
+</div>
+
+<style>
+    .supplier-container {
+        padding: 50px;
+        background-color: #f0f0f0;
+        border-radius: 10px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    .supplier-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .supplier-header h1 {
+        font-size: 36px;
+        margin-bottom: 10px;
+    }
+    .supplier-header p {
+        font-size: 18px;
+        color: #555;
+    }
+    .supplier-info {
+        margin-top: 20px;
+    }
+    .supplier-info h2, h3 {
+        color: #333;
+    }
+    .supplier-button {
+        text-align: center;
+        margin-top: 30px;
+    }
+    .supplier-button .button {
+        background-color: #007bff;
+        padding: 15px 30px;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 18px;
+        display: inline-block;
+    }
+    .supplier-button .button:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "dashboard.html" %}
+{% block content %}
+<div class="pending-orders-container">
+    <h2>Confirmed Orders for {{ location }}</h2>
+
+    {% if orders %}
+        <ul>
+            {% for order in orders %}
+                <li class="order-item">
+                    <p><strong>Order ID:</strong> {{ order.name }} | {{ order.quantity }}</p>
+                    <p><strong>Date:</strong> {{ order.date_created }}</p>
+                    <p><strong>Total:</strong> ${{ order.total }}</p>
+                    <p><strong>Billing Name:</strong> {{ order.billing_name }}</p>
+                    <p><strong>Billing Address:</strong> {{ order.billing_address }}</p>
+                    <p><strong>Phone Number:</strong> {{ order.phone_number }}</p>
+                    <a href="{% url 'order_details' order.id %}" class="btn btn-confirm">View Details</a>
+                </li>
+
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No Confirmed orders for this location.</p>
+    {% endif %}
+</div>
+
+<style>
+    .pending-orders-container {
+        max-width: 700px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .pending-orders-container h2 {
+        color: #333;
+        text-align: center;
+        font-size: 1.5em;
+        margin-bottom: 20px;
+    }
+    ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    .order-item {
+        background-color: #f9f9f9;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        border-left: 5px solid #ffd966;
+    }
+    .order-item p {
+        margin: 5px 0;
+        color: #333;
+    }
+</style>
+{% endblock %}

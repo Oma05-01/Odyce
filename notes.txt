@@ -1,0 +1,6 @@
+add side bar to the home page -- yunno why
+create a side bar that shows, profile, faq, logout, contact us,
+
+check the users_activity view kini
+
+set the conditions for the views and the templates

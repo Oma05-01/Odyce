@@ -1,0 +1,724 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %} <title> Odyces | Home </title> {% endblock %}
+    <style>
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            padding-top: 100px; /* Adjust based on the height of your header */
+            min-height: 100vh; /* Ensures the footer is always visible */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            background-color: #111;
+            padding: 20px;
+            color: #fff;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Welcome message aligned to the left */
+        .welcome {
+            font-size: 1.2em;
+            color: #fff;
+        }
+
+        /* Odyce aligned to the center */
+        h1 {
+            font-size: 2.5em;
+            letter-spacing: 3px;
+            font-weight: bold;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .odyce-home-link h1 {
+                color: #f2f2f2;
+                font-size: 28px;
+                font-weight: bold;
+                transition: color 0.3s;
+            }
+            .odyce-home-link h1:hover {
+                color: #ffd700;
+            }
+            nav a {
+                color: #ddd;
+                margin: 0 10px;
+                font-weight: 500;
+                transition: color 0.3s;
+            }
+            nav a:hover {
+                color: #ffd700;
+            }
+            .logout-btn {
+                color: #ff4d4d;
+                font-weight: bold;
+                text-transform: uppercase;
+                transition: color 0.3s;
+            }
+            .logout-btn:hover {
+                color: #ffcccc;
+            }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        nav a {
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-size: 1.2em;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #ff9e80;
+        }
+
+        /* Section */
+        .hero {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('perfume-banner.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding-top: 100px;
+        }
+
+        .hero h2 {
+            font-size: 4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+        }
+
+        .hero p {
+            font-size: 1.5em;
+            margin-bottom: 40px;
+        }
+
+        .hero a {
+            padding: 15px 30px;
+            background-color: #ff9e80;
+            color: #111;
+            font-size: 1.2em;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .hero a:hover {
+            background-color: #ff7043;
+        }
+
+        /* Product Section */
+        .products {
+            background-color: #fff;
+            padding: 50px 20px;
+            text-align: center;
+            margin-top: -50px;
+        }
+
+        .products h2 {
+            font-size: 2.8em;
+            margin-bottom: 50px;
+            color: #333;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-gap: 30px;
+        }
+
+        .product {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.4s ease, box-shadow 0.3s ease;
+        }
+
+        .product img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.4s ease;
+        }
+
+        .product h3 {
+            font-size: 1.8em;
+            margin: 15px 0;
+        }
+
+        .product p {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .product button {
+            padding: 10px 25px;
+            background-color: #ff9e80;
+            border: none;
+            color: #111;
+            font-size: 1.2em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .product button:hover {
+            background-color: #ff7043;
+        }
+
+        .product:hover {
+            transform: translateY(-10px);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .product:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #111;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            font-size: 1em;
+            margin-top: auto; /* Pushes the footer to the bottom */
+        }
+
+        footer a {
+            color: #ff9e80;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        footer a:hover {
+            color: #ff7043;
+        }
+
+
+        * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Poppins', sans-serif;
+                background-color: #f4f4f4;
+                color: #333;
+            }
+
+
+
+            /* Odyce Logo */
+            header .left-section {
+                font-family: 'Metropolis', sans-serif;
+                font-size: 2em;
+                font-weight: bold;
+                color: #fff;
+                text-transform: uppercase;
+            }
+
+            header .right-section a {
+                color: #fff;
+                padding: 10px 20px;
+                text-decoration: none;
+                font-size: 1.2em;
+                margin: 0 10px;
+                transition: color 0.3s ease;
+            }
+
+            header .right-section a:hover {
+                color: #ff9e80;
+            }
+
+            /* Split Sections */
+            .split-container {
+                display: flex;
+                height: 100vh;
+            }
+
+            /* Men's Section */
+            .men-section {
+                background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('men-perfume-bg.jpg');
+                background-size: cover;
+                background-position: center;
+                width: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: #fff;
+                position: relative;
+                flex-direction: column;
+            }
+
+            .men-section h2, .women-section h2 {
+                font-size: 3em;
+                letter-spacing: 2px;
+            }
+
+            .men-section p, .women-section p {
+                font-size: 1.4em;
+                margin-top: 10px;
+                margin-bottom: 30px;
+            }
+
+            .men-section a, .women-section a {
+                padding: 15px 30px;
+                background-color: #00796b;
+                color: #fff;
+                text-decoration: none;
+                border-radius: 5px;
+                font-size: 1.2em;
+                transition: background-color 0.3s ease;
+            }
+
+            .men-section a:hover {
+                background-color: #004d40;
+            }
+
+            /* Women's Section */
+            .women-section {
+                background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('women-perfume-bg.jpg');
+                background-size: cover;
+                background-position: center;
+                width: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: #333;
+                position: relative;
+                flex-direction: column;
+            }
+
+            .women-section a:hover {
+                background-color: #ec407a;
+            }
+
+            /* Carousel Styling */
+.carousel {
+    position: relative;
+    width: 80%;
+    height: 390px;
+    overflow: hidden;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+}
+
+.carousel-inner {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    background-color: transparent;
+
+}
+
+.carousel-item {
+    min-width: 100%;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 8px;
+    padding: 10px;
+    position: relative;
+    background-color: transparent;
+    border: none; /* Ensure no border */
+}
+
+.carousel-item img {
+    width: 200px;
+    height: 250px;
+    object-fit: cover;
+    border: none; /* Remove any default image border */
+    box-shadow: none; /* Remove any shadow if applied */
+    outline: none;
+}
+
+
+.buy-now {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #ff9e80;
+    color: #fff;
+    font-size: 1em;
+    border: none; /* Remove any default button border */
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    cursor: pointer; /* Add a pointer for better UX */
+    outline: none;
+}
+
+.buy-now:hover {
+    background-color: #d65b4b;
+}
+@media (max-width: 768px) {
+    .carousel {
+        width: 100%;
+        max-width: none;
+    }
+    .carousel-item img {
+        width: 150px;
+        height: 200px;
+    }
+    .buy-now {
+        font-size: 0.9em;
+    }
+}
+
+            /* Carousel Navigation */
+            .carousel-nav {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                padding: 0 10px;
+            }
+
+            .carousel-nav button {
+                background-color: rgba(0, 0, 0, 0.5);
+                color: #fff;
+                border: none;
+                padding: 10px;
+                cursor: pointer;
+                border-radius: 50%;
+            }
+
+            .carousel-nav button:hover {
+                background-color: rgba(0, 0, 0, 0.8);
+            }
+        </style>
+    <style>
+
+    .article-container {
+        padding: 40px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .articles {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .article-item {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: transform 0.3s;
+    }
+
+    .article-item {
+        flex: 1 1 30%; /* Adjusts width of each article */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 16px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+
+    .article-item:hover {
+        transform: scale(1.05);
+    }
+
+    .article-item h2 {
+        font-size: 24px;
+        color: #007bff;
+    }
+
+    .article-item .article-date {
+        font-size: 14px;
+        color: #6c757d;
+    }
+
+    .article-summary {
+        margin-top: 10px;
+        font-size: 16px;
+        color: #333;
+    }
+
+    .read-more {
+        display: inline-block;
+        margin-top: 15px;
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .read-more:hover {
+        text-decoration: underline;
+    }
+
+    /* Responsive behavior for small screens */
+    @media (max-width: 768px) {
+        .article-item {
+            flex: 1 1 100%; /* Full width on smaller screens */
+        }
+    }
+</style>
+    <style>
+      /* Sidebar Styling */
+        .sidebar {
+            width: 80px;
+            background-color: #343a40;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            padding-top: 20px;
+            transition: width 0.3s ease, background-color 0.3s ease;
+            overflow: hidden;
+            box-shadow: 4px 0 8px rgba(0, 0, 0, 0.2);
+            z-index: 9;
+        }
+        .sidebar.expanded {
+            width: 240px;
+            background-color: #212529;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            margin: 10px 0;
+        }
+        .sidebar ul li a {
+            color: #dee2e6;
+            text-decoration: none;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            border-radius: 4px;
+        }
+        .sidebar ul li a:hover {
+            background-color: #495057;
+            color: #adb5bd;
+        }
+        .sidebar ul li a .icon {
+            width: 30px;
+            text-align: center;
+        }
+        .sidebar ul li a .label {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .sidebar.expanded ul li a .label {
+            opacity: 1;
+        }
+
+        /* Toggle Button */
+        .toggle-btn {
+            background-color: #adb5bd;
+            color: #212529;
+            border: none;
+            cursor: pointer;
+            padding: 8px 10px;
+            position: fixed;
+            top: 120px; /* Places button below header */
+            left: 90px;
+            font-size: 18px;
+            border-radius: 4px;
+            transition: left 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .sidebar.expanded + .toggle-btn {
+            left: 260px;
+        }
+
+        /* Content Styling */
+        .content {
+            margin-left: 100px;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+        .sidebar.expanded ~ .content {
+            margin-left: 260px;
+        }
+</style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="welcome">Welcome, User</div>
+        <a href="{% url 'home' %}" class="odyce-home-link"><h1>ODYCE</h1></a>
+        <nav>
+            <a href="#">Shop</a>
+            <a href="#">Fragrances</a>
+            <a href="{% url 'view_wishlist' %}">Wishlist</a>
+        </nav>
+    </header>
+
+    <!-- Sidebar Section -->
+        <div class="sidebar" id="sidebar">
+        <ul>
+            <li><a href="{% url 'user_activity' %}"><span class="icon">📊</span> <span class="label">User Activity</span></a></li>
+            <li><a href="{% url 'view_users' %}"><span class="icon">👤</span> <span class="label">View Users</span></a></li>
+            <li><a href="{% url 'reviews' %}"><span class="icon">...</span> <span class="label">Reviews</span></a></li>
+            <li><a href="{% url 'contact_us_messages' %}"><span class="icon">📊</span> <span class="label">Contact_Us-Messages</span></a></li>
+        </ul>
+    </div>
+    <button class="toggle-btn" id="toggle-btn">☰</button>
+
+    <!-- Main content -->
+    <div class="content" id="content">
+        <div class="split-container">
+            <!-- Men's Section -->
+            <div class="men-section">
+                <h2>For Him</h2>
+                <p>Bold, fresh, and powerful scents that define masculinity.</p>
+                <a href="#">Explore Men's Perfumes</a>
+                <!-- Men's Carousel -->
+                <div class="carousel" id="men-carousel">
+                    <div class="carousel-inner">
+                        {% for product in men_perfumes %}
+                        <div class="carousel-item">
+                            <a href="{% url 'product_detail' product.id %}">
+                                <img src="{{ product.picurl.url }}" alt="{{ product.name }}">
+                            </a>
+                            <a href="{% url 'buy_now' product.id %}">
+                                <button class="buy-now">Buys Now</button>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="carousel-nav">
+                        <button onclick="prevSlide('men-carousel')">&lt;</button>
+                        <button onclick="nextSlide('men-carousel')">&gt;</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Women's Section -->
+            <div class="women-section">
+                <h2>For Her</h2>
+                <p>Elegant, soft, and floral perfumes that inspire femininity.</p>
+                <a href="#">Explore Women's Perfumes</a>
+                <!-- Women's Carousel -->
+                <div class="carousel" id="women-carousel">
+                    <div class="carousel-inner">
+                        {% for product in women_perfumes %}
+                        <div class="carousel-item">
+                            <a href="{% url 'product_detail' product.id %}">
+                                <img src="{{ product.picurl.url }}" alt="{{ product.name }}">
+                            </a>
+                            <a href="{% url 'buy_now' product.id %}">
+                                <button class="buy-now">Buy Now</button>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="carousel-nav">
+                        <button onclick="prevSlide('women-carousel')">&lt;</button>
+                        <button onclick="nextSlide('women-carousel')">&gt;</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="article-container">
+            <div class="articles">
+                <!-- Example articles -->
+                <article class="article-item">
+                    <h2>Article Title 1</h2>
+                    <p class="article-date">Published on: <span>October 23, 2024</span></p>
+                    <p class="article-summary">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+                    <a href="#" class="read-more">Read More</a>
+                </article>
+                <article class="article-item">
+                    <h2>Article Title 2</h2>
+                    <p class="article-date">Published on: <span>October 23, 2024</span></p>
+                    <p class="article-summary">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+                    <a href="#" class="read-more">Read More</a>
+                </article>
+                <article class="article-item">
+                    <h2>Article Title 3</h2>
+                    <p class="article-date">Published on: <span>October 23, 2024</span></p>
+                    <p class="article-summary">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+                    <a href="#" class="read-more">Read More</a>
+                </article>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Odyce Store | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </footer>
+
+    <!-- JavaScript for Carousel and Sidebar Toggle -->
+      <script>
+        let slideIndex = { 'men-carousel': 0, 'women-carousel': 0 };
+
+        function nextSlide(carouselId) {
+            let carousel = document.getElementById(carouselId);
+            let inner = carousel.querySelector('.carousel-inner');
+            let items = carousel.querySelectorAll('.carousel-item');
+            slideIndex[carouselId] = (slideIndex[carouselId] + 1) % items.length;
+            inner.style.transform = 'translateX(' + (-slideIndex[carouselId] * 100) + '%)';
+        }
+
+        function prevSlide(carouselId) {
+            let carousel = document.getElementById(carouselId);
+            let inner = carousel.querySelector('.carousel-inner');
+            let items = carousel.querySelectorAll('.carousel-item');
+            slideIndex[carouselId] = (slideIndex[carouselId] - 1 + items.length) % items.length;
+            inner.style.transform = 'translateX(' + (-slideIndex[carouselId] * 100) + '%)';
+        }
+    </script>
+    <script>
+    const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('toggle-btn');
+
+        // Toggle Sidebar
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('expanded');
+        });
+</script>
+</body>
+
+</html>

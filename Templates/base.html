@@ -1,0 +1,223 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %} <title> Odyce </title> {% endblock %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            padding-top: 100px; /* Adjust based on the height of your header */
+            min-height: 100vh; /* Ensures the footer is always visible */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            background-color: #111;
+            padding: 20px;
+            color: #fff;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            letter-spacing: 3px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        nav a {
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-size: 1.2em;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #ff9e80;
+        }
+
+        /* Hero Section */
+        .hero {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('perfume-banner.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding-top: 100px;
+        }
+
+        .hero h2 {
+            font-size: 4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+        }
+
+        .hero p {
+            font-size: 1.5em;
+            margin-bottom: 40px;
+        }
+
+        .hero a {
+            padding: 15px 30px;
+            background-color: #ff9e80;
+            color: #111;
+            font-size: 1.2em;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .hero a:hover {
+            background-color: #ff7043;
+        }
+
+        /* Product Section */
+        .products {
+            background-color: #fff;
+            padding: 50px 20px;
+            text-align: center;
+            margin-top: -50px;
+        }
+
+        .products h2 {
+            font-size: 2.8em;
+            margin-bottom: 50px;
+            color: #333;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-gap: 30px;
+        }
+
+        .product {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.4s ease, box-shadow 0.3s ease;
+        }
+
+        .product img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.4s ease;
+        }
+
+        .product h3 {
+            font-size: 1.8em;
+            margin: 15px 0;
+        }
+
+        .product p {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .product button {
+            padding: 10px 25px;
+            background-color: #ff9e80;
+            border: none;
+            color: #111;
+            font-size: 1.2em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .product button:hover {
+            background-color: #ff7043;
+        }
+
+        .product:hover {
+            transform: translateY(-10px);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .product:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #111;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            font-size: 1em;
+            margin-top: auto; /* Pushes the footer to the bottom */
+        }
+
+        footer a {
+            color: #ff9e80;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        footer a:hover {
+            color: #ff7043;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>ODYCE</h1>
+        <nav>
+            <a href="#">Shop</a>
+            <a href="#">Fragrances</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+
+    <!-- Block for content -->
+    <div>
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Odyce Store | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </footer>
+
+</body>
+</html>

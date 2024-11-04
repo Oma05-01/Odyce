@@ -1,0 +1,35 @@
+{% extends 'dashboard.html' %}
+{% block title %}Articles{% endblock %}
+
+{% block content %}
+<div class="all-posts-container">
+    <h1>All Articles</h1>
+    <section class="all-articles">
+        <!-- Add loop here to display all posts from database -->
+        {% for post in posts %}
+        <article class="article-item">
+            <h2>{{ post.title }}</h2>
+            <p class="article-date">Published on: <span>{{ post.publish_date }}</span></p>
+            <p class="article-summary">{{ post.summary }}</p>
+            <a href="{% url 'article_details' post.id %}" class="read-more">Read More</a>
+        </article>
+        {% endfor %}
+    </section>
+</div>
+
+<style>
+    .all-posts-container {
+        padding: 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .all-articles {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    /* Same styling as in the homepage articles section */
+</style>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "dashboard.html" %}
+{% block content %}
+    <h1>Order Details</h1>
+
+    <div class="order-container">
+        <p><strong>Order ID:</strong> {{ order.id }}</p>
+        <p><strong>Date Created:</strong> {{ order.date_created }}</p>
+        <p><strong>Billing Name:</strong> {{ order.billing_name }}</p>
+        <p><strong>Billing Address:</strong> {{ order.billing_address }}</p>
+        <p><strong>Status:</strong> <span class="status {{ order.status }}">{{ order.status|title }}</span></p>
+        <p><strong>Total:</strong> ${{ order.total }}</p>
+
+        {% if order.receipt %}
+            <p><strong>Receipt:</strong> <a href="{{ order.receipt.url }}" class="receipt-link">View Receipt</a></p>
+        {% else %}
+            <p>No receipt uploaded.</p>
+        {% endif %}
+
+        {% if request.user.is_staff and order.status == 'pending' %}
+            <form method="POST" action="{% url 'confirm_order' order.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-confirm">Confirm Payment</button>
+            </form>
+        {% endif %}
+    </div>
+
+    <style>
+        .order-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        .status {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .status.pending { background-color: #ffd966; color: #555; }
+        .status.confirmed { background-color: #4CAF50; color: white; }
+        .btn-confirm {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .btn-confirm:hover {
+            background-color: #45a049;
+        }
+        .receipt-link {
+            color: #4CAF50;
+            text-decoration: underline;
+        }
+    </style>
+{% endblock %}

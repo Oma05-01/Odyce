@@ -1,0 +1,17 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+form {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+}
+
+form label, form input, form button {
+    width: 100%;
+    margin: 10px 0;
+    padding: 8px;
+}

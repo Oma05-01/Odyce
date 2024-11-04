@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}Women's Perfumes{% endblock %}
+
+{% block content %}
+<div class="perfume-container">
+    <h1>Women's Perfumes</h1>
+    <section class="perfume-list">
+        <!-- Loop through all women's perfumes from the context (backend will provide this) -->
+        {% for perfume in womens_perfumes %}
+        <article class="perfume-item">
+            <img src="{{ perfume.image_url }}" alt="{{ perfume.name }}" class="perfume-image"/>
+            <h2>{{ perfume.name }}</h2>
+            <p class="perfume-brand">{{ perfume.brand }}</p>
+            <p class="perfume-price">{{ perfume.price }}</p>
+            <a href="{% url 'perfume_detail' perfume.id %}" class="view-details">View Details</a>
+        </article>
+        {% endfor %}
+    </section>
+</div>
+
+<style>
+    .perfume-container {
+        padding: 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        font-size: 32px;
+        color: #e83e8c;
+        font-family: 'Playfair Display', serif;
+        border-bottom: 3px solid #e83e8c;
+        padding-bottom: 10px;
+    }
+
+    .perfume-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 25px;
+    }
+
+    .perfume-item {
+        background-color: #f9f9f9;
+        padding: 25px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .perfume-item:hover {
+        transform: translateY(-5px);
+    }
+
+    .perfume-item h2 {
+        font-size: 22px;
+        color: #333;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .perfume-item .perfume-brand {
+        font-size: 16px;
+        color: #6c757d;
+        margin: 10px 0;
+    }
+
+    .perfume-item .perfume-price {
+        margin-top: 10px;
+        font-size: 20px;
+        color: #e83e8c;
+        font-weight: bold;
+    }
+
+    .view-details {
+        display: inline-block;
+        margin-top: 20px;
+        color: #e83e8c;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .view-details:hover {
+        text-decoration: underline;
+    }
+
+    .perfume-image {
+        width: 100%;
+        height: auto;
+        border-radius: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %}

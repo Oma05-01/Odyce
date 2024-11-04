@@ -1,0 +1,93 @@
+<!-- displays all the reviews that users have given  -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Odyce - Customer Reviews {% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .reviews-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .reviews-container h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .review-item {
+            margin-bottom: 40px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+        }
+
+        .review-item:last-child {
+            border-bottom: none;
+        }
+
+        .product-info {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .review-user {
+            font-size: 1em;
+            color: #00796b;
+            margin-bottom: 10px;
+        }
+
+        .review-rating {
+            color: #f9a825;
+            font-size: 1.2em;
+        }
+
+        .review-comment {
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="reviews-container">
+    <h1>Customer Reviews</h1>
+
+    {% for review in reviews %}
+    <div class="review-item">
+        <div class="product-info">
+            Reviewing: <strong>{{ review.product.name }}</strong> &mdash; ${{ review.product.price }}
+        </div>
+        <div class="review-user">
+            By: {{ review.user.username }} on {{ review.created_at|date:"F j, Y" }}
+        </div>
+        <div class="review-rating">
+            Rating: {{ review.rating }} out of 5
+        </div>
+        <div class="review-comment">
+            "{{ review.comment }}"
+        </div>
+    </div>
+    {% empty %}
+        <p>No reviews have been posted yet.</p>
+    {% endfor %}
+</div>
+
+</body>
+</html>
+{% endblock %}

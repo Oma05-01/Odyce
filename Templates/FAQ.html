@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Odyce - FAQ {% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .faq-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .faq-container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+        }
+
+        .faq-item h3 {
+            font-size: 1.6em;
+            color: #00796b;
+            cursor: pointer;
+        }
+
+        .faq-item p {
+            display: none;
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+
+        .faq-item.active p {
+            display: block;
+        }
+
+        /* Accordion styling */
+        .faq-item h3:after {
+            content: '+';
+            float: right;
+        }
+
+        .faq-item.active h3:after {
+            content: '-';
+        }
+
+        /* Link styling */
+        a {
+            color: #00796b;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #004d40;
+        }
+    </style>
+</head>
+<body>
+
+<div class="faq-container">
+    <h1>Frequently Asked Questions</h1>
+
+    <div class="faq-item">
+        <h3>What is Odyce Perfume?</h3>
+        <p>Odyce is a luxury perfume brand offering a wide range of scents for both men and women, carefully curated to suit different personalities and preferences.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>How can I order a product?</h3>
+        <p>You can browse our collection on the homepage or use the navigation bar to explore the categories. Once you've selected a product, click on "Buy Now" and follow the checkout process.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>What is your return policy?</h3>
+        <p>If you're not satisfied with your purchase, you may return the product within 30 days for a full refund, provided the product is unopened and in its original condition.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>Do you offer international shipping?</h3>
+        <p>Yes, we offer international shipping to selected countries. Shipping fees may vary based on location.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>How do I track my order?</h3>
+        <p>Once your order is shipped, you will receive a tracking number via email. You can use this number to track your package on our website or the shipping provider’s website.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>Can I modify my order after placing it?</h3>
+        <p>Orders can only be modified within 24 hours of placement. After that, we process your order, and changes are no longer possible.</p>
+    </div>
+</div>
+
+<script>
+    const faqItems = document.querySelectorAll('.faq-item h3');
+
+    faqItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const parent = item.parentNode;
+            parent.classList.toggle('active');
+        });
+    });
+</script>
+</body>
+</html>
+{% endblock %}

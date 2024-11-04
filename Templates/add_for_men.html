@@ -1,0 +1,112 @@
+{% extends "dashboard.html" %}
+{% load static %}
+
+{% block title %}Add Product for Men{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'styles/form_styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 600px; /* Adjust max width of the form */
+            margin: 50px auto; /* Center the form */
+            padding: 20px; /* Add padding */
+            background-color: #ffffff; /* White background */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
+            border-radius: 8px; /* Rounded corners */
+        }
+
+        h2 {
+            text-align: center; /* Center align title */
+            color: #333; /* Darker text color */
+            margin-bottom: 20px; /* Space below title */
+        }
+
+        form {
+            display: flex; /* Flexbox for better layout */
+            flex-direction: column; /* Stack elements vertically */
+            gap: 15px; /* Space between elements */
+        }
+
+        label {
+            font-weight: bold; /* Bold labels */
+            color: #555; /* Dark gray color for labels */
+        }
+
+        input[type="text"],
+        input[type="file"],
+        input[type="number"],
+        textarea {
+            padding: 10px; /* Inner padding */
+            font-size: 16px; /* Font size */
+            border: 1px solid #ccc; /* Light border */
+            border-radius: 5px; /* Rounded corners for inputs */
+            width: 100%; /* Full width */
+            box-sizing: border-box; /* Include padding in width */
+            resize: vertical; /* Allow vertical resizing */
+        }
+
+        textarea {
+            min-height: 100px; /* Minimum height for the textarea */
+            max-height: 300px; /* Maximum height for the textarea */
+            overflow: auto; /* Show scrollbar if needed */
+        }
+
+        button[type="submit"] {
+            padding: 10px; /* Inner padding */
+            font-size: 16px; /* Font size */
+            color: #fff; /* White text */
+            background-color: #333; /* Dark background */
+            border: none; /* Remove default border */
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+
+        button[type="submit"]:hover {
+            background-color: #555; /* Darker on hover */
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>Add Product for Men</h2>
+        <form method="POST" action="{% url 'add_for_men' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <label for="name">Perfume Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="scent">Scent:</label>
+            <input type="text" id="scent" name="scent" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" rows="4" required></textarea>
+
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" step="0.01" required>
+
+            <label for="myfile">Upload Image in JPG format only:</label>
+            <input type="file" id="myfile" name="myfile" accept="image/*" required>
+
+            <button type="submit">Add Perfume</button>
+        </form>
+
+        <!-- Placeholder for messages (success or error) -->
+        <div id="message">
+            {% if messages %}
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

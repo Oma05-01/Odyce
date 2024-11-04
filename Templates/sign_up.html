@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Odyce</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f3f3f3;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('perfume-background.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .signup-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        .signup-container h2 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .signup-container input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1.1em;
+            outline: none;
+        }
+
+        .signup-container button {
+            width: 100%;
+            padding: 15px;
+            background-color: #ff9e80;
+            border: none;
+            color: #fff;
+            font-size: 1.2em;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .signup-container button:hover {
+            background-color: #ff7043;
+        }
+
+        .signup-container p {
+            font-size: 1em;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        .signup-container a {
+            color: #ff9e80;
+            text-decoration: none;
+        }
+
+        .signup-container a:hover {
+            color: #ff7043;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            font-size: 1em;
+        }
+        .success-message {
+            color: green;
+            margin-top: 10px;
+            font-size: 1em;
+        }
+
+        /* Popup Styles */
+        .popup {
+            display: none;
+            position: absolute;
+            top: 10%;
+            right: 0;
+            left: 0;
+            margin: auto;
+            background-color: rgba(0, 0, 0, 0.85); /* Darker background */
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 1000;
+            max-width: 350px;
+            font-size: 1.1em;
+        }
+
+        /* Popup button styling */
+        .popup button {
+            background-color: #ff7043;
+            color: #fff;
+            border: none;
+            font-size: 1em;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .popup button:hover {
+            background-color: #ff9e80;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="signup-container">
+        <h2>Join Odyce</h2>
+        <form id="signup-form" action="{% url 'register' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="text" id="firstname" name="firstname" placeholder="First Name" required>
+            <input type="text" id="lastname" name="lastname" placeholder="Last Name" required>
+            <input type="email" id="email"  name="email" placeholder="Email Address" required>
+            <input type="number" id="phone_number" name="phone_number" placeholder="Phone Number" required>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
+            <button type="submit">Sign Up</button>
+        </form>
+        <p>Already have an account? <a href="{% url 'login' %}">Log in here</a></p>
+    </div>
+
+    <div id="popup" class="popup">
+        <span id="popup-message"></span>
+        <button onclick="closePopup()">Close</button>
+    </div>
+
+<script>
+        // Function to display the popup with the message
+        function showPopup(message) {
+            const popup = document.getElementById('popup');
+            const popupMessage = document.getElementById('popup-message');
+            popupMessage.innerText = message;
+            popup.style.display = 'block';
+        }
+
+        // Function to close the popup
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        // AJAX form submission with popup for error messages
+        document.getElementById('signup-form').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent form from submitting normally
+
+            let formData = new FormData(this);
+
+            fetch("{% url 'register' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'error') {
+                    showPopup(data.msg);  // Show error message in popup
+                } else if (data.status === 'success') {
+                    showPopup(data.msg);  // Show success message in popup
+                    setTimeout(() => {
+                        window.location.href = "{% url 'login' %}";  // Redirect to login after showing success
+                    }, 2000);  // Delay redirection for user to read success message
+                }
+            })
+        });
+    </script>
+</body>
+</html>

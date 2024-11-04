@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Odyce - Confirm Payment {% endblock %}
+
+{% block content %}
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .header {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+        .order-details, .instructions, .form-group {
+            margin-bottom: 20px;
+        }
+        .order-details {
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .instructions {
+            background-color: #f1f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        .form-group input[type="file"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .button {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        @media (max-width: 600px) {
+            .header {
+                font-size: 1.5em;
+            }
+            .container {
+                padding: 20px;
+            }
+            .button {
+                padding: 15px;
+                font-size: 1.1em;
+            }
+        }
+    </style>
+<br><br><br><br><br>
+<div class="container">
+    <div class="header">Confirm Your Payment</div>
+
+    <!-- Order Details Section -->
+    <div class="order-details">
+        <h2>Order Details</h2>
+        <p><strong>Order ID:</strong> {{ order.id }}</p>
+        <p><strong>Order Date:</strong> {{ order.date_created }}</p>
+        <p><strong>Total Price:</strong> ${{ order.total }}</p>
+    </div>
+
+    <!-- Payment Instructions Section -->
+    <div class="instructions">
+        <h3>Payment Instructions</h3>
+        <p>Please pay <strong>${{ order.total }}</strong> to the following account:</p>
+        <p><strong>Bank Name:</strong> {{ bank_name }}</p>
+        <p><strong>Account Number:</strong> {{ account_number }}</p>
+        <p>Once you've made the payment, upload your payment receipt below to confirm.</p>
+    </div>
+
+    <!-- Upload Receipt Form -->
+    <form action="{% url 'confirm_payment' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="receipt">Upload Payment Receipt</label>
+            <input type="file" id="receipt" name="receipt" required>
+        </div>
+        <button type="submit" class="button">Confirm Payment</button>
+    </form>
+</div>
+{% endblock %}

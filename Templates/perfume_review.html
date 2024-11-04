@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}Odyce - Product Reviews{% endblock %}
+
+{% block content %}
+<div class="container">
+    <header class="review-header">
+        <h1>Product Reviews</h1>
+        <p>Read what our customers are saying about our products.</p>
+    </header>
+
+    <section class="reviews">
+        <!-- Example Review -->
+        <div class="review-item">
+            <h2>Product Name</h2>
+            <p class="review-author">By <strong>Username</strong> on <span>Date</span></p>
+            <p class="review-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+        </div>
+        <!-- Repeat for more reviews -->
+    </section>
+</div>
+{% endblock %}
+
+
+

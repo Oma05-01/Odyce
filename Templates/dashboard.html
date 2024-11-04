@@ -1,0 +1,261 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f2f5;
+        color: #333;
+    }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    /* Sidebar styling */
+    .sidebar {
+        width: 240px;
+        background-color: #212529;
+        color: white;
+        height: 100vh;
+        position: fixed;
+        padding-top: 20px;
+        transition: width 0.3s ease, background-color 0.3s ease;
+        overflow: hidden;
+        box-shadow: 4px 0 8px rgba(0, 0, 0, 0.2);
+    }
+    .sidebar.collapsed {
+        width: 80px;
+        background-color: #343a40; /* Slightly darker for collapsed state */
+    }
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+    }
+    .sidebar ul li {
+        margin: 10px 0;
+        position: relative;
+        transition: background 0.3s ease;
+    }
+    .sidebar ul li a {
+        color: #dee2e6;
+        text-decoration: none;
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+        border-radius: 4px; /* Rounded corners */
+    }
+    .sidebar ul li a:hover {
+        background-color: #495057;
+        color: #adb5bd;
+        transition: color 0.3s ease;
+    }
+    .sidebar ul li a .icon {
+        width: 30px;
+        text-align: center;
+    }
+    .sidebar ul li a .label {
+        transition: opacity 0.3s ease;
+    }
+    .sidebar.collapsed ul li a .label {
+        opacity: 0;
+    }
+
+    /* Nested list styling */
+    .nested {
+        display: none;
+        padding-left: 20px;
+    }
+    .nested li a {
+        padding-left: 10px;
+        font-size: 0.9em;
+        color: #adb5bd; /* Subtle color for nested links */
+    }
+    .nested li a:hover {
+        color: #ffffff; /* Change color on hover */
+    }
+    .sidebar.collapsed .nested li a {
+        padding-left: 30px;
+    }
+
+    /* Toggle button */
+    .toggle-btn {
+        background-color: #adb5bd;
+        color: #212529;
+        border: none;
+        cursor: pointer;
+        padding: 8px 10px;
+        text-align: center;
+        position: fixed;
+        top: 10px;
+        left: 260px;
+        font-size: 18px;
+        border-radius: 4px;
+        transition: left 0.3s ease;
+        z-index: 1000;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for the button */
+    }
+    .sidebar.collapsed + .toggle-btn {
+        left: 90px;
+    }
+
+    /* Content styling */
+    .content {
+        margin-left: 260px;
+        padding: 20px;
+        transition: margin-left 0.3s ease;
+    }
+    .content.collapsed {
+        margin-left: 100px;
+    }
+
+    /* Page title styling */
+    h1 {
+        font-size: 24px;
+        color: #212529;
+        margin-bottom: 20px;
+    }
+
+    /* Nested list styling */
+    .nested {
+        display: none; /* Initially hidden */
+        padding-left: 20px;
+    }
+</style>
+
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <ul>
+            <li>
+                <a href="javascript:void(0)" class="collapsible">
+                    <span class="icon">📦</span> <span class="label">Pending Orders</span>
+                </a>
+                <ul class="nested">
+                    {% if pending_orders_by_location %}
+                        {% for location in pending_orders_by_location %}
+                            <li>
+                                <a href="{% url 'orders_by_location' location=location.billing_city %}">
+                                    {{ location.billing_city }} ({{ location.count|default:"0" }})
+                                </a>
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                        <li>No Pending Orders</li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:void(0)" class="collapsible">
+                    <span class="icon">✅</span> <span class="label">Confirmed Orders</span>
+                </a>
+                <ul class="nested">
+                    {% if confirmed_orders_locations %}
+                    {% for loc in confirmed_orders_locations %}
+                        <li>
+                            <a href="{% url 'confirmed_orders_by_location' location=loc.billing_city %}">
+                                {{ loc.billing_city }} ({{ loc.count|default:"0" }})
+                            </a>
+                        </li>
+                    {% endfor %}
+                    {% else %}
+                        <li>No Confirmed Orders</li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li><a href="{% url 'user_activity' %}"><span class="icon">📊</span> <span class="label">User Activity</span></a></li>
+            <li><a href="{% url 'view_users' %}"><span class="icon">👤</span> <span class="label">View Users</span></a></li>
+            <li><a href="{% url 'reviews' %}"><span class="icon">...</span> <span class="label">Reviews</span></a></li>
+            <li><a href="{% url 'contact_us_messages' %}"><span class="icon">📊</span> <span class="label">Contact_Us-Messages</span></a></li>
+            <li>
+                <a href="javascript:void(0)" class="collapsible">
+                    <span class="icon">➕</span> <span class="label">Add Product</span>
+                </a>
+                <ul class="nested">
+                    <li><a href="{% url 'add_for_men' %}">Add for Men</a></li>
+                    <li><a href="{% url 'add_for_women' %}">Add for Women</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:void(0)" class="collapsible">
+                    <span class="icon">📃</span> <span class="label">Product List</span>
+                </a>
+                <ul class="nested">
+                    <li><a href="{% url 'men_list' %}">Men's List</a></li>
+                    <li><a href="{% url 'women_list' %}">Women's List</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:void(0)" class="collapsible">
+                    <span class="icon">📃</span> <span class="label">Articles</span>
+                </a>
+                <ul class="nested">
+                    <li><a href="{% url 'create_article' %}"> Create Article </a></li>
+                    <li><a href="{% url 'articles' %}"> List of Articles </a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <button class="toggle-btn" id="toggle-btn">☰</button>
+    <div class="content" id="content">
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+
+    <script>
+    // JavaScript for sidebar toggle and collapsible links
+    const sidebar = document.getElementById('sidebar');
+    const content = document.getElementById('content');
+    const toggleBtn = document.getElementById('toggle-btn');
+    const collapsibles = document.querySelectorAll('.collapsible');
+    const nestedLists = document.querySelectorAll('.nested'); // Select all nested lists
+
+    // Sidebar toggle functionality
+    toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+        content.classList.toggle('collapsed');
+
+        // Collapse all nested lists when the sidebar is collapsed
+        if (sidebar.classList.contains('collapsed')) {
+            nestedLists.forEach(nestedList => {
+                nestedList.style.display = 'none'; // Hide all nested lists
+            });
+        }
+    });
+
+    // Collapsible sections functionality
+    collapsibles.forEach(item => {
+        item.addEventListener('click', (event) => {
+            // Check if sidebar is collapsed
+            if (sidebar.classList.contains('collapsed')) {
+                // If collapsed, expand it
+                sidebar.classList.remove('collapsed');
+                content.classList.remove('collapsed');
+
+                // After expanding the sidebar, ensure the nested list is toggled
+                const nestedList = item.nextElementSibling;
+                nestedList.style.display = 'block'; // Show the nested list
+            } else {
+                // If sidebar is not collapsed, toggle the nested list normally
+                const nestedList = item.nextElementSibling;
+                nestedList.style.display = nestedList.style.display === 'block' ? 'none' : 'block';
+            }
+
+            event.stopPropagation(); // Prevent the event from bubbling up
+        });
+    });
+</script>
+
+</body>
+</html>
