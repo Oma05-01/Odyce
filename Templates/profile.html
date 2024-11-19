@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Profile - Odyce{% endblock %}
 
+
+<!-- set this to logged in user -->
+
 {% block content %}
+<link rel="stylesheet" href="{% static 'styles/profile.css' %}">
 <section class="profile-section">
     <h1>User Profile</h1>
     <div class="profile-details">
@@ -17,72 +22,7 @@
     </div>
 </section>
 
-<style>
-  /* Profile Section Styling */
-.profile-section {
-    max-width: 600px;
-    margin: 30px auto;
-    padding: 20px;
-    background-color: #fafafa;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-.profile-section h1 {
-    font-size: 26px;
-    margin-bottom: 20px;
-    color: #333;
-}
-.profile-details p {
-    font-size: 18px;
-    margin: 10px 0;
-    color: #555;
-}
-.profile-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-.btn {
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    text-decoration: none;
-}
-.btn:hover {
-    background-color: #0056b3;
-}
-.delete-account-btn {
-    background-color: #e74c3c;
-}
-.delete-account-btn:hover {
-    background-color: #c0392b;
-}
 
-/* Change Password Section Styling */
-.change-password-section {
-    max-width: 600px;
-    margin: 30px auto;
-    padding: 20px;
-    background-color: #fafafa;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-.change-password-section h1 {
-    font-size: 26px;
-    margin-bottom: 20px;
-    color: #333;
-}
-.change-password-section form {
-    display: flex;
-    flex-direction: column;
-}
-
-</style>
 
 <script>
     function confirmDelete() {

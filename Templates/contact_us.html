@@ -1,78 +1,16 @@
 {% extends 'base.html' %}
 {% load static %}
 
+<!-- set this to logged in user -->
+<!-- check the url here -->
+
 {% block title %} Odyce - Contact Us {% endblock %}
 
 {% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-
-        .contact-container {
-            max-width: 800px;
-            margin: 50px auto;
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .contact-container h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.5em;
-            color: #00796b;
-        }
-
-        .contact-container form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            font-size: 1.2em;
-            margin-bottom: 10px;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 15px;
-            font-size: 1.1em;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            height: 150px;
-        }
-
-        .submit-btn {
-            background-color: #00796b;
-            color: #fff;
-            padding: 15px;
-            font-size: 1.2em;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .submit-btn:hover {
-            background-color: #004d40;
-        }
-    </style>
+<link rel="stylesheet" href="{% static 'styles/contact_us.css' %}">
 </head>
 <body>
 

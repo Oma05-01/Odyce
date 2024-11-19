@@ -1,8 +1,12 @@
 {% extends 'dashboard.html' %}
 
+<!-- set this to logged in user -->
+
+
 {% block title %}Create Article{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'styles/edit_article.css' %}">
 <div class="article-form-container">
     <h2>Edit Article</h2>
     <form method="POST" action="{% url 'edit_article' post.id %}">
@@ -29,57 +33,4 @@
     </div>
 </div>
 
-<style>
-    .article-form-container {
-        max-width: 700px;
-        margin: 20px auto;
-        padding: 30px;
-        background-color: #f8f9fa;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .article-form-container h2 {
-        font-size: 28px;
-        color: #333;
-        margin-bottom: 20px;
-    }
-
-    form label {
-        font-weight: bold;
-        color: #555;
-    }
-
-    form input[type="text"],
-    form input[type="date"],
-    form textarea {
-        width: 100%;
-        padding: 10px;
-        margin: 8px 0 20px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-    }
-
-    .submit-btn {
-        display: inline-block;
-        padding: 12px 20px;
-        font-size: 16px;
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .submit-btn:hover {
-        background-color: #0056b3;
-    }
-
-    #message p {
-        margin-top: 20px;
-        font-size: 16px;
-        color: #28a745;
-    }
-</style>
 {% endblock %}

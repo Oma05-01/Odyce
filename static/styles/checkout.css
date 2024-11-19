@@ -1,0 +1,77 @@
+
+    /* Container styling */
+    .checkout-container {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 30px auto;
+        font-family: Arial, sans-serif;
+    }
+    .checkout-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .checkout-header h1 {
+        font-size: 32px;
+        color: #333;
+    }
+    .checkout-header p {
+        color: #666;
+    }
+
+    /* Billing information */
+    .order-summary,
+    .order-details {
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 15px;
+    }
+    .order-summary h2, .order-details h2 {
+        font-size: 24px;
+        color: #444;
+        margin-bottom: 10px;
+    }
+    .order-summary p, .order-details p {
+        font-size: 16px;
+        color: #333;
+        margin: 5px 0;
+    }
+
+    /* Confirm button and wishlist button */
+    .confirm-buttons {
+        text-align: center;
+        margin-top: 20px;
+    }
+    .confirm-btn {
+        display: inline-block;
+        padding: 12px 30px;
+        background-color: #28a745;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 18px;
+        transition: background-color 0.3s ease;
+    }
+    .confirm-btn:hover {
+        background-color: #218838;
+    }
+    .or-text {
+        margin: 10px 0;
+        font-size: 16px;
+        color: #666;
+    }
+    .wishlist-btn {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .wishlist-btn:hover {
+        background-color: #0056b3;
+    }

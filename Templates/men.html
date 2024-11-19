@@ -1,94 +1,28 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Men's Perfumes{% endblock %}
 
+<!-- set this to logged in users -->
+
 {% block content %}
+<link rel="stylesheet" href="{% static 'styles/men.css' %}">
+<br><br><br><br>
 <div class="perfume-container">
     <h1>Men's Perfumes</h1>
+    <br><br>
     <section class="perfume-list">
         <!-- Loop through all men's perfumes from the context (backend will provide this) -->
         {% for perfume in mens_perfumes %}
         <article class="perfume-item">
-            <img src="{{ perfume.image_url }}" alt="{{ perfume.name }}" class="perfume-image"/>
+            <img src="{{ perfume.picurl.url }}" alt="{{ perfume.name }}" class="perfume-image"/>
             <h2>{{ perfume.name }}</h2>
             <p class="perfume-brand">{{ perfume.brand }}</p>
             <p class="perfume-price">{{ perfume.price }}</p>
-            <a href="{% url 'perfume_detail' perfume.id %}" class="view-details">View Details</a>
+            <a href="{% url 'product_detail' perfume.id %}" class="view-details">View Details</a>
         </article>
         {% endfor %}
     </section>
 </div>
 
-<style>
-    .perfume-container {
-        padding: 40px;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
 
-    h1 {
-        font-size: 32px;
-        color: #333;
-        font-family: 'Roboto Slab', serif;
-        border-bottom: 3px solid #333;
-        padding-bottom: 10px;
-    }
-
-    .perfume-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 25px;
-    }
-
-    .perfume-item {
-        background-color: #1a1a1a;
-        padding: 25px;
-        border-radius: 10px;
-        text-align: center;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        transition: transform 0.2s ease-in-out;
-    }
-
-    .perfume-item:hover {
-        transform: translateY(-5px);
-    }
-
-    .perfume-item h2 {
-        font-size: 22px;
-        color: #f0f0f0;
-        font-family: 'Roboto', sans-serif;
-    }
-
-    .perfume-item .perfume-brand {
-        font-size: 16px;
-        color: #8c8c8c;
-        margin: 10px 0;
-    }
-
-    .perfume-item .perfume-price {
-        margin-top: 10px;
-        font-size: 20px;
-        color: #007bff;
-        font-weight: bold;
-    }
-
-    .view-details {
-        display: inline-block;
-        margin-top: 20px;
-        color: #007bff;
-        text-decoration: none;
-        font-weight: bold;
-    }
-
-    .view-details:hover {
-        text-decoration: underline;
-    }
-
-    .perfume-image {
-        width: 100%;
-        height: auto;
-        border-radius: 8px;
-        margin-bottom: 15px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-</style>
 {% endblock %}

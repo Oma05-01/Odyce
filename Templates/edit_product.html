@@ -1,7 +1,11 @@
 {% extends 'dashboard.html' %}
+{% load static %}
 {% block title %}{{ post.title }}{% endblock %}
 
+<!-- set this to logged in admin -->
+
 {% block content %}
+<link rel="stylesheet" href="{% static 'styles/edit_p.css' %}">
 <div class="container">
     <h2>Edit Product </h2>
     <form method="POST" action="{% url 'edit_product' product.id %}" enctype="multipart/form-data">

@@ -21,6 +21,9 @@ from django.urls import reverse
 from .forms import ReviewForm
 
 # Create your views here.
+def kini(request):
+
+    return render(request, 'index.html')
 
 
 def landing(request):
@@ -107,6 +110,7 @@ def login_user(request):
     return render(request, 'login.html')
 
 
+@login_required(login_url='/login')
 def logout_user(request):
     
     logout(request)
@@ -114,12 +118,12 @@ def logout_user(request):
     return redirect('login_user')
 
 
-# @login_required
+@login_required(login_url='/login')
 def profile(request):
     return render(request, 'profile.html', {'user': request.user})
 
 
-# @login_required
+@login_required(login_url='/login')
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
@@ -135,7 +139,7 @@ def change_password(request):
     return render(request, 'change_password.html', {'form': form})
 
 
-# @login_required
+@login_required(login_url='/login')
 def delete_account(request):
     if request.method == 'POST':
         user = request.user
@@ -144,7 +148,7 @@ def delete_account(request):
         return JsonResponse({'status': 'success', 'message': 'Account deleted successfully'})
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
-
+@login_required(login_url='/login')
 def home(request):
 
     men_perfumes = MenPerfume.objects.all()
@@ -152,23 +156,23 @@ def home(request):
     return render(request, 'home.html', {'men_perfumes': men_perfumes, 'women_perfumes': women_perfumes})
 
 
+@login_required(login_url='/login')
 def product_detail(request, product_id):
-
     item = MenPerfume.objects.filter(pk=product_id).first()
-    if item.is_for_men:
-        product = MenPerfume.objects.filter(is_for_men=True, pk=product_id)
-        print(type(product))
+    if item and item.is_for_men:
+        product = item  # Use the instance directly
+        content_type = ContentType.objects.get_for_model(MenPerfume)  # Use the model class
     else:
-        # If not found in MenPerfume, try fetching from WomenPerfume
+        # Check if the product exists in WomenPerfume
         item = WomenPerfume.objects.filter(pk=product_id).first()
-        if item.is_for_women:
-            product = WomenPerfume.objects.filter(is_for_women=True, pk=product_id)
+        if item and item.is_for_women:
+            product = item  # Use the instance directly
+            content_type = ContentType.objects.get_for_model(WomenPerfume)  # Use the model class
         else:
             # If the product is not found in either model, handle the error
             return render(request, '404.html')
 
     # Fetch reviews related to this product
-    content_type = ContentType.objects.get_for_model(product)
     review = Review.objects.filter(content_type=content_type, object_id=product.id)
 
     # Handle review submission
@@ -176,23 +180,29 @@ def product_detail(request, product_id):
         review_form = ReviewForm(request.POST)
         if review_form.is_valid():
             new_review = review_form.save(commit=False)
-            new_review.user = request.user
-            new_review.content_type = content_type
-            new_review.object_id = product.id
-            new_review.save()
-            return redirect('product_detail', product_id=product.id)
+            try:
+                print('okay')
+                customer = Customer.objects.get(user=request.user)
+                print(customer, "is here")
+                new_review.user = customer
+                new_review.content_type = content_type
+                new_review.object_id = product.id
+                new_review.save()
+                return redirect('product_detail', product_id=product.id)
+            except Customer.DoesNotExist:
+                return render(request, 'error.html', {'message': 'Customer not found.'})
     else:
         review_form = ReviewForm()
 
     context = {
-        'products': product,  # Pass the product details to the template
+        'product': product,  # Pass the product details to the template
         'reviews': review,
         'review_form': review_form,
     }
 
     return render(request, 'perfume_details_page.html', context)
 
-
+@login_required(login_url='/login')
 def product_review(request, product_id):
     # Retrieve the product based on the provided product_id
     try:
@@ -203,19 +213,10 @@ def product_review(request, product_id):
     return render(request, 'perfume_review.html', {'item': item})
 
 
-# # Get the current logged-in user's customer profile
-    # try:
-    #     customer = Customer.objects.get(user=request.user)
-    # except Customer.DoesNotExist:
-    #     customer = None  # Handle case if no profile is found
-    #
-    # # Pass customer to the template for displaying coupon code info
-    # context = {
-    #     'customer': customer,
-    # }
-
+@login_required(login_url='/login')
 def buy_now(request, product_id):
-    cities = ["Lagos", "Abuja", "Jos", "Rivers", "Benin", "Aba"]
+    cities = ["Igarra", "Irrua", "Uselu", "Agenebode", "Uromi", "Auchi", "Ubiaja", "Fugar", "Ekpoma", "Iguegben",
+              "Idogbo", "Afuze", "Abudu", "Okada", "Oredo", "Iguobazuwa", "Sabongida Ora", "Ehor"]
     discount_code = request.POST.get('discount_code')  # Assume user submits coupon via POST
 
     # Check if coupon code exists and is already used
@@ -246,6 +247,7 @@ def buy_now(request, product_id):
     return render(request, 'buy_now.html', context)
 
 
+@login_required(login_url='/login')
 def buy_as_distributor(request, product_id):
     item = MenPerfume.objects.filter(pk=product_id).first()
     if item.is_for_men:
@@ -282,23 +284,14 @@ def save_session_data(request):
     return JsonResponse({'status': 'error'}, status=400)
 
 
+@login_required(login_url='/login')
 def checkout(request):
     final_price = request.session.get('finalPrice')
     product_id = request.session.get('product_id')
 
     if request.method == 'POST' and final_price:
         # Assuming user and other required fields are available in session
-        order = Order(
-            customer=request.user.customer,  # Ensure the customer is linked to the current user
-            billing_name=request.session.get('billing_name'),
-            billing_address=request.session.get('billing_address'),
-            billing_city=request.session.get('billing_city'),
-            phone_number=request.session.get('phone-number'),
-            quantity=request.session.get('quantity'),
-            total=final_price  # Set the final price as the total
-        )
-        print('okay')
-        order.save()
+
         return redirect('confirm_payment')
 
     context = {
@@ -314,14 +307,26 @@ def checkout(request):
     return render(request, 'checkout.html', context)
 
 
+@login_required(login_url='/login')
 def confirm_payment(request):
-    # Retrieve the Customer instance associated with the logged-in User
     customer = get_object_or_404(Customer, user=request.user)
-
-    # Retrieve the pending order for the current customer
-    order = get_object_or_404(Order, customer=customer, status='pending')
+    final_price = request.session.get('finalPrice')
+    product_id = request.session.get('product_id')
 
     if request.method == 'POST':
+
+        order = Order(
+            customer=request.user.customer,  # Ensure the customer is linked to the current user
+            billing_name=request.session.get('billing_name'),
+            billing_address=request.session.get('billing_address'),
+            billing_city=request.session.get('billing_city'),
+            phone_number=request.session.get('phone-number'),
+            quantity=request.session.get('quantity'),
+            total=final_price  # Set the final price as the total
+        )
+        print('okay')
+        order.save()
+
         receipt = request.FILES.get('receipt')
 
         # Attach the receipt and update order status
@@ -337,9 +342,10 @@ def confirm_payment(request):
 
         messages.success(request, 'Your payment has been submitted successfully and is awaiting confirmation.')
 
-        # Clear the discount code from session after application
-        if 'discountCode' in request.session:
-            del request.session['discountCode']
+        # Clear session data
+        for key in ['discountCode', 'finalPrice', 'product_id']:
+            if key in request.session:
+                del request.session[key]
 
         return redirect('success_page')  # Replace 'success_page' with the actual page name
 
@@ -348,19 +354,22 @@ def confirm_payment(request):
     account_number = "1234567890"
 
     context = {
-        'order': order,
         'bank_name': bank_name,
         'account_number': account_number,
+        'final_price': final_price,
+        'product_id': product_id
     }
 
     return render(request, 'customer_payment_page.html', context)
 
 
+@login_required(login_url='/login')
 def success_page(request):
 
     return render(request, 'success_page.html')
 
 
+@login_required(login_url='/login')
 def customer_orders(request):
 
     # Retrieve all orders for the current user
@@ -373,7 +382,7 @@ def customer_orders(request):
     return render(request, 'customer_order_history.html', context)
 
 
-# @login_required
+@login_required(login_url='/login')
 def add_to_wishlist(request, product_id):
     # Check in MenPerfume first
     item = MenPerfume.objects.filter(pk=product_id).first()
@@ -407,20 +416,21 @@ def add_to_wishlist(request, product_id):
     return render(request, '404.html')
 
 
-# @login_required
+@login_required(login_url='/login')
 def view_wishlist(request):
     wishlist_items = WishlistItem.objects.filter(user=request.user)
     context = {"wishlist_items": wishlist_items}
     return render(request, "wishlist.html", context)
 
 
-# @login_required
+@login_required(login_url='/login')
 def remove_from_wishlist(request, item_id):
     wishlist_item = get_object_or_404(WishlistItem, id=item_id, user=request.user)
     wishlist_item.delete()
     return redirect("view_wishlist")
 
 
+@login_required(login_url='/login')
 def become_distributor(request):
     if request.method == "POST":
         # Retrieve the current user
@@ -436,6 +446,7 @@ def become_distributor(request):
     return render(request, 'be_a_distributor.html')
 
 
+@login_required(login_url='/login')
 def distributor_checkout(request, product_type):
     if request.method == 'POST':
         # Retrieve product details based on product type (men or women)
@@ -481,6 +492,7 @@ def distributor_checkout(request, product_type):
     return render(request, 'distributor_checkout.html', {'product_type': product_type})
 
 
+@login_required(login_url='/login')
 def create_article(request):
 
     if request.method == "POST":
@@ -499,6 +511,7 @@ def create_article(request):
     return render(request, 'create_article.html')
 
 
+@login_required(login_url='/login')
 def edit_article(request, article_id):
     post = get_object_or_404(Articles, id=article_id)
 
@@ -514,6 +527,7 @@ def edit_article(request, article_id):
     return render(request, 'edit_article.html', {'post': post})
 
 
+@login_required(login_url='/login')
 def articles(request):
 
     posts = Articles.objects.all()
@@ -521,6 +535,7 @@ def articles(request):
     return render(request, 'article_list.html', {'posts': posts})
 
 
+@login_required(login_url='/login')
 def article_details(request, title):
 
     post = get_object_or_404(Articles, title=title)
@@ -528,6 +543,7 @@ def article_details(request, title):
     return render(request, 'article_details.html', {'post': post})
 
 
+@login_required(login_url='/login')
 def delete_article(request, post_id):
     post = get_object_or_404(Articles, id=post_id)
     if request.method == "POST":
@@ -538,18 +554,20 @@ def delete_article(request, post_id):
     return render(request, 'confirm_article_delete.html', {'post': post})
 
 
+@login_required(login_url='/login')
 def men(request):
 
-    mens_perfumes = get_object_or_404(MenPerfume)
+    mens_perfumes = MenPerfume.objects.all()
 
     return render(request, 'men.html', {'mens_perfumes': mens_perfumes})
 
 
+@login_required(login_url='/login')
 def women(request):
 
-    womens_perfumes = get_object_or_404(WomenPerfume)
+    womens_perfumes = WomenPerfume.objects.all()
 
-    return render(request, 'men.html', {'womens_perfumes': womens_perfumes})
+    return render(request, 'women.html', {'womens_perfumes': womens_perfumes})
 
 
 def faq(request):
@@ -557,6 +575,7 @@ def faq(request):
     return render(request, 'faq.html')
 
 
+@login_required(login_url='/login')
 def contact_us(request):
 
     if request.method == "POST":
@@ -578,12 +597,16 @@ def contact_us(request):
     return render(request, 'contact_us.html')
 
 
+@login_required(login_url='/login')
 def reviews(request):
 
-    return render(request, 'reviews.html')
+    review_ = Review.objects.all()
+
+    return render(request, 'reviews.html', {'reviews': review_})
 
 
 # User Activity View
+@login_required(login_url='/login')
 def user_activity(request):
 
     # Example data for demonstration (replace with actual query for logged-in users)
@@ -599,6 +622,7 @@ def user_activity(request):
 
 
 # User Detail View
+@login_required(login_url='/login')
 def user_detail(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     try:
@@ -614,6 +638,7 @@ def user_detail(request, user_id):
 
 
 # Dashboard View
+@login_required(login_url='/login')
 def dashboard(request):
 
     pending_orders_by_location = Order.objects.filter(status='pending').values('billing_city').annotate(count=Count('id'))
@@ -634,6 +659,7 @@ def dashboard(request):
 
 
 # Pending Orders View (Grouped by location)
+@login_required(login_url='/login')
 def pending_orders(request):
 
     # Group pending orders by billing city
@@ -649,28 +675,7 @@ def pending_orders(request):
     return render(request, "pending_orders.html", context)
 
 
-# Confirmed Orders View
-def confirmed_orders(request):
-
-    # Get distinct locations and count of confirmed orders per location
-    confirmed_orders_by_location = (
-        Order.objects
-        .filter(status='confirmed')
-        .values('billing_city')
-        .annotate(count=Count('id'))  # Count confirmed orders per city
-        .order_by('billing_city')     # Order by city for consistent display
-    )
-
-    location = Order.objects.get().values('billing_city')
-
-    context = {
-        'confirmed_orders_by_location': confirmed_orders_by_location,
-        'Location': location,
-    }
-
-    return render(request, 'confirmed_orders.html', context)
-
-
+@login_required(login_url='/login')
 def orders_by_location(request, location):
 
     pending_orders_by_location = Order.objects.filter(status='pending').values('billing_city').annotate(
@@ -695,6 +700,7 @@ def orders_by_location(request, location):
     return render(request, "orders_by_location.html", context)
 
 
+@login_required(login_url='/login')
 def confirmed_orders_by_location(request, location):
 
     pending_orders_by_location = Order.objects.filter(status='pending').values('billing_city').annotate(
@@ -724,6 +730,7 @@ def confirmed_orders_by_location(request, location):
 
 
 # Order Details View
+@login_required(login_url='/login')
 def order_details(request, order_id):
     pending_orders_by_location = Order.objects.filter(status='pending').values('billing_city').annotate(
         count=Count('id'))
@@ -744,6 +751,7 @@ def order_details(request, order_id):
     return render(request, 'order_details.html', context)
 
 
+@login_required(login_url='/login')
 def confirm_order(request, order_id):
 
     # this is for the dashboard
@@ -751,16 +759,17 @@ def confirm_order(request, order_id):
     if request.method == 'POST':
         order.confirm_order()
         # Notify user (e.g., via email) - Placeholder for notification code
-        # send_mail(
-        #     'Order Confirmed',
-        #     f'Your order has been confirmed. Your confirmation code is {order.confirmed_order_code}.',
-        #     'from@example.com',
-        #     [order.billing_email],
-        #     fail_silently=False,
-        # )
-        return redirect('confirmed_orders')  # Redirect to the list of confirmed orders - adjust this
+        send_mail(
+            'Order Confirmed',
+            f'Your order has been confirmed. Your confirmation code is {order.confirmed_order_code}.',
+            'OdyceForBenin@gmail.com',
+            [order.billing_email],
+            fail_silently=False,
+        )
+        return redirect('dashboard')
 
 
+@login_required(login_url='/login')
 def contact_us_messages(request):
 
     pending_orders_by_location = Order.objects.filter(status='pending').values('billing_city').annotate(
@@ -783,6 +792,7 @@ def contact_us_messages(request):
     return render(request, 'contact-us_messages.html', context)
 
 
+@login_required(login_url='/login')
 def add_for_men(request):
     pending_orders_by_location = Order.objects.filter(status='pending').values('billing_city').annotate(
         count=Count('id'))
@@ -838,6 +848,7 @@ def add_for_men(request):
     return render(request, 'add_for_men.html', context)
 
 
+@login_required(login_url='/login')
 def add_for_women(request):
 
     pending_orders_by_location = Order.objects.filter(status='pending').values('billing_city').annotate(
@@ -869,7 +880,7 @@ def add_for_women(request):
 
             if str(myfile.content_type).startswith('image'):
                 if myfile.size < 500000000:
-                    product = MenPerfume(
+                    product = WomenPerfume(
                         name=name,
                         pic_name=str(filename),
                         picurl=str(url),
@@ -894,6 +905,7 @@ def add_for_women(request):
     return render(request, 'add_for_women.html', context)
 
 
+@login_required(login_url='/login')
 def men_list(request):
 
     pending_orders_by_location = Order.objects.filter(status='pending').values('billing_city').annotate(
@@ -915,6 +927,7 @@ def men_list(request):
     return render(request, 'men_list.html', context)
 
 
+@login_required(login_url='/login')
 def women_list(request):
     women_products = WomenPerfume.objects.all()
 
@@ -936,6 +949,7 @@ def women_list(request):
     return render(request, 'women_list.html', context)
 
 
+@login_required(login_url='/login')
 def edit_product(request, product_id):
     # do this with try and except
     try:
@@ -959,6 +973,7 @@ def edit_product(request, product_id):
     return render(request, 'edit_product.html', {'product': product})
 
 
+@login_required(login_url='/login')
 def product_detail_back(request, product_id):
     try:
         product = MenPerfume.objects.get(id=product_id)
@@ -968,6 +983,7 @@ def product_detail_back(request, product_id):
     return render(request, 'product_detail.html', {'product': product})
 
 
+@login_required(login_url='/login')
 def delete_product(request, product_id):
     try:
         product = MenPerfume.objects.get(id=product_id)
@@ -987,6 +1003,7 @@ def delete_product(request, product_id):
     return render(request, 'confirm_delete.html', {'product': product})
 
 
+@login_required(login_url='/login')
 def all_list(request):
     men_products = MenPerfume.objects.all()
     women_products = WomenPerfume.objects.all()
@@ -999,6 +1016,7 @@ def all_list(request):
     return render(request, 'perfume_list.html', context)
 
 
+@login_required(login_url='/login')
 def view_users(request):
 
     pending_orders_by_location = Order.objects.filter(status='pending').values('billing_city').annotate(

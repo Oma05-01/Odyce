@@ -1,44 +1,10 @@
 {% extends 'dashboard.html' %}
 {% block title %} <title> User Activity </title> {% endblock %}
 
-{% block content %}
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-        }
-        .container {
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        h2 {
-            color: #333;
-        }
-        .user-list {
-            list-style-type: none;
-            padding: 0;
-        }
-        .user-list li {
-            background-color: #fff;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-        }
-        .user-list a {
-            text-decoration: none;
-            color: #00796b;
-        }
-        .user-list a:hover {
-            color: #004d40;
-        }
-    </style>
+<!-- set this to logged in admin -->
 
+{% block content %}
+<link rel="stylesheet" href="{% static 'styles/user_activity.css' %}">
     <body>
     <div class="container">
         <h2>Users Who Have Logged In</h2>

@@ -1,9 +1,12 @@
-{% extends 'base.html' %}
+{% extends 'dashboard.html' %}
 {% load static %}
+
+<!-- set this to logged in admin -->
 
 {% block title %} User Details {% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'styles/user_detail.css' %}">
 <br> <br> <br>
 <section class="user-details-section">
     <h1>User Details</h1>
@@ -31,82 +34,4 @@
     </ul>
 </section>
 
-<style>
-.view-users-section {
-        max-width: 800px;
-        margin: 20px auto;
-        padding: 25px;
-        background: #fafafa;
-        border-radius: 8px;
-        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    .view-users-section h1 {
-        font-size: 26px;
-        color: #333;
-        margin-bottom: 20px;
-    }
-    .user-list {
-        list-style: none;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-    }
-    .user-list a {
-        color: #007bff;
-        font-size: 20px;
-        font-weight: 500;
-        text-decoration: none;
-        padding: 10px;
-        border-radius: 6px;
-        transition: background 0.3s, color 0.3s;
-    }
-    .user-list a:hover {
-        background-color: #007bff;
-        color: #fff;
-    }
-
-    /* User Details Section Styling */
-    .user-details-section {
-        max-width: 800px;
-        margin: 20px auto;
-        padding: 25px;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    .user-details-section h1,
-    .user-details-section h2 {
-        color: #333;
-    }
-    .user-details-section h1 {
-        font-size: 28px;
-        margin-bottom: 15px;
-    }
-    .user-details-section h2 {
-        font-size: 22px;
-        margin-top: 30px;
-        color: #555;
-    }
-    .user-info p {
-        font-size: 18px;
-        margin: 8px 0;
-        color: #555;
-        line-height: 1.6;
-    }
-    .order-list {
-        list-style: none;
-        padding: 0;
-    }
-    .order-list li {
-        background-color: #f8f8f8;
-        padding: 15px;
-        border-radius: 6px;
-        margin-bottom: 15px;
-        box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
-    }
-    .order-list li strong {
-        color: #333;
-    }
-</style>
 {% endblock %}

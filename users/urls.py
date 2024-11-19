@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.landing, name='landing'),  # Landing page
     path('register/', views.register, name='register'),  # Registration page
+    path('kini/', views.kini, name='kini'),  # kini page
     path('logout/', views.logout, name='logout'),
     path('login/', views.login_user, name='login'),  # Login page
     path('home/', views.home, name='home'),  # Home page
@@ -44,14 +45,14 @@ urlpatterns = [
     path("dashboard/pending-orders/<str:location>/", views.orders_by_location, name="orders_by_location"),
 
     # Confirmed Orders page
-    path("dashboard/confirmed-orders/", views.confirmed_orders, name="confirmed_orders"),
+    # path("dashboard/confirmed-orders/", views.confirmed_orders, name="confirmed_orders"),
     path('dashboard/confirmed-orders/<str:location>/', views.confirmed_orders_by_location, name='confirmed_orders_by_location'),
     path('confirm-order/<int:order_id>/', views.confirm_order, name='confirm_order'),
 
     path('product/add-for-men/', views.add_for_men, name='add_for_men'),
     path('product/add-for-women/', views.add_for_women, name='add_for_women'),
     path('dashboard/edit-product/<int:product_id>/', views.edit_product, name='edit_product'),
-    path('dashboard/product/<int:product_id>/', views.product_detail_back, name='product_detail'),
+    path('dashboard/product/<int:product_id>/', views.product_detail_back, name='product_detail_back'),
     path('product/delete/<int:product_id>/', views.delete_product, name='delete_product'),
     path('product/men-list/', views.men_list, name='men_list'),
     path('product/women-list/', views.women_list, name='women_list'),

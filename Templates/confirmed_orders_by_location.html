@@ -1,5 +1,10 @@
 {% extends "dashboard.html" %}
+{% load static %}
+
+<!-- set this to logged in admin -->
+
 {% block content %}
+<link rel="stylesheet" href="{% static 'styles/confirmed_orders_by_location.css' %}">
 <div class="pending-orders-container">
     <h2>Confirmed Orders for {{ location }}</h2>
 
@@ -13,6 +18,7 @@
                     <p><strong>Billing Name:</strong> {{ order.billing_name }}</p>
                     <p><strong>Billing Address:</strong> {{ order.billing_address }}</p>
                     <p><strong>Phone Number:</strong> {{ order.phone_number }}</p>
+                    <p><strong>Order confirmation code:</strong> {{ order.confirmed_order_code }}</p>
                     <a href="{% url 'order_details' order.id %}" class="btn btn-confirm">View Details</a>
                 </li>
 
@@ -23,35 +29,5 @@
     {% endif %}
 </div>
 
-<style>
-    .pending-orders-container {
-        max-width: 700px;
-        margin: 20px auto;
-        padding: 20px;
-        background-color: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .pending-orders-container h2 {
-        color: #333;
-        text-align: center;
-        font-size: 1.5em;
-        margin-bottom: 20px;
-    }
-    ul {
-        list-style-type: none;
-        padding-left: 0;
-    }
-    .order-item {
-        background-color: #f9f9f9;
-        padding: 15px;
-        margin-bottom: 15px;
-        border-radius: 5px;
-        border-left: 5px solid #ffd966;
-    }
-    .order-item p {
-        margin: 5px 0;
-        color: #333;
-    }
-</style>
+
 {% endblock %}
