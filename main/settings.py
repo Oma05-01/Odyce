@@ -32,7 +32,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = False
 
 # Production setup
-ALLOWED_HOSTS = ['main-ie29.onrender.com', 'www.main-ie29.onrender.com',]
+ALLOWED_HOSTS = ['main-ie29.onrender.com', 'www.main-ie29.onrender.com', 'localhost', '127.0.0.1']
 
 # Local development setup (add localhost for local testing)
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'main-ie29.onrender.com']
