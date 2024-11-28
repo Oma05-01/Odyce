@@ -1,0 +1,120 @@
+<style>
+/* General Container Styling */
+.container {
+    max-width: 900px;
+    margin: 50px auto;
+    font-family: Arial, sans-serif;
+}
+
+/* Header */
+.container h2 {
+    text-align: center;
+    color: #333;
+    font-size: 28px;
+    margin-bottom: 30px;
+}
+
+/* Product List Styling */
+.product-list-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    padding: 15px;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+/* Product Image */
+.product-list-item img {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+/* Product Details */
+.product-details {
+    flex: 1;
+}
+
+.product-details h5 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.product-details p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 0;
+}
+
+/* Product Actions */
+.product-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.product-actions .btn {
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.product-actions .btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+.product-actions .btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.product-actions .btn-danger {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+
+.product-actions .btn-danger:hover {
+    background-color: #c82333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .product-list-item {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .product-list-item img {
+        max-width: 80px;
+        max-height: 80px;
+    }
+
+    .product-details h5 {
+        text-align: center;
+    }
+
+    .product-details p {
+        text-align: center;
+    }
+
+    .product-actions {
+        flex-direction: row;
+        gap: 5px;
+    }
+
+    .product-actions .btn {
+        flex: 1;
+    }
+}
+</style>

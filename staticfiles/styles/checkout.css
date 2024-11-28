@@ -1,0 +1,126 @@
+/* Overall Container */
+.checkout-container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;  /* More rounded corners */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 40px auto;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Section Headers */
+.checkout-header h1 {
+    font-size: 36px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.checkout-header p {
+    font-size: 18px;
+    color: #666;
+}
+
+/* Order Summary and Order Details */
+.order-summary,
+.order-details {
+    margin-bottom: 30px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 20px;
+}
+
+.order-summary h2, .order-details h2 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 15px;
+}
+
+.order-summary p, .order-details p {
+    font-size: 18px;
+    color: #555;
+    margin: 8px 0;
+    line-height: 1.5;
+}
+
+/* Button Styles */
+.confirm-buttons {
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* Confirm Button */
+.confirm-btn {
+    display: inline-block;
+    padding: 14px 36px;
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.confirm-btn:hover {
+    background-color: #218838;
+    transform: translateY(-2px);  /* Slight lift effect on hover */
+}
+
+/* Or Text */
+.or-text {
+    margin: 20px 0;
+    font-size: 16px;
+    color: #666;
+}
+
+/* Wishlist Button */
+.wishlist-btn {
+    padding: 12px 24px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.wishlist-btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);  /* Slight lift effect on hover */
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .checkout-container {
+        padding: 20px;
+        max-width: 100%;
+    }
+
+    .confirm-btn, .wishlist-btn {
+        width: 100%;  /* Make buttons full width on smaller screens */
+        padding: 14px;
+        font-size: 18px;
+    }
+
+    .order-summary p, .order-details p {
+        font-size: 16px; /* Slightly smaller text on mobile */
+    }
+
+    .checkout-header h1 {
+        font-size: 32px;
+    }
+}
+
+/* Additional Improvements */
+#discount-message {
+    background-color: #e0f7fa;
+    padding: 10px;
+    border-radius: 5px;
+    color: #00796b;
+    font-weight: bold;
+    margin-top: 10px;
+}

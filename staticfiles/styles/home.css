@@ -1,0 +1,496 @@
+
+body {
+font-family: 'Poppins', sans-serif;
+background: linear-gradient(120deg, #ffefba, #ffffff);
+color: #333;
+padding-top: 100px; /* Adjust based on the height of your header */
+min-height: 100vh; /* Ensures the footer is always visible */
+display: flex;
+flex-direction: column;
+}
+
+/* Header */
+header {
+background-image: rgb(110, 158, 169);
+background-image: linear-gradient(90deg, rgba(110, 158, 169, 1) 0%, rgba(117,88, 134, 1) 54%, rgba(185, 56, 143, 1) 100%);
+padding: 20px;
+color: #fff;
+position: fixed;
+width: 100%;
+top: 0;
+z-index: 10;
+box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+/* Odyce Logo */
+header .left-section {
+font-family: 'Metropolis', sans-serif;
+font-size: 2em;
+font-weight: bold;
+color: #fff;
+text-transform: uppercase;
+}
+
+header .right-section a {
+color: #fff;
+padding: 10px 20px;
+text-decoration: none;
+font-size: 1.2em;
+margin: 0 10px;
+transition: color 0.3s ease;
+}
+
+header .right-section a:hover {
+color: #ff9e80;
+}
+
+
+/* Welcome message aligned to the left */
+.welcome {
+font-size: 1.2em;
+color: #fff;
+}
+
+/* Odyce aligned to the center */
+h1 {
+font-size: 2.5em;
+letter-spacing: 3px;
+font-weight: bold;
+text-align: center;
+flex-grow: 1;
+}
+
+.odyce-home-link h1 {
+color: #f2f2f2;
+font-size: 28px;
+font-weight: bold;
+transition: color 0.3s;
+text-decoration: none !important;
+}
+
+.odyce-home-link h1:hover {
+color: #ffd700;
+}
+
+nav a {
+color: #ddd;
+margin: 0 10px;
+font-weight: 500;
+transition: color 0.3s;
+}
+nav a:hover {
+color: #ffd700;
+}
+.logout-btn {
+color: #ff4d4d;
+font-weight: bold;
+text-transform: uppercase;
+transition: color 0.3s;
+}
+.logout-btn:hover {
+color: #ffcccc;
+}
+
+nav {
+display: flex;
+justify-content: center;
+margin-top: 15px;
+}
+
+nav a {
+color: #fff;
+padding: 10px 20px;
+text-decoration: none;
+font-size: 1.2em;
+margin: 0 10px;
+transition: color 0.3s ease;
+}
+
+nav a:hover {
+color: #ff9e80;
+}
+
+/* Sidebar Styling */
+.sidebar {
+width: 80px;
+background-color: #797a87;
+color: white;
+height: 100vh;
+position: fixed;
+padding-top: 20px;
+transition: width 0.3s ease, background-color 0.3s ease;
+overflow: hidden;
+box-shadow: 4px 0 8px rgba(0, 0, 0, 0.2);
+z-index: 9;
+}
+.sidebar.expanded {
+width: 240px;
+background-color: rgb(135,133,121);
+background-color: linear-gradient(0deg, rgba(135,133,121,1) 0%, rgba(135,133,121,1) 38%, rgba(9,92,121,1) 100%);
+}
+.sidebar ul {
+list-style: none;
+padding: 0;
+}
+.sidebar ul li {
+margin: 10px 0;
+}
+.sidebar ul li a {
+color: #dee2e6;
+text-decoration: none;
+padding: 12px 20px;
+display: flex;
+align-items: center;
+font-weight: 500;
+border-radius: 4px;
+}
+.sidebar ul li a:hover {
+background-color: #495057;
+color: #adb5bd;
+}
+.sidebar ul li a .icon {
+width: 30px;
+text-align: center;
+}
+.sidebar ul li a .label {
+opacity: 0;
+transition: opacity 0.3s ease;
+}
+.sidebar.expanded ul li a .label {
+opacity: 1;
+}
+
+/* Toggle Button */
+.toggle-btn {
+background-color: #adb5bd;
+color: #212529;
+border: none;
+cursor: pointer;
+padding: 8px 10px;
+position: fixed;
+top: 120px; /* Places button below header */
+left: 90px;
+font-size: 18px;
+border-radius: 4px;
+transition: left 0.3s ease;
+z-index: 1000;
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.sidebar.expanded + .toggle-btn {
+left: 260px;
+}
+
+/* Content Styling */
+.content {
+margin-left: 100px;
+padding: 20px;
+background-color: #f0f2f5;
+transition: margin-left 0.3s ease;
+}
+.sidebar.expanded ~ .content {
+margin-left: 260px;
+}
+
+
+/* Split Sections */
+.split-container {
+display: flex;
+height: 100vh;
+border: 1px solid #ddd; /* Adds border around the container */
+border-radius: 8px; /* Optional: rounds the corners of the container */
+overflow: hidden;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+}
+
+/* Men's Section */
+.men-section {
+background-image: rgb(13, 24, 139);
+background-image: linear-gradient(90deg, rgba(13, 24, 139, 1) 0%, rgba(12, 61, 120, 1) 54%, rgba(110, 158, 169, 1) 100%);
+background-size: cover;
+background-position: center;
+border-right: 10px solid #ddd; /* Divider line between sections */
+width: 50%;
+display: flex;
+justify-content: center;
+align-items: center;
+color: #fff;
+position: relative;
+flex-direction: column;
+}
+
+.men-section h2, .women-section h2 {
+font-size: 3em;
+letter-spacing: 2px;
+}
+
+.men-section p, .women-section p {
+font-size: 1.4em;
+margin-top: 10px;
+margin-bottom: 30px;
+}
+
+.men-section a {
+padding: 15px 30px;
+color: #fff;
+text-decoration: none;
+border-radius: 5px;
+font-size: 1.2em;
+transition: background-color 0.3s ease;
+}
+
+.men-section a#ex-men:hover {
+    background-color: #004d40;
+}
+
+/* Women's Section */
+.women-section {
+background-image: rgb(110, 158, 169);
+background-image: linear-gradient(90deg, rgba(110, 158, 169, 1) 0%, rgba(117,88, 134, 1) 54%, rgba(185, 56, 143, 1) 100%);
+
+background-size: cover;
+background-position: center;
+width: 50%;
+display: flex;
+justify-content: center;
+align-items: center;
+color: #333;
+position: relative;
+flex-direction: column;
+}
+
+.women-section a {
+padding: 15px 30px;
+color: #000;
+text-decoration: none;
+border-radius: 5px;
+font-size: 1.2em;
+transition: background-color 0.3s ease;
+}
+
+.women-section a#ex-women:hover {
+    background-color: #ec407a;
+}
+
+/* Carousel Styling */
+.carousel {
+position: relative;
+width: 80%;
+height: 500px;
+overflow: hidden;
+margin-top: 5px;
+display: flex;
+justify-content: center;
+align-items: center;
+background-color: transparent;
+}
+
+.carousel-inner {
+display: flex;
+transition: transform 0.5s ease-in-out;
+background-color: transparent;
+
+}
+
+.carousel-item {
+min-width: 100%;
+height: 250px;
+display: flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+border-radius: 2px;
+padding: 5px;
+position: relative;
+background-color: transparent;
+border: none; /* Ensure no border */
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 8px; /* Added border-radius to the image */
+    box-shadow: none;
+    outline: none;
+    transition: transform 0.4s ease;
+}
+
+
+.carousel-item:hover .card-img-top {
+    transform: scale(1.15); /* Keep this as is, if you want the larger hover effect */
+}
+
+
+.carousel-item a {
+    display: block;
+}
+
+@media (max-width: 768px) {
+.carousel {
+width: 100%;
+max-width: none;
+}
+
+.buy-now {
+font-size: 0.9em;
+}
+}
+
+.list-group-item {
+  color: #333; /* Dark text color for readability */
+  border: none; /* Remove borders for cleaner look */
+  font-size: 0.95rem;
+  padding: 10px 15px;
+}
+
+/* Carousel Navigation */
+.carousel-nav {
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+width: 100%;
+display: flex;
+justify-content: space-between;
+padding: 0 10px;
+}
+
+.carousel-nav button {
+background-color: rgba(0, 0, 0, 0.5);
+color: #fff;
+border: none;
+padding: 10px;
+cursor: pointer;
+border-radius: 50%;
+}
+
+.carousel-nav button:hover {
+background-color: rgba(0, 0, 0, 0.8);
+}
+
+.buy-now {
+margin-top: 10px;
+padding: 10px 20px;
+background-color: #ff9e80;
+color: #fff;
+font-size: 1em;
+border: none; /* Remove any default button border */
+border-radius: 5px;
+transition: background-color 0.3s ease;
+cursor: pointer; /* Add a pointer for better UX */
+outline: none;
+}
+
+.buy-now:hover {
+background-color: #d65b4b;
+}
+
+
+.article-container {
+padding: 40px;
+background-color: #f8f9fa;
+border-radius: 10px;
+box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+max-width: 1200px;
+margin: 0 auto;
+}
+
+.articles {
+display: flex;
+flex-wrap: wrap;
+gap: 20px;
+justify-content: center;
+}
+
+.article-item {
+background-color: white;
+padding: 20px;
+border-radius: 10px;
+box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+transition: transform 0.3s;
+}
+
+.article-item {
+flex: 1 1 30%; /* Adjusts width of each article */
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+padding: 16px;
+border-radius: 8px;
+background-color: #f9f9f9;
+}
+
+.article-item:hover {
+transform: scale(1.05);
+}
+
+.article-item h2 {
+font-size: 24px;
+color: #007bff;
+}
+
+.article-item .article-date {
+font-size: 14px;
+color: #6c757d;
+}
+
+.article-summary {
+margin-top: 10px;
+font-size: 16px;
+color: #333;
+}
+
+.read-more {
+display: inline-block;
+margin-top: 15px;
+color: #007bff;
+text-decoration: none;
+font-weight: bold;
+}
+
+.read-more:hover {
+text-decoration: underline;
+}
+
+/* Responsive behavior for small screens */
+@media (max-width: 768px) {
+.article-item {
+flex: 1 1 100%; /* Full width on smaller screens */
+}
+}
+
+
+/* Footer */
+footer {
+background-color: rgb(76,78,102);
+background-color: linear-gradient(90deg, rgba(76,78,102,1) 0%, rgba(121,122,135,1) 40%, rgba(193,153,114,1) 100%);
+color: #fff;
+padding: 20px;
+text-align: center;
+font-size: 1em;
+margin-top: auto; /* Pushes the footer to the bottom */
+}
+
+footer a {
+color: #ff9e80;
+text-decoration: none;
+margin: 0 10px;
+}
+
+footer a:hover {
+color: #ff7043;
+}
+
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+font-family: 'Poppins', sans-serif;
+background-color: #f4f4f4;
+color:;
+}
+
