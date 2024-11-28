@@ -1,21 +1,59 @@
 {% extends 'dashboard.html' %}
+{% load static %}
 {% block title %} <title> User Activity </title> {% endblock %}
 
 <!-- set this to logged in admin -->
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/user_activity.css' %}">
+<link rel="stylesheet" href="{% static 'styles/user_activity.css' %}?v=1">
     <body>
     <div class="container">
         <h2>Users Who Have Logged In</h2>
-        <ul class="user-list">
-<!---->
-        </ul>
+<ul>
+    {% for user in users_logged_in %}
+        <li>{{ user.first_name }} - Last login: {{ user.user.last_login }}</li>
+    {% endfor %}
+</ul>
 
-        <h2>Currently Logged In Users</h2>
-        <ul class="user-list">
+<div class="pagination">
+    <span class="step-links">
+        {% if users_logged_in.has_previous %}
+            <a href="?logged_in_page=1">&laquo; first</a>
+            <a href="?logged_in_page={{ users_logged_in.previous_page_number }}">previous</a>
+        {% endif %}
+        <span class="current">
+            Page {{ users_logged_in.number }} of {{ users_logged_in.paginator.num_pages }}.
+        </span>
+        {% if users_logged_in.has_next %}
+            <a href="?logged_in_page={{ users_logged_in.next_page_number }}">next</a>
+            <a href="?logged_in_page={{ users_logged_in.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
 
-        </ul>
+<h2>Currently Logged-In Users</h2>
+<ul>
+    {% for user in current_users %}
+        <li>{{ user.username }}</li>
+    {% endfor %}
+</ul>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if current_users.has_previous %}
+            <a href="?current_users_page=1">&laquo; first</a>
+            <a href="?current_users_page={{ current_users.previous_page_number }}">previous</a>
+        {% endif %}
+        <span class="current">
+            Page {{ current_users.number }} of {{ current_users.paginator.num_pages }}.
+        </span>
+        {% if current_users.has_next %}
+            <a href="?current_users_page={{ current_users.next_page_number }}">next</a>
+            <a href="?current_users_page={{ current_users.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
     </div>
 </body>
 {% endblock %}

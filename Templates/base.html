@@ -7,17 +7,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% block title %} <title> Odyce </title> {% endblock %}
     <link href="{% static 'styles/base.css' %}?v=1" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
 
 </head>
 <body>
 
     <!-- Header -->
     <header>
-        <h1>ODYCE</h1>
+        <a href="{% url 'home' %}" class="logo-link">
+            <h1>ODYCE</h1>
+        </a>
         <nav>
-            <a href="#">Shop</a>
             <a href="#">Fragrances</a>
             <a href="#">Contact</a>
+            <a href="/profile">Profile</a>
+            <a href="/profile">Faq</a>
         </nav>
     </header>
 

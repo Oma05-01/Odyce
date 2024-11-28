@@ -10,16 +10,18 @@
 <section class="wishlist-section">
     <br><br>
     <h2>Your Wishlist</h2>
+    <br><br>
+    <br><br>
     <div class="wishlist-container">
         {% if wishlist_items %}
             <ul class="wishlist-list">
                 {% for item in wishlist_items %}
                     <li class="wishlist-item">
                         <div class="item-details">
-                            <img src="{{ item.image_url }}" alt="{{ item.product_name }}">
+                            <img src="{{ item.product.picurl.url  }}" alt="{{ item.product_name }}">
                             <div class="item-info">
-                                <h3>{{ item.product_name }}</h3>
-                                <p>Price: ${{ item.price }}</p>
+                                <h3>{{ item.product.name }}</h3>
+                                <p>Price: ${{ item.product.price }}</p>
                                 <p>Quantity: {{ item.quantity }}</p>
                                 <a href="{% url 'remove_from_wishlist' item.id %}" class="remove-btn">Remove</a>
                             </div>

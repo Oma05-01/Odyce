@@ -61,7 +61,7 @@ urlpatterns = [
     path('dashboard/order/<int:order_id>/', views.order_details, name='order_details'),
 
     path('wishlist/', views.view_wishlist, name='view_wishlist'),
-    path('wishlist/add/<int:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
+    path('add_to_wishlist/<int:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
     path('wishlist/remove/<int:item_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
 
 

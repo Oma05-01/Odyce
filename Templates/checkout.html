@@ -1,18 +1,15 @@
 {% extends 'base.html' %}
 {% load static %}
 
-<!-- set this to logged in user -->
-
-{% block title %}Odyce - Checkout{% endblock %}
-
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/checkout.css' %}">
-<br><br><br><br><br><br><br><br>
+<link rel="stylesheet" href="{% static 'styles/checkout.css' %}?v=1">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
+<br><br><br>
 <div class="checkout-container">
-    <header class="checkout-header">
         <h1>Checkout</h1>
         <p>Please review your order before confirming.</p>
-    </header>
+
+    <br><br>
 
     <section class="order-summary">
         <h2>Billing Information</h2>
@@ -41,5 +38,44 @@
     </form>
 </div>
 
+<script>
+    function addToWishlist(productId) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "{% url 'add_to_wishlist' product_id=0 %}".replace('0', productId), true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));  // CSRF protection
+
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        var response = JSON.parse(xhr.responseText);
+        if (response.status === "success") {
+          alert(response.message);  // Success alert
+        } else {
+          alert(response.message);  // Error alert
+        }
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
+    };
+
+    var data = JSON.stringify({ product_id: productId });
+    xhr.send(data);
+  }
+
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      var cookies = document.cookie.split(";");
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+</script>
 
 {% endblock %}

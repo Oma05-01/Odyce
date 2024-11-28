@@ -3,6 +3,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.http import JsonResponse
+from django.core.paginator import Paginator
+from django.contrib.sessions.models import Session
+from django.utils.timezone import now
 from . models import *
 from django.core.files.storage import FileSystemStorage
 import random
@@ -384,12 +387,12 @@ def customer_orders(request):
 
 @login_required(login_url='/login')
 def add_to_wishlist(request, product_id):
-    # Check in MenPerfume first
+    # Try to find the item in MenPerfume first
     item = MenPerfume.objects.filter(pk=product_id).first()
     if item and item.is_for_men:
         content_type = ContentType.objects.get_for_model(MenPerfume)
         wishlist_item, created = WishlistItem.objects.get_or_create(
-            user=request.user,
+            user=request.user.customer,
             content_type=content_type,
             object_id=item.id
         )
@@ -398,12 +401,12 @@ def add_to_wishlist(request, product_id):
             wishlist_item.save()
         return JsonResponse({"status": "success", "message": "Item added to wishlist"})
 
-    # Check in WomenPerfume if not found in MenPerfume
+    # If not found in MenPerfume, check in WomenPerfume
     item = WomenPerfume.objects.filter(pk=product_id).first()
     if item and item.is_for_women:
         content_type = ContentType.objects.get_for_model(WomenPerfume)
         wishlist_item, created = WishlistItem.objects.get_or_create(
-            user=request.user,
+            user=request.user.customer,
             content_type=content_type,
             object_id=item.id
         )
@@ -412,13 +415,13 @@ def add_to_wishlist(request, product_id):
             wishlist_item.save()
         return JsonResponse({"status": "success", "message": "Item added to wishlist"})
 
-    # If product not found, return a 404 response
-    return render(request, '404.html')
+    # If the product is not found, return an error response
+    return JsonResponse({"status": "error", "message": "Product not found or invalid product type."}, status=404)
 
 
 @login_required(login_url='/login')
 def view_wishlist(request):
-    wishlist_items = WishlistItem.objects.filter(user=request.user)
+    wishlist_items = WishlistItem.objects.filter(user=request.user.customer)
     context = {"wishlist_items": wishlist_items}
     return render(request, "wishlist.html", context)
 
@@ -608,14 +611,40 @@ def reviews(request):
 # User Activity View
 @login_required(login_url='/login')
 def user_activity(request):
+    # Users who have ever logged in (users with a non-null 'last_login' in the related User model)
+    users_logged_in = Customer.objects.filter(user__last_login__isnull=False)
 
-    # Example data for demonstration (replace with actual query for logged-in users)
-    users_logged_in = User.objects.filter(last_login__isnull=False)
-    current_users = User.objects.filter(is_active=True)  # For demonstration, using active users
+    # Get active sessions (i.e., currently logged-in users)
+    active_sessions = Session.objects.filter(expire_date__gte=now())
+
+    # Extract user IDs from active sessions by looking in the session_data
+    active_user_ids = []
+    for session in active_sessions:
+        session_data = session.get_decoded()  # Get decoded session data
+        user_id = session_data.get('_auth_user_id')  # The user ID is stored in _auth_user_id
+        if user_id:
+            active_user_ids.append(user_id)
+
+    # Get the users who are currently logged in based on the extracted user IDs
+    current_users = User.objects.filter(id__in=active_user_ids)
+
+    # Paginate both lists
+    logged_in_paginator = Paginator(users_logged_in, 10)  # Show 10 per page
+    current_users_paginator = Paginator(current_users, 10)  # Show 10 per page
+
+    # Get the current page number for each list
+    logged_in_page = request.GET.get('logged_in_page')
+    current_users_page = request.GET.get('current_users_page')
+
+    # Get the respective page of users
+    users_logged_in_page = logged_in_paginator.get_page(logged_in_page)
+    for customer in users_logged_in:
+        print(customer.user.last_login, 'jjj')
+    current_users_page = current_users_paginator.get_page(current_users_page)
 
     context = {
-        'users_logged_in': users_logged_in,
-        'current_users': current_users,
+        'users_logged_in': users_logged_in_page,
+        'current_users': current_users_page,
     }
 
     return render(request, 'user_activity.html', context)
@@ -763,7 +792,7 @@ def confirm_order(request, order_id):
             'Order Confirmed',
             f'Your order has been confirmed. Your confirmation code is {order.confirmed_order_code}.',
             'OdyceForBenin@gmail.com',
-            [order.billing_email],
+            [order.customer.email],
             fail_silently=False,
         )
         return redirect('dashboard')

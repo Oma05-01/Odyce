@@ -35,6 +35,8 @@
             text-align: center;
         }
 
+
+
         nav {
             display: flex;
             justify-content: center;
@@ -166,6 +168,20 @@
 
         .product:hover img {
             transform: scale(1.1);
+        }
+
+        a.logo-link {
+            text-decoration: none !important;  /* Ensures the underline is removed, even if other styles conflict */
+        }
+
+        /* Style for the h1 inside the anchor tag */
+        a.logo-link h1 {
+            margin: 0; /* Ensure no margin around the h1 */
+            color: #333; /* Adjust the text color if needed */
+            font-size: 2.5em;  /* Optional: Customize the font size */
+            letter-spacing: 3px; /* Optional: Add letter spacing */
+            font-weight: bold;  /* Optional: Make the text bold */
+            text-align: center; /* Optional: Center align the text */
         }
 
         /* Footer */

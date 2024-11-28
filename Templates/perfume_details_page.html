@@ -4,7 +4,7 @@
 <!-- set this to logged in user -->
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/perfume_details.css' %}">
+<link rel="stylesheet" href="{% static 'styles/perfume_details.css' %}?v=1">
 <br> <br>
     <section class="product-details">
     <h2>Signature Scent 1</h2>
@@ -19,10 +19,13 @@
             <p><strong>Base Notes:</strong> Musk, Amber</p>
             <p><strong>Concentration:</strong> Eau de Parfum</p>
             <p><strong>Recommended for:</strong> Everyday wear, Casual outings</p>
-            <a href="{% url 'buy_now' product.id %}">
+            <span>
+                <a href="{% url 'buy_now' product.id %}">
                 <button class="buy-now">Buy Now</button>
                 <br><br>
             </a>
+            <button onclick="addToWishlist({{ product.id }})" class="wishlist-btn">Add to Wishlist</button>
+            </span>
         </div>
     </div>
 
@@ -31,7 +34,7 @@
     <div class="reviews">
         {% for review in reviews %}
             <div class="review">
-                <p><strong>{{ user.customer.first_name }}:</strong> {{ review.comment }}</p>
+                <p><strong>{{ review.user.first_name }}:</strong> {{ review.comment }}</p>
                 <span> Rating: {{ review.rating }} Stars</span>
                 <p>{{ review.comment }}</p>
                 <small>{{ review.created_at }}</small>
@@ -63,5 +66,46 @@
     {% endif %}
 
 </section>
+
+<script>
+  function addToWishlist(productId) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "{% url 'add_to_wishlist' product_id=0 %}".replace('0', productId), true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));  // CSRF protection
+
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        var response = JSON.parse(xhr.responseText);
+        if (response.status === "success") {
+          alert(response.message);  // Success alert
+        } else {
+          alert(response.message);  // Error alert
+        }
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
+    };
+
+    var data = JSON.stringify({ product_id: productId });
+    xhr.send(data);
+  }
+
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      var cookies = document.cookie.split(";");
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+</script>
+
 {% endblock %}
 

@@ -1,7 +1,1 @@
-check the users_activity view kini
 
-set the conditions for the views and the templates
-
-sort out the adding to wishlist kini - maybe cos i am ot logged in as a customer
-
-update the footer in both the home page and base template
