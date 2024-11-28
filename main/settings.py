@@ -14,6 +14,10 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 import dj_database_url
+
+
+load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,11 +28,37 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+# Production setup
+ALLOWED_HOSTS = ['main-ie29.onrender.com', 'www.main-ie29.onrender.com',]
+
+# Local development setup (add localhost for local testing)
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'main-ie29.onrender.com']
+
+
+# Set HSTS for production
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Optional: Enforce HSTS for all subdomains
+SECURE_HSTS_PRELOAD = True  # Optional: Allow your domain to be included in browser preload lists (for stricter security)
+
+# Force SSL redirection for production
+SECURE_SSL_REDIRECT = True
+
+
+# If using a proxy like Nginx or Heroku, ensure Django knows the connection is over HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
+# Enforce SSL Cookies (important for security)
+SESSION_COOKIE_SECURE = True  # Ensures cookies are only sent over HTTPS
+CSRF_COOKIE_SECURE = True  # Ensures CSRF cookies are only sent over HTTPS
+
+# Use Secure HTTP Headers
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent browsers from sniffing content types
+SECURE_BROWSER_XSS_FILTER = True  # Enable browser XSS filtering
+
 
 
 # Application definition
@@ -145,8 +175,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-load_dotenv()
 
 # Email configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
