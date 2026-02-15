@@ -32,16 +32,16 @@ It was built to deepen understanding of Django architecture, relational modeling
 
 ## ⚙️ Key Features
 
-🧴 Separate Men’s and Women’s perfume categories
-📝 Product detail pages with reviews
-⭐ Star-based rating system
-🧠 Generic review system using Django ContentTypes
-🛒 Checkout flow with session-based order state
-📎 Payment confirmation with receipt upload
-💖 Wishlist functionality
-🔐 Login-required protected views
-🛠 Admin product management (edit/delete)
-📦 Controlled order creation (prevents duplicate unpaid orders)
+- 🧴 Separate Men’s and Women’s perfume categories
+- 📝 Product detail pages with reviews
+- ⭐ Star-based rating system
+- 🧠 Generic review system using Django ContentTypes
+- 🛒 Checkout flow with session-based order state
+- 📎 Payment confirmation with receipt upload
+- 💖 Wishlist functionality
+- 🔐 Login-required protected views
+- 🛠 Admin product management (edit/delete)
+- 📦 Controlled order creation (prevents duplicate unpaid orders)
 
 ## 🧠 Architecture / Design Decisions
 **Why Django?**
