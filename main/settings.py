@@ -110,16 +110,26 @@ WSGI_APPLICATION = 'main.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'odyce_db',
-        'USER': 'odyce_admin',
-        'PASSWORD': '0m@p0stgr3s',
-        'HOST': 'localhost', # Or your DB server IP
-        'PORT': '5432',
+if not DEBUG:
+    # On Render, use the DATABASE_URL environment variable
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=os.environ.get('DATABASE_URL'),
+            conn_max_age=600
+        )
     }
-}
+else:
+    # Keep your local Postgres settings for when you're working in PyCharm
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'odyce_db',
+            'USER': 'odyce_admin',
+            'PASSWORD': '0m@p0stgr3s',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
+        }
+    }
 
 
 # Password validation
