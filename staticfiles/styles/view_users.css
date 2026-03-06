@@ -1,0 +1,120 @@
+:root {
+    --slate-900: #0f172a;
+    --slate-600: #475569;
+    --slate-100: #f1f5f9;
+    --accent: #38bdf8;
+    --border: #e2e8f0;
+}
+
+.users-page-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    font-family: 'Inter', sans-serif;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+}
+
+.header-text h1 { font-size: 1.8rem; color: rgba(184,154,106,0.18); margin: 0; }
+.header-text p { color: #b89a6a; margin-top: 5px; }
+
+.stat-badge {
+    background: var(--slate-900);
+    color: white;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Table Styling */
+.users-table-container {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.users-table th {
+    background: #f8fafc;
+    padding: 15px 20px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--slate-600);
+    border-bottom: 1px solid var(--border);
+}
+
+.users-table td {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--slate-100);
+    vertical-align: middle;
+}
+
+/* User Cell with Avatar */
+.user-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-avatar {
+    width: 35px;
+    height: 35px;
+    background: var(--slate-100);
+    color: var(--slate-900);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.user-name strong { display: block; color: var(--slate-900); }
+.user-name span { font-size: 0.8rem; color: var(--slate-600); }
+
+/* Role Badges */
+.role-badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.role-badge.distributor { background: #e0f2fe; color: #0369a1; }
+.role-badge.staff { background: #fef3c7; color: #92400e; }
+.role-badge.customer { background: #f1f5f9; color: var(--slate-600); }
+
+.text-right { text-align: right; }
+
+.btn-view {
+    text-decoration: none;
+    background: var(--slate-900);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.btn-view:hover { background: var(--accent); }
+
+@media (max-width: 768px) {
+    .users-table th:nth-child(2), .users-table td:nth-child(2) { display: none; }
+}

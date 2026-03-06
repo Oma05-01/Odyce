@@ -1,0 +1,75 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+{% block title %}Admin | Create New Fragrance{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'styles/create_post.css' %}?v=2">
+
+<div class="create-product-wrapper">
+    <header class="page-header">
+        <nav class="breadcrumb">
+            <a href="{% url 'dashboard' %}">Dashboard</a> / <span>New Product</span>
+        </nav>
+        <h1>Launch New Fragrance</h1>
+        <p>Fill in the details below to add a new scent to the Odyce collection.</p>
+    </header>
+
+    <div class="form-container">
+        <form method="POST" enctype="multipart/form-data" action="{% url 'create_product' %}" class="admin-form">
+            {% csrf_token %}
+
+            <div class="form-grid">
+                <div class="form-main">
+                    <div class="form-card">
+                        <h3>General Information</h3>
+                        <div class="form-group">
+                            <label for="name">Product Name</label>
+                            <input type="text" id="name" name="name" placeholder="e.g. Midnight Oud" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Fragrance Story & Notes</label>
+                            <textarea id="description" name="description" rows="8" placeholder="Describe the scent profile, top, middle, and base notes..." required></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-sidebar">
+                    <div class="form-card">
+                        <h3>Inventory & Pricing</h3>
+                        <div class="form-group">
+                            <label for="price">Retail Price (₦)</label>
+                            <input type="number" id="price" name="price" step="0.01" placeholder="0.00" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="quantity">Stock Quantity</label>
+                            <input type="number" id="quantity" name="quantity" placeholder="0" required>
+                        </div>
+                    </div>
+
+                    <div class="form-card">
+                        <h3>Product Media</h3>
+                        <div class="form-group">
+                            <label for="image">Upload Gallery Image</label>
+                            <div class="custom-file-upload">
+                                <input type="file" id="image" name="image" accept="image/*" required>
+                                <div class="upload-hint">
+                                    <span>📸</span>
+                                    <p>Click to upload JPG or PNG</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-create">Publish Product</button>
+                <a href="javascript:history.back()" class="btn-discard">Discard Draft</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

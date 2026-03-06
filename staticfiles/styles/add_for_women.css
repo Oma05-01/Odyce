@@ -1,0 +1,133 @@
+:root {
+    --slate-900: #0f172a;
+    --slate-700: #334155;
+    --slate-200: #e2e8f0;
+    --accent-pink: #f472b6; /* Subtle distinction for women's section */
+    --white: #ffffff;
+}
+
+.admin-form-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.form-header {
+    margin-bottom: 30px;
+}
+
+.breadcrumb {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--slate-700);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+}
+
+.breadcrumb .current {
+    color: var(--accent-pink);
+    font-weight: 600;
+}
+
+.form-header h1 {
+    font-size: 1.75rem;
+    color: var(--slate-900);
+}
+
+.admin-card-form {
+    background: var(--white);
+    padding: 40px;
+    border-radius: 12px;
+    border: 1px solid var(--slate-200);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--slate-700);
+}
+
+.form-group input, 
+.form-group textarea {
+    padding: 12px;
+    border: 1px solid var(--slate-200);
+    border-radius: 8px;
+    font-family: inherit;
+    background: #f8fafc;
+}
+
+.form-group input:focus, 
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent-pink);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.1);
+}
+
+/* Custom File Upload */
+.custom-file-upload input[type="file"] {
+    display: none;
+}
+
+.file-drop-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+    border: 2px dashed var(--slate-200);
+    border-radius: 8px;
+    cursor: pointer;
+    background: #f8fafc;
+}
+
+.file-drop-zone:hover {
+    border-color: var(--accent-pink);
+}
+
+.btn-save {
+    background: var(--slate-900);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-save:hover {
+    background: #000;
+    transform: translateY(-1px);
+}
+
+.btn-back {
+    text-decoration: none;
+    color: var(--slate-700);
+    font-size: 0.9rem;
+    margin-left: 20px;
+}
+
+.alert {
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.alert-success { background: #ecfdf5; color: #065f46; }
+
+@media (max-width: 768px) {
+    .form-row { grid-template-columns: 1fr; }
+}

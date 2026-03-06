@@ -1,0 +1,114 @@
+:root {
+    --slate-900: #0f172a;
+    --slate-600: #475569;
+    --emerald-600: #059669;
+    --border: #e2e8f0;
+}
+
+.confirmed-location-wrapper {
+    max-width: 850px;
+    margin: 0 auto;
+    font-family: 'Inter', sans-serif;
+}
+
+.location-header {
+    margin-bottom: 30px;
+}
+
+.breadcrumb {
+    font-size: 0.8rem;
+    color: var(--slate-600);
+    margin-bottom: 10px;
+}
+
+.breadcrumb a { text-decoration: none; color: var(--emerald-600); }
+
+.location-header h1 {
+    font-size: 1.8rem;
+    color: var(--slate-900);
+    margin: 0;
+}
+
+/* Order Card Styling */
+.orders-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.confirmed-order-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-left: 6px solid var(--emerald-600);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 15px;
+}
+
+.order-id { font-weight: 700; color: var(--slate-600); font-family: monospace; }
+.verified-badge { color: var(--emerald-600); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; }
+
+.card-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.customer-name { font-size: 1.1rem; font-weight: 600; color: var(--slate-900); }
+.customer-contact { color: var(--emerald-600); font-size: 0.9rem; margin: 4px 0; }
+.customer-address { color: var(--slate-600); font-size: 0.85rem; line-height: 1.4; }
+
+.order-total { font-size: 1.4rem; font-weight: 700; color: var(--slate-900); margin: 10px 0; }
+
+.code-box {
+    background: #f0fdf4;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px dashed var(--emerald-600);
+}
+
+.code-box small { display: block; color: var(--emerald-600); font-size: 0.7rem; text-transform: uppercase; }
+.code-box strong { font-size: 1.1rem; color: var(--slate-900); letter-spacing: 1px; }
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px;
+}
+
+.timestamp { font-size: 0.8rem; color: var(--slate-600); }
+
+.btn-manage {
+    text-decoration: none;
+    background: var(--slate-900);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.btn-manage:hover { background: #000; }
+
+/* Empty State */
+.empty-location {
+    text-align: center;
+    padding: 60px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+@media (max-width: 600px) {
+    .card-body { grid-template-columns: 1fr; gap: 20px; }
+}

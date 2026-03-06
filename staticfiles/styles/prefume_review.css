@@ -1,0 +1,127 @@
+:root {
+    --midnight: #0f172a;
+    --gold-accent: #c5a059;
+    --slate-text: #475569;
+    --bg-light: #f8fafc;
+}
+
+.reviews-wrapper {
+    max-width: 1100px;
+    margin: 100px auto 60px;
+    padding: 0 20px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.reviews-hero {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.reviews-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    color: var(--midnight);
+    margin-bottom: 10px;
+}
+
+.reviews-hero p {
+    color: var(--slate-text);
+    font-size: 1.1rem;
+}
+
+/* Grid Layout */
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+/* Card Styling */
+.review-card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.product-mini {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 15px;
+}
+
+.product-mini img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.product-info h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--midnight);
+}
+
+/* Stars */
+.star-rating {
+    color: #e2e8f0;
+    font-size: 0.8rem;
+}
+
+.star.filled {
+    color: var(--gold-accent);
+}
+
+/* Content */
+.review-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--midnight);
+    margin: 0 0 25px 0;
+    flex-grow: 1;
+}
+
+/* Meta */
+.review-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.author-name {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--midnight);
+}
+
+.verified-badge {
+    font-size: 0.7rem;
+    color: #10b981;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.review-date {
+    font-size: 0.8rem;
+    color: var(--slate-text);
+}
+
+@media (max-width: 600px) {
+    .reviews-hero h1 { font-size: 2rem; }
+}

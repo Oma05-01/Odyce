@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # Production setup
 ALLOWED_HOSTS = ['main-ie29.onrender.com', 'www.main-ie29.onrender.com', 'localhost', '127.0.0.1']
@@ -37,29 +37,30 @@ ALLOWED_HOSTS = ['main-ie29.onrender.com', 'www.main-ie29.onrender.com', 'localh
 # Local development setup (add localhost for local testing)
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'main-ie29.onrender.com']
 
+if not DEBUG:
+    # Set HSTS for production
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Optional: Enforce HSTS for all subdomains
+    SECURE_HSTS_PRELOAD = True  # Optional: Allow your domain to be included in browser preload lists (for stricter security)
 
-# Set HSTS for production
-# SECURE_HSTS_SECONDS = 31536000  # 1 year
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Optional: Enforce HSTS for all subdomains
-# SECURE_HSTS_PRELOAD = True  # Optional: Allow your domain to be included in browser preload lists (for stricter security)
-#
-# # Force SSL redirection for production
-# SECURE_SSL_REDIRECT = False
-#
-#
-# # If using a proxy like Nginx or Heroku, ensure Django knows the connection is over HTTPS
-# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-#
-#
-# # Enforce SSL Cookies (important for security)
-# SESSION_COOKIE_SECURE = True  # Ensures cookies are only sent over HTTPS
-# CSRF_COOKIE_SECURE = True  # Ensures CSRF cookies are only sent over HTTPS
-#
-# # Use Secure HTTP Headers
-# SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent browsers from sniffing content types
-# SECURE_BROWSER_XSS_FILTER = True  # Enable browser XSS filtering
+    # Force SSL redirection for production
+    SECURE_SSL_REDIRECT = True
 
 
+    # If using a proxy like Nginx or Heroku, ensure Django knows the connection is over HTTPS
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
+    # Enforce SSL Cookies (important for security)
+    SESSION_COOKIE_SECURE = True  # Ensures cookies are only sent over HTTPS
+    CSRF_COOKIE_SECURE = True  # Ensures CSRF cookies are only sent over HTTPS
+
+    # Use Secure HTTP Headers
+    SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent browsers from sniffing content types
+    SECURE_BROWSER_XSS_FILTER = True  # Enable browser XSS filtering
+
+    # Protect against XSS and Clickjacking
+    X_FRAME_OPTIONS = 'DENY'
 
 # Application definition
 
@@ -110,11 +111,14 @@ WSGI_APPLICATION = 'main.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        # 👇 Changed this string to point to SQLite instead of Postgres
-        default='sqlite:///db.sqlite3',
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'odyce_db',
+        'USER': 'odyce_admin',
+        'PASSWORD': '0m@p0stgr3s',
+        'HOST': 'localhost', # Or your DB server IP
+        'PORT': '5432',
+    }
 }
 
 
@@ -152,7 +156,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/

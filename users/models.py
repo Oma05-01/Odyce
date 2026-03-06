@@ -144,7 +144,11 @@ class ContactUS(models.Model):
 
 
 @receiver(post_save, sender=User)
-def create_customer_profile(sender, instance, created, **kwargs):
+def create_customer_profile(sender, instance, created, raw,  **kwargs):
+    if raw:
+        return
+
     if created:
+
         # This only runs when a NEW user is saved
         Customer.objects.get_or_create(user=instance)

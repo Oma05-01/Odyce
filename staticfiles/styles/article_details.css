@@ -1,0 +1,109 @@
+:root {
+    --text-primary: #1a1a1a;
+    --text-secondary: #64748b;
+    --accent: #ff9e80;
+    --bg-journal: #ffffff;
+}
+
+.journal-wrapper {
+    max-width: 750px; /* Narrower width for better reading focus */
+    margin: 60px auto;
+    padding: 0 20px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.article-hero {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.breadcrumb {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+.breadcrumb a { color: var(--accent); text-decoration: none; }
+
+.article-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+.article-meta {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.article-meta .dot { margin: 0 10px; }
+
+/* Content Styling */
+.article-body {
+    font-family: 'Lora', serif; /* Classic serif for a literary feel */
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #2d3748;
+}
+
+.post-content p {
+    margin-bottom: 25px;
+}
+
+/* Admin Toolbar Styling */
+.admin-toolbar {
+    margin-top: 80px;
+    padding: 30px;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.admin-toolbar h3 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+.btn-admin {
+    display: inline-block;
+    padding: 12px 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.3s;
+    border: none;
+}
+
+.edit {
+    background-color: var(--text-primary);
+    color: white;
+    margin-right: 10px;
+}
+
+.delete {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+.delete:hover { background-color: #dc2626; color: white; }
+
+.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 60px;
+    color: var(--text-secondary);
+    text-decoration: none;
+}
+
+@media (max-width: 600px) {
+    .article-title { font-size: 2.2rem; }
+}

@@ -1,0 +1,135 @@
+:root {
+    --slate-900: #0f172a;
+    --slate-600: #475569;
+    --amber-500: #f59e0b;
+    --border: #e2e8f0;
+}
+
+.logistics-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: 'Inter', sans-serif;
+}
+
+.logistics-header {
+    margin-bottom: 40px;
+}
+
+.breadcrumb {
+    font-size: 0.8rem;
+    color: var(--slate-600);
+    margin-bottom: 10px;
+}
+
+.header-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-title h1 {
+    font-size: 1.8rem;
+    color: var(--slate-900);
+    margin: 0;
+}
+
+.order-count {
+    background: #fef3c7;
+    color: #92400e;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Order Cards Stack */
+.orders-queue {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.order-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 25px;
+    position: relative;
+    transition: transform 0.2s;
+}
+
+.order-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+}
+
+.card-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--amber-500);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+.status-text {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--amber-500);
+}
+
+.card-content {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.order-id { font-size: 1.2rem; margin: 0; color: var(--slate-900); }
+.order-total { font-size: 1.4rem; font-weight: 700; color: var(--slate-900); margin-top: 5px; }
+
+.customer-info p {
+    font-size: 0.9rem;
+    color: var(--slate-600);
+    margin-bottom: 5px;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+}
+
+.order-date { font-size: 0.8rem; color: #94a3b8; }
+
+.btn-inspect {
+    background: var(--slate-900);
+    color: white;
+    text-decoration: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.btn-inspect:hover { background: #000; }
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+}
+
+@media (max-width: 600px) {
+    .card-content { grid-template-columns: 1fr; gap: 15px; }
+}

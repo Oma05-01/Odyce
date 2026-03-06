@@ -1,0 +1,153 @@
+:root {
+    --odyce-ink: #0f0e0c;
+    --odyce-gold: #b89a6a;
+    --odyce-cream: #f7f3ee;
+    --odyce-mist: #e8e2d9;
+    --odyce-charcoal: #2a2825;
+}
+
+.activity-page-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.activity-header {
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--odyce-mist);
+    padding-bottom: 20px;
+}
+
+.activity-header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: rgba(184,154,106,0.18);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.activity-header p {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--odyce-gold);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.activity-section {
+    background: white;
+    border: 1px solid var(--odyce-mist);
+    border-radius: 2px; /* Sharp corners like the rest of Odyce */
+    padding: 35px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.section-title h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    color: var(--odyce-ink);
+    letter-spacing: 1px;
+}
+
+/* --- Active Users: Luxury Tags --- */
+.active-users-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.active-user-tag {
+    background: var(--odyce-ink);
+    color: var(--odyce-gold);
+    padding: 10px 20px;
+    border-radius: 2px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--odyce-gold);
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--odyce-gold);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--odyce-gold);
+}
+
+/* --- History Table: Minimalist Editorial --- */
+.activity-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.activity-table th {
+    padding: 15px;
+    border-bottom: 1px solid var(--odyce-ink);
+    color: var(--odyce-ink);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+
+.activity-table td {
+    padding: 20px 15px;
+    border-bottom: 1px solid var(--odyce-mist);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    color: var(--odyce-charcoal);
+}
+
+.badge-offline {
+    font-size: 0.65rem;
+    background: var(--odyce-mist);
+    color: var(--odyce-ink);
+    padding: 4px 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- Pagination --- */
+.pagination {
+    margin-top: 30px;
+    gap: 10px;
+}
+
+.pagination a {
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--odyce-gold);
+    border: 1px solid var(--odyce-gold);
+    padding: 8px 18px;
+    border-radius: 0;
+    transition: all 0.3s ease;
+}
+
+.pagination a:hover {
+    background: var(--odyce-gold);
+    color: white;
+}
+
+/* --- Pulse Icon (Gold instead of Emerald) --- */
+.pulse-icon {
+    width: 10px;
+    height: 10px;
+    background: var(--odyce-gold);
+    border-radius: 50%;
+    animation: pulse-gold 2s infinite;
+}
+
+@keyframes pulse-gold {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(184, 154, 106, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(184, 154, 106, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(184, 154, 106, 0); }
+}

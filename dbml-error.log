@@ -1,0 +1,19 @@
+2026-03-05T23:43:03.588Z
+Error: PostgreSQL connection error: AggregateError
+    at D (C:\Users\user\AppData\Roaming\npm\node_modules\@dbml\cli\node_modules\@dbml\connector\dist\index.js:1:1741)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async ae (C:\Users\user\AppData\Roaming\npm\node_modules\@dbml\cli\node_modules\@dbml\connector\dist\index.js:218:278)
+    at async connectionHandler (C:\Users\user\AppData\Roaming\npm\node_modules\@dbml\cli\lib\index.js:1179:22)
+
+2026-03-06T00:12:45.074Z
+undefined
+
+2026-03-06T00:16:45.934Z
+undefined
+
+2026-03-06T00:19:43.491Z
+undefined
+
+2026-03-06T00:20:18.793Z
+undefined
+

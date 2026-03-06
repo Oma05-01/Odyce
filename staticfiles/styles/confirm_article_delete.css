@@ -1,0 +1,107 @@
+:root {
+    --danger: #ef4444;
+    --danger-dark: #b91c1c;
+    --slate-900: #0f172a;
+    --slate-600: #475569;
+    --border: #e2e8f0;
+}
+
+.delete-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    font-family: 'Inter', sans-serif;
+}
+
+.delete-card {
+    background: white;
+    max-width: 500px;
+    width: 100%;
+    padding: 40px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border);
+}
+
+.warning-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.delete-card h1 {
+    font-size: 1.5rem;
+    color: var(--slate-900);
+    margin-bottom: 10px;
+}
+
+.warning-text {
+    color: var(--slate-600);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.article-preview-box {
+    background: #fef2f2;
+    border: 1px solid #fee2e2;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.article-preview-box .label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--danger-dark);
+    display: block;
+    margin-bottom: 5px;
+}
+
+.title-display {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--slate-900);
+}
+
+/* Actions */
+.button-row {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-confirm-delete {
+    padding: 14px;
+    background: var(--danger);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-confirm-delete:hover {
+    background: var(--danger-dark);
+}
+
+.btn-cancel {
+    padding: 14px;
+    text-decoration: none;
+    color: var(--slate-600);
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.btn-cancel:hover {
+    background: #f8fafc;
+    color: var(--slate-900);
+}

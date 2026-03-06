@@ -1,0 +1,121 @@
+:root {
+    --slate-900: #0f172a;
+    --slate-600: #475569;
+    --border: #e2e8f0;
+    --accent: #38bdf8;
+}
+
+.edit-article-wrapper {
+    max-width: 900px;
+    margin: 40px auto;
+    font-family: 'Inter', sans-serif;
+}
+
+.form-card {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+    margin-bottom: 30px;
+}
+
+.breadcrumb {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--slate-600);
+    margin-bottom: 10px;
+}
+
+.breadcrumb a { color: var(--accent); text-decoration: none; }
+
+.card-header h1 {
+    font-size: 1.8rem;
+    color: var(--slate-900);
+    margin: 0;
+}
+
+.card-header p { color: var(--slate-600); }
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--slate-900);
+    margin-bottom: 8px;
+}
+
+.form-group input, 
+.form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #f8fafc;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.form-group input:focus, 
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--slate-900);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
+}
+
+.field-help {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.8rem;
+    color: var(--slate-600);
+}
+
+/* Actions */
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-top: 25px;
+    border-top: 1px solid var(--border);
+}
+
+.btn-update {
+    padding: 14px 28px;
+    background: var(--slate-900);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-update:hover { background: #000; }
+
+.btn-cancel {
+    text-decoration: none;
+    color: var(--slate-600);
+    font-size: 0.9rem;
+}
+
+.btn-cancel:hover { color: #ef4444; }
+
+/* Alert Messages */
+.alert {
+    margin-top: 25px;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.9rem;
+    background: var(--slate-900);
+    color: white;
+}

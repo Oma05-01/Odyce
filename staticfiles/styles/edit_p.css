@@ -1,0 +1,137 @@
+:root {
+    --slate-900: #0f172a;
+    --slate-700: #334155;
+    --border: #e2e8f0;
+    --success: #10b981;
+}
+
+.edit-product-wrapper {
+    max-width: 800px;
+    margin: 40px auto;
+    font-family: 'Inter', sans-serif;
+}
+
+.form-card {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.card-header h1 {
+    font-size: 1.8rem;
+    color: var(--slate-900);
+}
+
+.card-header p {
+    color: var(--slate-700);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    color: var(--slate-900);
+}
+
+.form-group input, 
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #f8fafc;
+    transition: 0.2s;
+}
+
+.form-group input:focus, 
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--slate-900);
+    background: white;
+}
+
+/* Image Preview Logic */
+.upload-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #f1f5f9;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.current-image-preview img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.current-image-preview span {
+    display: block;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--slate-700);
+}
+
+/* Actions */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn-update {
+    flex: 2;
+    background: var(--slate-900);
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-cancel {
+    flex: 1;
+    text-align: center;
+    text-decoration: none;
+    padding: 14px;
+    color: #ef4444;
+    font-weight: 500;
+}
+
+/* Alerts */
+.alert {
+    margin-top: 20px;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    background: var(--slate-900);
+    color: white;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 600px) {
+    .form-row { grid-template-columns: 1fr; }
+    .upload-container { flex-direction: column; align-items: flex-start; }
+}

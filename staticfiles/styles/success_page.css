@@ -1,0 +1,122 @@
+:root {
+    --success-green: #27ae60;
+    --dark-text: #2c3e50;
+    --muted-text: #64748b;
+    --bg-color: #f8fafc;
+}
+
+.success-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 85vh;
+    background-color: var(--bg-color);
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.success-card {
+    text-align: center;
+    background-color: #ffffff;
+    padding: 60px 40px;
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+    max-width: 550px;
+    width: 100%;
+}
+
+/* Success Checkmark Animation Effect */
+.icon-circle {
+    width: 80px;
+    height: 80px;
+    background-color: #e6fffa;
+    color: var(--success-green);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    margin: 0 auto 30px;
+    border: 2px solid #b2f5ea;
+}
+
+.success-card h1 {
+    font-size: 2rem;
+    color: var(--dark-text);
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.main-msg {
+    font-size: 1.1rem;
+    color: var(--dark-text);
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.status-box {
+    background-color: #f1f5f9;
+    padding: 12px 20px;
+    border-radius: 12px;
+    display: inline-flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    font-size: 0.9rem;
+}
+
+.status-label { color: var(--muted-text); }
+.status-value { color: var(--dark-text); font-weight: 600; }
+
+.sub-msg {
+    font-size: 0.95rem;
+    color: var(--muted-text);
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+/* Action Buttons */
+.action-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.btn-primary {
+    width: 100%;
+    max-width: 300px;
+    padding: 15px 30px;
+    background-color: var(--dark-text);
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.btn-secondary {
+    color: var(--muted-text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.btn-secondary:hover {
+    color: var(--success-green);
+}
+
+@media (max-width: 480px) {
+    .success-card {
+        padding: 40px 20px;
+    }
+    .success-card h1 {
+        font-size: 1.6rem;
+    }
+}

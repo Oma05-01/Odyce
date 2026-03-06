@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odyce | Luxury Fragrance House</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="{% static 'styles/home.css' %}?v=2" rel="stylesheet"/>
+</head>
+<body>
+
+{% if request.user.is_authenticated %}
+    <header>
+        <div class="welcome">Welcome, {{ request.user.first_name|default:request.user.username }}</div>
+        <a href="{% url 'home' %}" class="odyce-home-link"><h1>ODYCE</h1></a>
+        <nav>
+            <a href="{% url 'home' %}">Shop</a>
+            <a href="{% url 'view_wishlist' %}">Wishlist</a>
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        </nav>
+    </header>
+
+    {% if request.user.is_staff %}
+    <div class="fab-backdrop" id="fab-backdrop"></div>
+    <div class="fab-wrapper" id="fab-wrapper">
+        <button class="fab-main" id="fab-main"><span class="fab-icon-bar"></span><span class="fab-icon-bar"></span><span class="fab-icon-bar"></span></button>
+        <div class="fab-items">
+            <a href="{% url 'contact_us_messages' %}" class="fab-item"><span class="fab-item-label">Messages</span><span class="fab-item-btn">✉️</span></a>
+            <a href="{% url 'reviews' %}" class="fab-item"><span class="fab-item-label">Reviews</span><span class="fab-item-btn">⭐</span></a>
+            <a href="{% url 'view_users' %}" class="fab-item"><span class="fab-item-label">Users</span><span class="fab-item-btn">👤</span></a>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="content">
+        <div class="split-container">
+            <div class="men-section">
+                <p class="section-eyebrow">Collection</p>
+                <h2>For Him</h2>
+                <a href="{% url 'men' %}" class="explore-link">Explore Men's</a>
+                <div class="carousel" id="men-carousel">
+                    <div class="carousel-track-wrap"><div class="carousel-track">
+                        {% for product in men_perfumes %}
+                        <div class="card">
+                            <a href="{% url 'product_detail' 'men' product.id %}">
+                                {% if product.picurl %}<img src="{{ product.picurl.url }}" alt="{{ product.name }}">{% endif %}
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="price-tag">₦{{ product.price }}</p>
+                                <a href="{% url 'buy_now' 'men' product.id %}"><button class="buy-now">Buy Now</button></a>
+                            </div>
+                        </div>
+                        {% empty %}<p>No perfumes available.</p>{% endfor %}
+                    </div></div>
+                    <div class="carousel-nav"><button data-dir="-1">‹</button><button data-dir="1">›</button></div>
+                </div>
+            </div>
+
+            <div class="women-section">
+                <p class="section-eyebrow">Collection</p>
+                <h2>For Her</h2>
+                <a href="{% url 'women' %}" class="explore-link">Explore Women's</a>
+                <div class="carousel" id="women-carousel">
+                    <div class="carousel-track-wrap"><div class="carousel-track">
+                        {% for product in women_perfumes %}
+                        <div class="card">
+                            <a href="{% url 'product_detail' 'women' product.id %}">
+                                {% if product.picurl %}<img src="{{ product.picurl.url }}" alt="{{ product.name }}">{% endif %}
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="price-tag">₦{{ product.price }}</p>
+                                <a href="{% url 'buy_now' 'women' product.id %}"><button class="buy-now">Buy Now</button></a>
+                            </div>
+                        </div>
+                        {% empty %}<p>No perfumes available.</p>{% endfor %}
+                    </div></div>
+                    <div class="carousel-nav"><button data-dir="-1">‹</button><button data-dir="1">›</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer><p>&copy; 2026 Odyce Store | <a href="#">Privacy Policy</a></p></footer>
+
+{% else %}
+    <div class="access-denied">
+        <h2>Access Denied</h2>
+        <p>Authentication required to view the vault.</p>
+        <a href="{% url 'login' %}"><button>Enter Odyce</button></a>
+    </div>
+{% endif %}
+
+    <script>
+        // FAB Toggle
+        const fabMain = document.getElementById('fab-main');
+        const fabWrapper = document.getElementById('fab-wrapper');
+        if(fabMain) {
+            fabMain.addEventListener('click', () => {
+                fabWrapper.classList.toggle('open');
+                fabMain.classList.toggle('open');
+            });
+        }
+
+        // Carousel Logic
+        document.querySelectorAll('.carousel').forEach(carousel => {
+            const track = carousel.querySelector('.carousel-track');
+            const items = carousel.querySelectorAll('.card');
+            let current = 0;
+            carousel.querySelectorAll('.carousel-nav button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const dir = parseInt(btn.dataset.dir);
+                    current = (current + dir + items.length) % items.length;
+                    track.style.transform = `translateX(-${current * 100}%)`;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

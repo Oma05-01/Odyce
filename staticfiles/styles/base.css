@@ -1,0 +1,151 @@
+/* --- Global Styles --- */
+:root {
+    --primary: #0f172a;    /* Slate Dark */
+    --accent: #ff9e80;     /* Peach Accent */
+    --bg-light: #f8fafc;
+    --text-main: #334155;
+    --nav-height: 80px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /* Pushes content down so it's not hidden under the fixed header */
+    padding-top: var(--nav-height);
+}
+
+/* --- Header & Nav --- */
+.main-header {
+    background-color: var(--primary);
+    height: var(--nav-height);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.header-content {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-link {
+    text-decoration: none;
+}
+
+.logo-link h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    letter-spacing: 5px;
+    color: #fff;
+    margin: 0;
+}
+
+.main-nav a {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-left: 25px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+}
+
+.main-nav a:hover {
+    color: var(--accent);
+}
+
+/* --- Main Wrapper --- */
+.content-wrapper {
+    flex: 1; /* This ensures the footer stays at the bottom on short pages */
+}
+
+/* --- Footer --- */
+.main-footer {
+    background-color: var(--primary);
+    color: #fff;
+    padding: 60px 20px 30px;
+    margin-top: 80px;
+}
+
+.footer-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.footer-brand h3 {
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+}
+
+.footer-brand p {
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+.footer-links a {
+    color: #94a3b8;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 0.85rem;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: var(--accent);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 30px;
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        padding: 10px;
+    }
+    
+    .main-nav {
+        margin-top: 10px;
+    }
+    
+    .main-nav a {
+        margin: 0 10px;
+        font-size: 0.75rem;
+    }
+    
+    .footer-grid {
+        flex-direction: column;
+        gap: 30px;
+        text-align: center;
+    }
+}
