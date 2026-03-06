@@ -1,126 +1,176 @@
-/* Overall Container */
-.checkout-container {
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 12px;  /* More rounded corners */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
-    margin: 40px auto;
-    font-family: 'Arial', sans-serif;
+:root {
+    --brand-green: #27ae60;
+    --brand-dark: #2c3e50;
+    --brand-accent: #ff9e80;
+    --text-light: #7f8c8d;
 }
 
-/* Section Headers */
+.checkout-page-wrapper {
+    background-color: #f4f7f6;
+    min-height: 100vh;
+    padding: 60px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.checkout-container {
+    background-color: #ffffff;
+    padding: 50px;
+    border-radius: 16px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+    max-width: 900px;
+    width: 100%;
+}
+
+.checkout-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
 .checkout-header h1 {
-    font-size: 36px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 20px;
+    font-size: 2.5rem;
+    color: var(--brand-dark);
+    margin-bottom: 10px;
 }
 
 .checkout-header p {
-    font-size: 18px;
-    color: #666;
+    color: var(--text-light);
+    font-size: 1.1rem;
 }
 
-/* Order Summary and Order Details */
-.order-summary,
-.order-details {
-    margin-bottom: 30px;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 20px;
+/* Two-column layout for details */
+.checkout-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 40px;
 }
 
-.order-summary h2, .order-details h2 {
-    font-size: 28px;
-    font-weight: 600;
-    color: #444;
-    margin-bottom: 15px;
+.info-card {
+    background: #fff;
+    border: 1px solid #edf2f7;
+    border-radius: 12px;
+    padding: 25px;
+    transition: transform 0.3s ease;
 }
 
-.order-summary p, .order-details p {
-    font-size: 18px;
-    color: #555;
-    margin: 8px 0;
-    line-height: 1.5;
+.info-card:hover {
+    border-color: var(--brand-accent);
 }
 
-/* Button Styles */
-.confirm-buttons {
-    text-align: center;
-    margin-top: 30px;
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
-/* Confirm Button */
-.confirm-btn {
+.card-header .icon {
+    font-size: 1.5rem;
+}
+
+.card-header h2 {
+    font-size: 1.25rem;
+    color: var(--brand-dark);
+    margin: 0;
+}
+
+.card-body p {
+    margin: 12px 0;
+    color: #4a5568;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Pricing Highlight */
+.price-highlight {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px dashed #edf2f7;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price-highlight .amount {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--brand-green);
+}
+
+#discount-badge {
+    background-color: #e6fffa;
+    color: #2c7a7b;
+    padding: 8px 12px;
+    border-radius: 6px;
     display: inline-block;
-    padding: 14px 36px;
-    background-color: #28a745;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+/* Buttons */
+.confirm-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.confirm-btn {
+    width: 100%;
+    max-width: 400px;
+    padding: 18px;
+    background-color: var(--brand-dark);
     color: white;
-    text-decoration: none;
-    border-radius: 10px;
-    font-size: 20px;
-    font-weight: 500;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .confirm-btn:hover {
-    background-color: #218838;
-    transform: translateY(-2px);  /* Slight lift effect on hover */
+    background-color: #000;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
-/* Or Text */
-.or-text {
-    margin: 20px 0;
-    font-size: 16px;
-    color: #666;
+.secondary-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
 }
 
-/* Wishlist Button */
 .wishlist-btn {
-    padding: 12px 24px;
-    background-color: #007bff;
-    color: white;
+    background: none;
     border: none;
-    border-radius: 10px;
-    font-size: 18px;
-    font-weight: 500;
+    color: var(--brand-accent);
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 1rem;
+    text-decoration: underline;
 }
 
-.wishlist-btn:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);  /* Slight lift effect on hover */
+.back-link {
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 0.9rem;
 }
 
-/* Responsiveness */
+.back-link:hover {
+    color: #e53e3e;
+}
+
+/* Mobile Responsive */
 @media (max-width: 768px) {
+    .checkout-grid {
+        grid-template-columns: 1fr;
+    }
+    
     .checkout-container {
-        padding: 20px;
-        max-width: 100%;
+        padding: 30px 20px;
     }
-
-    .confirm-btn, .wishlist-btn {
-        width: 100%;  /* Make buttons full width on smaller screens */
-        padding: 14px;
-        font-size: 18px;
-    }
-
-    .order-summary p, .order-details p {
-        font-size: 16px; /* Slightly smaller text on mobile */
-    }
-
-    .checkout-header h1 {
-        font-size: 32px;
-    }
-}
-
-/* Additional Improvements */
-#discount-message {
-    background-color: #e0f7fa;
-    padding: 10px;
-    border-radius: 5px;
-    color: #00796b;
-    font-weight: bold;
-    margin-top: 10px;
 }

@@ -1,30 +1,60 @@
 {% extends 'base.html' %}
 {% load static %}
 
-<!-- set this to logged in user -->
-
-{% block title %}Odyce - Become a Distributor{% endblock %}
-
+{% block title %}Odyce | Distributor Partnership{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/be_a_distributor.css' %}">
-<div class="supplier-container">
-    <header class="supplier-header">
-        <h1>Become a Distributor</h1>
-        <p>Join us as a distributor and contribute to our range of exquisite perfumes.</p>
+<link rel="stylesheet" href="{% static 'styles/be_a_distributor.css' %}?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<div class="distributor-wrapper">
+    <header class="distributor-hero">
+        <h1>Partner with Odyce</h1>
+        <p>Empowering entrepreneurs to bring world-class fragrances to their communities.</p>
     </header>
 
-    <section class="supplier-info">
-        <h2>Who is a Distributor?</h2>
-        <p>[Your description here]</p>
+    <div class="distributor-main">
+        <section class="distributor-intro">
+            <div class="text-block">
+                <h2>What is an Odyce Distributor?</h2>
+                <p>An Odyce Distributor is a strategic partner who purchases our premium fragrances in bulk at exclusive wholesale rates. Whether you own a boutique or are starting your own fragrance business, we provide the supply and the brand support to help you succeed.</p>
+            </div>
 
-        <h3>Quantity of Units</h3>
-        <p>[Description of units available]</p>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <span class="icon">📈</span>
+                    <h3>High Margins</h3>
+                    <p>Access tiered pricing that ensures significant profit on every bottle sold.</p>
+                </div>
+                <div class="benefit-card">
+                    <span class="icon">📦</span>
+                    <h3>Bulk Logistics</h3>
+                    <p>Priority shipping and dedicated fulfillment for large quantity orders.</p>
+                </div>
+                <div class="benefit-card">
+                    <span class="icon">🎖️</span>
+                    <h3>Brand Assets</h3>
+                    <p>Get access to professional marketing materials and product photography.</p>
+                </div>
+            </div>
+        </section>
 
-        <div class="supplier-button">
-            <a href="{% url 'become_distributor' %}" class="button">Become a Distributor</a>
-        </div>
-    </section>
+        <section class="requirements-box">
+            <h3>Minimum Requirements</h3>
+            <ul>
+                <li>Minimum order quantity of <strong>20 units</strong> per transaction.</li>
+                <li>Commitment to maintaining Odyce brand presentation standards.</li>
+                <li>Valid business address within our supported delivery zones.</li>
+            </ul>
+
+            <div class="action-container">
+                <form action="{% url 'become_distributor' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-partner">Join as a Distributor</button>
+                </form>
+                <p class="small-print">By clicking, your account status will be updated to "Distributor".</p>
+            </div>
+        </section>
+    </div>
 </div>
-
 {% endblock %}

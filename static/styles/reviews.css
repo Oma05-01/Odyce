@@ -1,53 +1,118 @@
+:root {
+    --primary-slate: #0f172a;
+    --gold-accent: #c5a059;
+    --text-muted: #64748b;
+    --card-bg: #ffffff;
+}
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-        }
+.reviews-wrapper {
+    max-width: 1100px;
+    margin: 80px auto;
+    padding: 0 20px;
+    font-family: 'Poppins', sans-serif;
+}
 
-        .reviews-container {
-            max-width: 1000px;
-            margin: 50px auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        }
+.reviews-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
 
-        .reviews-container h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.5em;
-        }
+.reviews-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: var(--primary-slate);
+    margin-bottom: 10px;
+}
 
-        .review-item {
-            margin-bottom: 40px;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 20px;
-        }
+.reviews-header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    font-weight: 300;
+}
 
-        .review-item:last-child {
-            border-bottom: none;
-        }
+/* Grid Layout */
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+}
 
-        .product-info {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+/* Card Styling */
+.review-card {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
 
-        .review-user {
-            font-size: 1em;
-            color: #00796b;
-            margin-bottom: 10px;
-        }
+.review-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
 
-        .review-rating {
-            color: #f9a825;
-            font-size: 1.2em;
-        }
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
 
-        .review-comment {
-            font-size: 1.1em;
-            margin-top: 10px;
-        }
+.user-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-initial {
+    width: 40px;
+    height: 40px;
+    background: var(--primary-slate);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.username { font-size: 1rem; color: var(--primary-slate); margin: 0; }
+
+.verified-tag {
+    font-size: 0.7rem;
+    color: #10b981;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* Star Rating */
+.star { color: #e2e8f0; font-size: 1.1rem; }
+.star.filled { color: var(--gold-accent); }
+
+/* Review Content */
+.review-body {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--primary-slate);
+    margin: 0 0 25px 0;
+    flex-grow: 1;
+}
+
+.card-footer {
+    border-top: 1px solid #f1f5f9;
+    padding-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-link { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
+.review-date { font-size: 0.8rem; color: #94a3b8; }
+
+@media (max-width: 600px) {
+    .reviews-header h1 { font-size: 2.2rem; }
+}

@@ -1,0 +1,118 @@
+:root {
+    --midnight: #0f172a;
+    --gold: #c5a059;
+    --slate-100: #f1f5f9;
+}
+
+.review-submit-wrapper {
+    background-color: #f8fafc;
+    min-height: 90vh;
+    padding: 120px 20px;
+    display: flex;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+.review-form-card {
+    background: white;
+    max-width: 600px;
+    width: 100%;
+    padding: 50px;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.form-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    color: var(--midnight);
+}
+
+/* Interactive Star Rating */
+.star-input {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.star-input input { display: none; }
+
+.star-input label {
+    font-size: 2.5rem;
+    color: #e2e8f0;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.star-input label:hover,
+.star-input label:hover ~ label,
+.star-input input:checked ~ label {
+    color: var(--gold);
+}
+
+.rating-group label:first-child {
+    display: block;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--midnight);
+}
+
+.rating-hint { font-size: 0.75rem; text-align: center; color: #94a3b8; }
+
+/* Form Elements */
+.form-group { margin-top: 30px; }
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: var(--slate-100);
+    font-family: inherit;
+    resize: none;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--midnight);
+    background: white;
+}
+
+.btn-submit-review {
+    width: 100%;
+    padding: 16px;
+    background: var(--midnight);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-top: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-submit-review:hover { background: #000; transform: translateY(-2px); }
+
+.btn-back {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #94a3b8;
+    font-size: 0.9rem;
+}

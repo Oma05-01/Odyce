@@ -1,28 +1,37 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Men's Perfumes{% endblock %}
 
-<!-- set this to logged in users -->
+{% block title %}Odyce | Men's Collection{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/men.css' %}">
-<br><br><br><br>
-<div class="perfume-container">
-    <h1>Men's Perfumes</h1>
-    <br><br>
-    <section class="perfume-list">
-        <!-- Loop through all men's perfumes from the context (backend will provide this) -->
+<link rel="stylesheet" href="{% static 'styles/men.css' %}?v=3">
+
+<div class="collection-wrapper">
+    <header class="collection-header">
+        <h1>The Men's Collection</h1>
+        <p>Sophisticated scents for the modern gentleman.</p>
+    </header>
+
+    <div class="perfume-grid">
         {% for perfume in mens_perfumes %}
-        <article class="perfume-item">
-            <img src="{{ perfume.picurl.url }}" alt="{{ perfume.name }}" class="perfume-image"/>
-            <h2>{{ perfume.name }}</h2>
-            <p class="perfume-brand">{{ perfume.brand }}</p>
-            <p class="perfume-price">{{ perfume.price }}</p>
-            <a href="{% url 'product_detail' perfume.id %}" class="view-details">View Details</a>
+        <article class="perfume-card">
+            <div class="image-wrapper">
+                <img src="{{ perfume.picurl.url }}" alt="{{ perfume.name }}" class="perfume-image"/>
+                <div class="card-overlay">
+                <a href="{% url 'product_detail' 'men' perfume.id %}" class="btn-explore">Explore Scent</a>                </div>
+            </div>
+
+            <div class="perfume-meta">
+                <p class="brand-label">{{ perfume.brand|default:"Odyce Original" }}</p>
+                <h2 class="perfume-name">{{ perfume.name }}</h2>
+                <p class="perfume-price">₦{{ perfume.price }}</p>
+            </div>
         </article>
+        {% empty %}
+        <div class="empty-state">
+            <p>Our men's collection is being curated. Please check back soon.</p>
+        </div>
         {% endfor %}
-    </section>
+    </div>
 </div>
-
-
 {% endblock %}

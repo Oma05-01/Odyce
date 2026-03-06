@@ -1,8 +1,9 @@
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.auth.models import User
-from django.http import JsonResponse
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import JsonResponse, HttpResponseForbidden
 from django.core.paginator import Paginator
 from django.contrib.sessions.models import Session
 from django.utils.timezone import now
@@ -30,8 +31,17 @@ def kini(request):
 
 
 def landing(request):
+    # Grab the 2 most recent from each category using the auto-added 'date' field
+    recent_men = MenPerfume.objects.order_by('-date')[:2]
+    recent_women = WomenPerfume.objects.order_by('-date')[:2]
 
-    return render(request, 'landing.html')
+    # Combine them into a single list
+    recent_perfumes = list(recent_men) + list(recent_women)
+
+    context = {
+        'recent_perfumes': recent_perfumes
+    }
+    return render(request, 'landing.html', context)
 
 
 def register(request):
@@ -70,12 +80,8 @@ def register(request):
             # Create Customer record linked to User
             Customer.objects.create(
                 user=user,  # Assuming Customer has a ForeignKey to User
-                first_name=first_name,
-                last_name=last_name,
-                email=email,
                 coupon_code=coupon,
                 phone_number=phone_number,
-                password=password1
             )
 
             # Send success response as JSON
@@ -118,7 +124,7 @@ def logout_user(request):
     
     logout(request)
 
-    return redirect('login_user')
+    return redirect('login')
 
 
 @login_required(login_url='/login')
@@ -160,49 +166,38 @@ def home(request):
 
 
 @login_required(login_url='/login')
-def product_detail(request, product_id):
-    item = MenPerfume.objects.filter(pk=product_id).first()
-    if item and item.is_for_men:
-        product = item  # Use the instance directly
-        content_type = ContentType.objects.get_for_model(MenPerfume)  # Use the model class
+def product_detail(request, product_type, product_id):
+    # Dynamically select the correct model based on the URL parameter
+    if product_type == 'men':
+        product = get_object_or_404(MenPerfume, pk=product_id)
+        content_type = ContentType.objects.get_for_model(MenPerfume)
+    elif product_type == 'women':
+        product = get_object_or_404(WomenPerfume, pk=product_id)
+        content_type = ContentType.objects.get_for_model(WomenPerfume)
     else:
-        # Check if the product exists in WomenPerfume
-        item = WomenPerfume.objects.filter(pk=product_id).first()
-        if item and item.is_for_women:
-            product = item  # Use the instance directly
-            content_type = ContentType.objects.get_for_model(WomenPerfume)  # Use the model class
-        else:
-            # If the product is not found in either model, handle the error
-            return render(request, '404.html')
+        return render(request, '404.html')
 
-    # Fetch reviews related to this product
-    review = Review.objects.filter(content_type=content_type, object_id=product.id)
+    # Fetch reviews related to this specific product
+    reviews = Review.objects.filter(content_type=content_type, object_id=product.id)
 
     # Handle review submission
     if request.method == "POST":
         review_form = ReviewForm(request.POST)
         if review_form.is_valid():
             new_review = review_form.save(commit=False)
-            try:
-                print('okay')
-                customer = Customer.objects.get(user=request.user)
-                print(customer, "is here")
-                new_review.user = customer
-                new_review.content_type = content_type
-                new_review.object_id = product.id
-                new_review.save()
-                return redirect('product_detail', product_id=product.id)
-            except Customer.DoesNotExist:
-                return render(request, 'error.html', {'message': 'Customer not found.'})
+            new_review.user = request.user.customer # Using the updated related name
+            new_review.content_type = content_type
+            new_review.object_id = product.id
+            new_review.save()
+            return redirect('product_detail', product_type=product_type, product_id=product.id)
     else:
         review_form = ReviewForm()
 
     context = {
-        'product': product,  # Pass the product details to the template
-        'reviews': review,
+        'product': product,
+        'reviews': reviews,
         'review_form': review_form,
     }
-
     return render(request, 'perfume_details_page.html', context)
 
 @login_required(login_url='/login')
@@ -217,55 +212,57 @@ def product_review(request, product_id):
 
 
 @login_required(login_url='/login')
-def buy_now(request, product_id):
+def buy_now(request, product_type, product_id):
     cities = ["Igarra", "Irrua", "Uselu", "Agenebode", "Uromi", "Auchi", "Ubiaja", "Fugar", "Ekpoma", "Iguegben",
               "Idogbo", "Afuze", "Abudu", "Okada", "Oredo", "Iguobazuwa", "Sabongida Ora", "Ehor"]
-    discount_code = request.POST.get('discount_code')  # Assume user submits coupon via POST
+    discount_code = request.POST.get('discount_code')
 
-    # Check if coupon code exists and is already used
     if discount_code:
         customer = request.user.customer
         if discount_code == customer.applied_coupon:
             messages.error(request, 'Coupon already used')
-            discount_code = None  # Prevents it from being passed to checkout
+            discount_code = None
 
-    item = MenPerfume.objects.filter(pk=product_id).first()
-    if item.is_for_men:
+    # Strict check using the URL parameter
+    if product_type == 'men':
         product = get_object_or_404(MenPerfume, pk=product_id)
+    elif product_type == 'women':
+        product = get_object_or_404(WomenPerfume, pk=product_id)
     else:
-        # If not found in MenPerfume, try fetching from WomenPerfume
-        item = WomenPerfume.objects.filter(pk=product_id).first()
-        if item.is_for_women:
-            product = get_object_or_404(WomenPerfume, pk=product_id)
-        else:
-            # If the product is not found in either model, handle the error
-            return render(request, '404.html')
+        return render(request, '404.html')
 
     context = {
         'cities': cities,
         'discount_code': discount_code,
-        'product': product,  # Pass the product details to the template
+        'product': product,
+        'product_type': product_type, # Pass this to the template for checkout routing
     }
+
+    request.session['product_id'] = product_id
+    request.session['product_type'] = product_type
 
     return render(request, 'buy_now.html', context)
 
 
 @login_required(login_url='/login')
-def buy_as_distributor(request, product_id):
-    item = MenPerfume.objects.filter(pk=product_id).first()
-    if item.is_for_men:
+def buy_as_distributor(request, product_type, product_id):
+    # Strictly route based on the URL parameter
+    if product_type == 'men':
         product = get_object_or_404(MenPerfume, pk=product_id)
+    elif product_type == 'women':
+        product = get_object_or_404(WomenPerfume, pk=product_id)
     else:
-        # If not found in MenPerfume, try fetching from WomenPerfume
-        item = WomenPerfume.objects.filter(pk=product_id).first()
-        if item.is_for_women:
-            product = get_object_or_404(WomenPerfume, pk=product_id)
-        else:
-            # If the product is not found in either model, handle the error
-            return render(request, '404.html')  # Handle unknown product type
-    cities = ['Lagos', 'Abuja', 'Jos', 'Rivers', 'Benin', 'Aba']  # Assuming this list is defined
+        return render(request, '404.html')  # Handle unknown product type
 
-    return render(request, 'buy_as_distributor.html', {'product': product, 'cities': cities})
+    cities = ['Lagos', 'Abuja', 'Jos', 'Rivers', 'Benin', 'Aba']
+
+    context = {
+        'product': product,
+        'product_type': product_type, # Passing this so the template knows what we're buying
+        'cities': cities
+    }
+
+    return render(request, 'buy_as_distributor.html', context)
 
 
 @csrf_exempt
@@ -291,10 +288,11 @@ def save_session_data(request):
 def checkout(request):
     final_price = request.session.get('finalPrice')
     product_id = request.session.get('product_id')
+    # ADD THIS LINE: Retrieve the product type from the session
+    product_type = request.session.get('product_type')
 
     if request.method == 'POST' and final_price:
-        # Assuming user and other required fields are available in session
-
+        # Your payment logic here...
         return redirect('confirm_payment')
 
     context = {
@@ -305,16 +303,21 @@ def checkout(request):
         'quantity': request.session.get('quantity'),
         'final_price': final_price,
         'discount_code': request.session.get('discountCode'),
-        'product_id': product_id
+        'product_id': product_id,
+        # ADD THIS LINE: Pass it to the template
+        'product_type': product_type
     }
     return render(request, 'checkout.html', context)
 
 
 @login_required(login_url='/login')
 def confirm_payment(request):
-    customer = get_object_or_404(Customer, user=request.user)
     final_price = request.session.get('finalPrice')
     product_id = request.session.get('product_id')
+    product_type = request.session.get('product_type')
+
+    if not final_price:
+        return redirect('home')
 
     if request.method == 'POST':
 
@@ -345,12 +348,24 @@ def confirm_payment(request):
 
         messages.success(request, 'Your payment has been submitted successfully and is awaiting confirmation.')
 
+        try:
+            subject = 'Your Odyce Fragrance Order is Confirmed'
+            # You can use a simple string or a fancy HTML template
+            message = f"Hello {request.user.first_name},\n\nThank you for your purchase of ₦{final_price}. Your scent journey with Odyce has begun! We are preparing your order for shipment to {request.session.get('billing_city')}."
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [request.user.email]
+
+            send_mail(subject, message, email_from, recipient_list)
+        except Exception as e:
+            print(f"Email error: {e}")  # Log error but don't stop the user experience
+
         # Clear session data
-        for key in ['discountCode', 'finalPrice', 'product_id']:
+        keys_to_clear = ['finalPrice', 'product_id', 'product_type', 'quantity', 'discountCode']
+        for key in keys_to_clear:
             if key in request.session:
                 del request.session[key]
 
-        return redirect('success_page')  # Replace 'success_page' with the actual page name
+        return render(request, 'success_page.html', {'price': final_price})  # Replace 'success_page' with the actual page name
 
     # Payment details (adjust as needed)
     bank_name = "Your Bank Name"
@@ -386,67 +401,92 @@ def customer_orders(request):
 
 
 @login_required(login_url='/login')
-def add_to_wishlist(request, product_id):
-    # Try to find the item in MenPerfume first
-    item = MenPerfume.objects.filter(pk=product_id).first()
-    if item and item.is_for_men:
+def add_to_wishlist(request, product_type, product_id):
+    # 1. SAFETY CHECK: Guard against Admin/Superusers who don't have a Customer profile
+    try:
+        customer = request.user.customer
+    except ObjectDoesNotExist:
+        return JsonResponse({
+            "status": "error",
+            "message": "Admin accounts cannot use the wishlist. Please use a customer profile."
+        }, status=400)
+
+    # 2. Determine the correct model and ContentType
+    if product_type == 'men':
+        product = get_object_or_404(MenPerfume, pk=product_id)
         content_type = ContentType.objects.get_for_model(MenPerfume)
-        wishlist_item, created = WishlistItem.objects.get_or_create(
-            user=request.user.customer,
-            content_type=content_type,
-            object_id=item.id
-        )
-        if not created:
-            wishlist_item.quantity += 1
-            wishlist_item.save()
-        return JsonResponse({"status": "success", "message": "Item added to wishlist"})
-
-    # If not found in MenPerfume, check in WomenPerfume
-    item = WomenPerfume.objects.filter(pk=product_id).first()
-    if item and item.is_for_women:
+    elif product_type == 'women':
+        product = get_object_or_404(WomenPerfume, pk=product_id)
         content_type = ContentType.objects.get_for_model(WomenPerfume)
-        wishlist_item, created = WishlistItem.objects.get_or_create(
-            user=request.user.customer,
-            content_type=content_type,
-            object_id=item.id
-        )
-        if not created:
-            wishlist_item.quantity += 1
-            wishlist_item.save()
-        return JsonResponse({"status": "success", "message": "Item added to wishlist"})
+    else:
+        return JsonResponse({"status": "error", "message": "Invalid product type."}, status=400)
 
-    # If the product is not found, return an error response
-    return JsonResponse({"status": "error", "message": "Product not found or invalid product type."}, status=404)
+    # 3. Create or update the wishlist item using the safely retrieved 'customer'
+    wishlist_item, created = WishlistItem.objects.get_or_create(
+        user=customer,
+        content_type=content_type,
+        object_id=product.id
+    )
+
+    if not created:
+        wishlist_item.quantity += 1
+        wishlist_item.save()
+
+    return JsonResponse({"status": "success", "message": "Item added to your Odyce wishlist."})
 
 
-@login_required(login_url='/login')
+@login_required
 def view_wishlist(request):
-    wishlist_items = WishlistItem.objects.filter(user=request.user.customer)
-    context = {"wishlist_items": wishlist_items}
-    return render(request, "wishlist.html", context)
+    try:
+        # Attempt to get the customer profile
+        customer = request.user.customer
+        wishlist_items = WishlistItem.objects.filter(user=customer)
 
+        # Helper to identify product type (men/women)
+        for item in wishlist_items:
+            item.product_type = item.content_type.model.replace('perfume', '').lower()
+
+        return render(request, 'wishlist.html', {'wishlist_items': wishlist_items})
+
+    except ObjectDoesNotExist:
+        # If no customer profile exists, show an empty wishlist or a message
+        messages.warning(request, "Your account does not have a customer profile.")
+        return render(request, 'wishlist.html', {'wishlist_items': []})
 
 @login_required(login_url='/login')
 def remove_from_wishlist(request, item_id):
-    wishlist_item = get_object_or_404(WishlistItem, id=item_id, user=request.user)
-    wishlist_item.delete()
+    try:
+        # Get the Customer instance linked to the logged-in User
+        customer_profile = request.user.customer
+
+        # Query using the Customer instance
+        wishlist_item = get_object_or_404(WishlistItem, id=item_id, user=customer_profile)
+        wishlist_item.delete()
+        messages.success(request, "Item removed from your vault.")
+
+    except ObjectDoesNotExist:
+        # Fallback for Superusers/Admins without a Customer profile
+        messages.error(request, "Admin accounts do not have access to customer wishlist items.")
+        return redirect("home")
+
     return redirect("view_wishlist")
 
 
-@login_required(login_url='/login')
+@login_required
 def become_distributor(request):
-    if request.method == "POST":
-        # Retrieve the current user
+    try:
+        # 1. Attempt to get the profile
         customer = Customer.objects.get(user=request.user)
+    except Customer.DoesNotExist:
+        # 2. If it doesn't exist (like for an admin), create it on the fly
+        customer = Customer.objects.create(user=request.user)
+        # Or redirect them to a "Complete Profile" page
 
-        # Set the is_distributor field to True
-        customer.is_distributor = True
-        customer.save()
+    if request.method == 'POST':
+        # Your logic for distributor application here...
+        pass
 
-        # Redirect back to the buy-now page (you may need to adjust the URL for the specific product page)
-        return redirect('buy_now')  # Assuming 'buy_now' is the name of the buy-now page URL
-
-    return render(request, 'be_a_distributor.html')
+    return render(request, 'be_a_distributor.html', {'customer': customer})
 
 
 @login_required(login_url='/login')
@@ -611,6 +651,15 @@ def reviews(request):
 # User Activity View
 @login_required(login_url='/login')
 def user_activity(request):
+    pending_orders_by_location = Order.objects.filter(status='pending').values('billing_city').annotate(
+        count=Count('id'))
+    confirmed_orders_locations = (
+        Order.objects
+        .filter(status='confirmed')
+        .values('billing_city')
+        .annotate(count=Count('id'))
+        .order_by('billing_city')
+    )
     # Users who have ever logged in (users with a non-null 'last_login' in the related User model)
     users_logged_in = Customer.objects.filter(user__last_login__isnull=False)
 
@@ -645,6 +694,8 @@ def user_activity(request):
     context = {
         'users_logged_in': users_logged_in_page,
         'current_users': current_users_page,
+        'confirmed_orders_locations': confirmed_orders_locations,
+        'pending_orders_by_location': pending_orders_by_location,
     }
 
     return render(request, 'user_activity.html', context)
@@ -843,36 +894,19 @@ def add_for_men(request):
         scent = request.POST.get('scent')
         description = request.POST.get('description')
         price = request.POST.get('price')
+        myfile = request.FILES.get('myfile')  # Get the file directly
 
-        try:
-            myfile = request.FILES['myfile']
-            fs = FileSystemStorage()
-            filename = fs.save(myfile.name, myfile)
-            url = fs.url(filename)
-
-            if str(myfile.content_type).startswith('image'):
-                if myfile.size < 500000000:
-                    product = MenPerfume(
-                        name=name,
-                        pic_name=str(filename),
-                        picurl=str(url),
-                        price=price,
-                        description=description,
-                        scent=scent
-                    )
-                    product.save()
-                    return redirect('men_list')
-                else:
-                    fs.delete(filename)
-                    msg = "Sorry, your image is bigger than 5mb"
-                    return JsonResponse({'status': 'error', 'msg': msg})
-            else:
-                msg = "Sorry, this format is not supported"
-                return JsonResponse({'status': 'error', 'msg': msg})
-
-        except Exception as e:
-            msg = f'INVALID: {str(e)}'
-            return JsonResponse({'status': 'error', 'msg': msg})
+        if myfile:
+            product = MenPerfume(
+                name=name,
+                pic_name=myfile.name,  # Optional now, but kept for your schema
+                picurl=myfile,  # Pass the raw file directly to the ImageField
+                price=price,
+                description=description,
+                scent=scent
+            )
+            product.save()
+            return redirect('men_list')
 
     return render(request, 'add_for_men.html', context)
 
@@ -900,36 +934,19 @@ def add_for_women(request):
         scent = request.POST.get('scent')
         description = request.POST.get('description')
         price = request.POST.get('price')
+        myfile = request.FILES.get('myfile')  # Get the file directly
 
-        try:
-            myfile = request.FILES['myfile']
-            fs = FileSystemStorage()
-            filename = fs.save(myfile.name, myfile)
-            url = fs.url(filename)
-
-            if str(myfile.content_type).startswith('image'):
-                if myfile.size < 500000000:
-                    product = WomenPerfume(
-                        name=name,
-                        pic_name=str(filename),
-                        picurl=str(url),
-                        price=price,
-                        description=description,
-                        scent=scent
-                    )
-                    product.save()
-                    return redirect('women_list')
-                else:
-                    fs.delete(filename)
-                    msg = "Sorry, your image is bigger than 5mb"
-                    return JsonResponse({'status': 'error', 'msg': msg})
-            else:
-                msg = "Sorry, this format is not supported"
-                return JsonResponse({'status': 'error', 'msg': msg})
-
-        except Exception as e:
-            msg = f'INVALID: {str(e)}'
-            return JsonResponse({'status': 'error', 'msg': msg})
+        if myfile:
+            product = MenPerfume(
+                name=name,
+                pic_name=myfile.name,  # Optional now, but kept for your schema
+                picurl=myfile,  # Pass the raw file directly to the ImageField
+                price=price,
+                description=description,
+                scent=scent
+            )
+            product.save()
+            return redirect('men_list')
 
     return render(request, 'add_for_women.html', context)
 
@@ -979,12 +996,13 @@ def women_list(request):
 
 
 @login_required(login_url='/login')
-def edit_product(request, product_id):
-    # do this with try and except
-    try:
+def edit_product(request, product_type, product_id):
+    if product_type == 'men':
         product = get_object_or_404(MenPerfume, id=product_id)
-    except:
+    elif product_type == 'women':
         product = get_object_or_404(WomenPerfume, id=product_id)
+    else:
+        return render(request, '404.html')
 
     if request.method == "POST":
         product.name = request.POST['name']
@@ -993,43 +1011,47 @@ def edit_product(request, product_id):
         product.price = request.POST['price']
 
         if 'myfile' in request.FILES:
-            product.image = request.FILES['myfile']
+            product.picurl = request.FILES['myfile']  # Updated to match your ImageField name
 
         product.save()
         messages.success(request, 'Product updated successfully!')
-        return redirect('product_detail', product_id=product.id)
 
-    return render(request, 'edit_product.html', {'product': product})
+        # Include product_type in the redirect!
+        return redirect('product_detail', product_type=product_type, product_id=product.id)
 
-
-@login_required(login_url='/login')
-def product_detail_back(request, product_id):
-    try:
-        product = MenPerfume.objects.get(id=product_id)
-    except:
-        product = get_object_or_404(WomenPerfume, id=product_id)
-
-    return render(request, 'product_detail.html', {'product': product})
+    return render(request, 'edit_product.html', {'product': product, 'product_type': product_type})
 
 
 @login_required(login_url='/login')
-def delete_product(request, product_id):
-    try:
-        product = MenPerfume.objects.get(id=product_id)
-    except:
+def product_detail_back(request, product_type, product_id):
+    # Admin view for viewing product details
+    if product_type == 'men':
+        product = get_object_or_404(MenPerfume, pk=product_id)
+    elif product_type == 'women':
+        product = get_object_or_404(WomenPerfume, pk=product_id)
+    else:
+        return render(request, '404.html')
+
+    return render(request, 'product_detail.html', {'product': product, 'product_type': product_type})
+
+
+@login_required(login_url='/login')
+def delete_product(request, product_type, product_id):
+    if product_type == 'men':
+        product = get_object_or_404(MenPerfume, id=product_id)
+        redirect_url = 'men_list'
+    elif product_type == 'women':
         product = get_object_or_404(WomenPerfume, id=product_id)
+        redirect_url = 'women_list'
+    else:
+        return render(request, '404.html')
 
     if request.method == "POST":
         product.delete()
         messages.success(request, "Product deleted successfully!")
+        return redirect(redirect_url)
 
-        # Redirect based on the type of product
-        if isinstance(product, MenPerfume):
-            return redirect('men_list')  # Redirect to men's product list
-        else:
-            return redirect('women_list')  # Redirect to women's product list
-
-    return render(request, 'confirm_delete.html', {'product': product})
+    return render(request, 'confirm_delete.html', {'product': product, 'product_type': product_type})
 
 
 @login_required(login_url='/login')
@@ -1067,3 +1089,62 @@ def view_users(request):
 
     return render(request, 'view_users.html', context)
 
+
+@login_required
+def submit_review(request, model_name, product_id):
+    # 1. Map the string from the URL to the actual Model class
+    model_map = {
+        'men': MenPerfume,
+        'women': WomenPerfume,
+    }
+
+    selected_model = model_map.get(model_name)
+    if not selected_model:
+        return redirect('home')
+
+    # 2. Get the specific perfume instance
+    product = get_object_or_404(selected_model, id=product_id)
+
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+
+        # 3. Get the ContentType for this specific model
+        content_type = ContentType.objects.get_for_model(selected_model)
+
+        # 4. Create the Review using the Generic Foreign Key fields
+        Review.objects.create(
+            user=request.user.customer,  # Assuming request.user has a .customer profile
+            content_type=content_type,
+            object_id=product.id,
+            rating=rating,
+            comment=comment
+        )
+
+        messages.success(request, f"Your impression of {product.name} has been shared.")
+        return redirect('home')  # Or back to the product detail
+
+    return render(request, 'submit_review.html', {'product': product, 'model_name': model_name})
+
+
+@login_required
+def view_invoice(request, order_id):
+    # 1. Fetch the order
+    order = get_object_or_404(Order, id=order_id)
+
+    # 2. Security Check: Only the order owner or staff can see the invoice
+    # If your Order model links to 'User' directly, use order.user
+    # If it links to 'Customer', use order.user.customer
+    if order.user != request.user and not request.user.is_staff:
+        return HttpResponseForbidden("You do not have permission to view this invoice.")
+
+    # 3. Calculate subtotal if it's not stored in the DB
+    # This ensures the invoice always shows the math correctly
+    subtotal = order.unit_price * order.quantity
+
+    context = {
+        'order': order,
+        'subtotal': subtotal,
+    }
+
+    return render(request, 'invoice_template.html', context)

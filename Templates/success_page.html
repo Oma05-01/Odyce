@@ -1,20 +1,32 @@
 {% extends 'base.html' %}
 {% load static %}
 
-<!-- set this to logged in user -->
-
-{% block title %}Payment Success{% endblock %}
+{% block title %}Odyce | Payment Submitted{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/success_page.css' %}">
-<div class="success-container">
-    <div class="success-content">
-        <h1>Thank You!</h1>
-        <p>Your payment has been successfully submitted and is pending confirmation.</p>
-        <p>We will notify you once your order is confirmed.</p>
-        
-        <a href="{% url 'customer_orders' %}" class="button">View Order History</a>
+<link rel="stylesheet" href="{% static 'styles/success_page.css' %}?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<div class="success-wrapper">
+    <div class="success-card">
+        <div class="icon-circle">
+            <span class="checkmark">✓</span>
+        </div>
+
+        <h1>Submission Received</h1>
+        <p class="main-msg">Thank you for your purchase! Your payment receipt has been successfully uploaded.</p>
+
+        <div class="status-box">
+            <span class="status-label">Current Status:</span>
+            <span class="status-value">Awaiting Admin Confirmation</span>
+        </div>
+
+        <p class="sub-msg">Our team is currently verifying your transfer. You will receive a confirmation code once the process is complete.</p>
+
+        <div class="action-group">
+            <a href="{% url 'customer_orders' %}" class="btn-primary">Track My Order</a>
+            <a href="{% url 'home' %}" class="btn-secondary">Return to Shop</a>
+        </div>
     </div>
 </div>
-
 {% endblock %}

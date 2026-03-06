@@ -1,50 +1,107 @@
+:root {
+    --danger: #ef4444;
+    --danger-dark: #b91c1c;
+    --slate-900: #0f172a;
+    --slate-600: #475569;
+    --border: #e2e8f0;
+}
 
-    .confirm-delete-container {
-        padding: 40px;
-        max-width: 600px;
-        margin: 40px auto;
-        text-align: center;
-        background-color: #f8f9fa;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+.delete-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    font-family: 'Inter', sans-serif;
+}
 
-    .confirm-delete-container h2 {
-        font-size: 24px;
-        color: #dc3545;
-        margin-bottom: 20px;
-    }
+.delete-card {
+    background: white;
+    max-width: 500px;
+    width: 100%;
+    padding: 40px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border);
+}
 
-    .confirm-delete-container p {
-        font-size: 18px;
-        color: #333;
-    }
+.warning-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
 
-    .btn {
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        text-decoration: none;
-        border: none;
-        border-radius: 5px;
-        margin: 10px;
-        transition: background-color 0.3s ease;
-    }
+.delete-card h1 {
+    font-size: 1.5rem;
+    color: var(--slate-900);
+    margin-bottom: 10px;
+}
 
-    .delete-btn {
-        background-color: #dc3545;
-        color: #fff;
-    }
+.warning-text {
+    color: var(--slate-600);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
 
-    .delete-btn:hover {
-        background-color: #c82333;
-    }
+.article-preview-box {
+    background: #fef2f2;
+    border: 1px solid #fee2e2;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    text-align: left;
+}
 
-    .cancel-btn {
-        background-color: #6c757d;
-        color: #fff;
-    }
+.article-preview-box .label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--danger-dark);
+    display: block;
+    margin-bottom: 5px;
+}
 
-    .cancel-btn:hover {
-        background-color: #5a6268;
-    }
+.title-display {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--slate-900);
+}
+
+/* Actions */
+.button-row {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-confirm-delete {
+    padding: 14px;
+    background: var(--danger);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-confirm-delete:hover {
+    background: var(--danger-dark);
+}
+
+.btn-cancel {
+    padding: 14px;
+    text-decoration: none;
+    color: var(--slate-600);
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.btn-cancel:hover {
+    background: #f8fafc;
+    color: var(--slate-900);
+}

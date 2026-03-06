@@ -1,49 +1,55 @@
 {% extends "dashboard.html" %}
 {% load static %}
 
-<!-- set this to logged in admin -->
-
-{% block title %} Men's Product List {% endblock %}
-
+{% block title %}Admin | Men's Fragrances{% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Women's Product List</title>
-    <link rel="stylesheet" href="{% static 'styles/men_list.css' %} ?v=1">
-</head>
-<body>
-    <div class="container mt-5">
-        <h2 class="mb-4">Men's Product List</h2>
-        {% if products %}
-            <div class="row">
-                {% for product in products %}
-                    <div class="col-md-6">
-                        <div class="product-list-item">
+<link rel="stylesheet" href="{% static 'styles/men_list.css' %}?v=2">
+
+<div class="inventory-wrapper">
+    <header class="inventory-header">
+        <div class="header-text">
+            <h1>Men's Collection</h1>
+            <p>Manage pricing, descriptions, and availability for the masculine line.</p>
+        </div>
+        <a href="{% url 'create_product' %}" class="btn-add-new">+ Add Fragrance</a>
+    </header>
+
+    {% if products %}
+        <div class="inventory-grid">
+            {% for product in products %}
+                <div class="inventory-card">
+                    <div class="product-preview">
+                        {% if product.picurl %}
                             <img src="{{ product.picurl.url }}" alt="{{ product.name }}">
-                            <div class="product-details">
-                                <h5>{{ product.name }} - ${{ product.price }}</h5>
-                                <p>{{ product.description }}</p>
-                            </div>
-                            <div class="product-actions">
-                                <a href="{% url 'edit_product' product.id %}" class="btn btn-primary btn-sm">Edit Product</a>
-                                <a href="{% url 'delete_product' product.id %}" class="btn btn-danger btn-sm">Delete Product</a>
-                            </div>
+                        {% else %}
+                            <div class="no-image">No Image</div>
+                        {% endif %}
+                        <span class="price-badge">₦{{ product.price }}</span>
+                    </div>
+
+                    <div class="product-info">
+                        <h3>{{ product.name }}</h3>
+                        <p class="description">{{ product.description|truncatewords:15 }}</p>
+
+                        <div class="inventory-actions">
+                            <a href="{% url 'edit_product' product.id %}" class="btn-edit">
+                                <span class="icon">✏️</span> Edit
+                            </a>
+                            <a href="{% url 'delete_product' product.id %}" class="btn-delete">
+                                <span class="icon">🗑️</span> Delete
+                            </a>
                         </div>
                     </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <p>No products found.</p>
-        {% endif %}
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
-
-
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-inventory">
+            <div class="empty-icon">🪵</div>
+            <p>The Men's collection is currently empty.</p>
+            <a href="{% url 'create_product' %}" class="btn-primary">Add Your First Product</a>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

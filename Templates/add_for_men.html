@@ -1,44 +1,76 @@
 {% extends "dashboard.html" %}
 {% load static %}
 
-<!-- set this to logged in admin -->
-
-{% block title %}Add Product for Men{% endblock %}
-
+{% block title %}Admin | Add Men's Fragrance{% endblock %}
 
 {% block content %}
-    <link rel="stylesheet" href="{% static 'styles/add_for_men.css' %}">
-    <div class="container">
-        <h2>Add Product for Men</h2>
-        <form method="POST" action="{% url 'add_for_men' %}" enctype="multipart/form-data">
-            {% csrf_token %}
+<link rel="stylesheet" href="{% static 'styles/add_for_men.css' %}?v=2">
 
-            <label for="name">Perfume Name:</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="scent">Scent:</label>
-            <input type="text" id="scent" name="scent" required>
-
-            <label for="description">Description:</label>
-            <textarea id="description" name="description" rows="4" required></textarea>
-
-            <label for="price">Price:</label>
-            <input type="number" id="price" name="price" step="0.01" required>
-
-            <label for="myfile">Upload Image in JPG format only:</label>
-            <input type="file" id="myfile" name="myfile" accept="image/*" required>
-
-            <button type="submit">Add Perfume</button>
-        </form>
-
-        <!-- Placeholder for messages (success or error) -->
-        <div id="message">
-            {% if messages %}
-                {% for message in messages %}
-                    <p>{{ message }}</p>
-                {% endfor %}
-            {% endif %}
-        </div>
+<div class="admin-form-container">
+    <div class="form-header">
+        <nav class="breadcrumb">Inventory / <span class="current">Add Men's Perfume</span></nav>
+        <h1>Add New Fragrance (Men)</h1>
+        <p>Ensure all details are accurate for the customer catalog.</p>
     </div>
 
+    <form method="POST" action="{% url 'add_for_men' %}" enctype="multipart/form-data" class="admin-card-form">
+        {% csrf_token %}
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="name">Perfume Name</label>
+                <input type="text" id="name" name="name" placeholder="e.g., Midnight Musk" required>
+            </div>
+            <div class="form-group">
+                <label for="scent">Scent Profile</label>
+                <input type="text" id="scent" name="scent" placeholder="e.g., Woody, Spicy" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Product Description</label>
+            <textarea id="description" name="description" rows="5" placeholder="Describe the notes, longevity, and personality of the scent..." required></textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="price">Retail Price (₦)</label>
+                <input type="number" id="price" name="price" step="0.01" placeholder="0.00" required>
+            </div>
+            <div class="form-group">
+                <label for="myfile">Product Image</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="myfile" name="myfile" accept="image/jpeg, image/jpg" required>
+                    <label for="myfile" class="file-drop-zone">
+                        <span class="icon">📷</span>
+                        <span id="file-label-text">Choose JPG Image</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-save">Upload Product</button>
+            <a href="{% url 'men_list' %}" class="btn-back">Cancel</a>
+        </div>
+    </form>
+
+    {% if messages %}
+    <div class="message-container">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    // Show file name on selection
+    document.getElementById('myfile').onchange = function () {
+        const fileName = this.files[0] ? this.files[0].name : "Choose JPG Image";
+        document.getElementById('file-label-text').innerText = fileName;
+    };
+</script>
 {% endblock %}

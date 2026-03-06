@@ -1,140 +1,153 @@
-/* Global Styles */
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f9f9f9;
-    color: #333;
+:root {
+    --odyce-ink: #0f0e0c;
+    --odyce-gold: #b89a6a;
+    --odyce-cream: #f7f3ee;
+    --odyce-mist: #e8e2d9;
+    --odyce-charcoal: #2a2825;
 }
 
-/* Main container with max width and padding */
-.container {
-    padding: 40px 20px;
-    max-width: 1200px;
+.activity-page-wrapper {
+    max-width: 1100px;
     margin: 0 auto;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Headings */
-h2 {
-    color: #00796b;
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-}
-
-/* User List Styles */
-.user-list {
-    list-style-type: none;
-    padding: 0;
-}
-
-.user-list li {
-    background-color: #fff;
     padding: 20px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.activity-header {
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--odyce-mist);
+    padding-bottom: 20px;
+}
+
+.activity-header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: rgba(184,154,106,0.18);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.activity-header p {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--odyce-gold);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.activity-section {
+    background: white;
+    border: 1px solid var(--odyce-mist);
+    border-radius: 2px; /* Sharp corners like the rest of Odyce */
+    padding: 35px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.section-title h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    color: var(--odyce-ink);
+    letter-spacing: 1px;
+}
+
+/* --- Active Users: Luxury Tags --- */
+.active-users-grid {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.active-user-tag {
+    background: var(--odyce-ink);
+    color: var(--odyce-gold);
+    padding: 10px 20px;
+    border-radius: 2px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
     align-items: center;
-    transition: all 0.3s ease;
+    gap: 10px;
+    border: 1px solid var(--odyce-gold);
 }
 
-.user-list li:hover {
-    background-color: #f1f1f1;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+.status-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--odyce-gold);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--odyce-gold);
 }
 
-/* User Name and Status */
-.user-list .user-info {
-    font-size: 1.1rem;
+/* --- History Table: Minimalist Editorial --- */
+.activity-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.activity-table th {
+    padding: 15px;
+    border-bottom: 1px solid var(--odyce-ink);
+    color: var(--odyce-ink);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
     font-weight: 600;
 }
 
-.user-list .user-status {
-    font-size: 1rem;
-    color: #00796b;
+.activity-table td {
+    padding: 20px 15px;
+    border-bottom: 1px solid var(--odyce-mist);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    color: var(--odyce-charcoal);
 }
 
-/* Links inside the list */
-.user-list a {
-    text-decoration: none;
-    color: #00796b;
-    font-weight: 500;
-    transition: color 0.3s ease;
+.badge-offline {
+    font-size: 0.65rem;
+    background: var(--odyce-mist);
+    color: var(--odyce-ink);
+    padding: 4px 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.user-list a:hover {
-    color: #004d40;
-}
-
-/* Button Style (if applicable) */
-.button {
-    padding: 10px 20px;
-    background-color: #00796b;
-    color: white;
-    font-size: 1rem;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 20px;
-}
-
-.button:hover {
-    background-color: #004d40;
-}
-
-/* Pagination Styles */
+/* --- Pagination --- */
 .pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 40px;
+    margin-top: 30px;
+    gap: 10px;
 }
 
 .pagination a {
-    text-decoration: none;
-    padding: 10px 15px;
-    margin: 0 5px;
-    background-color: #00796b;
-    color: white;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--odyce-gold);
+    border: 1px solid var(--odyce-gold);
+    padding: 8px 18px;
+    border-radius: 0;
+    transition: all 0.3s ease;
 }
 
 .pagination a:hover {
-    background-color: #004d40;
-}
-
-.pagination .current-page {
-    background-color: #004d40;
+    background: var(--odyce-gold);
     color: white;
 }
 
-/* Responsive Design for Small Screens */
-@media (max-width: 768px) {
-    .container {
-        padding: 20px;
-        max-width: 100%;
-    }
+/* --- Pulse Icon (Gold instead of Emerald) --- */
+.pulse-icon {
+    width: 10px;
+    height: 10px;
+    background: var(--odyce-gold);
+    border-radius: 50%;
+    animation: pulse-gold 2s infinite;
+}
 
-    .user-list li {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .user-list .user-info {
-        font-size: 1.2rem;
-    }
-
-    .pagination {
-        flex-direction: column;
-    }
-
-    .pagination a {
-        margin-bottom: 10px;
-    }
+@keyframes pulse-gold {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(184, 154, 106, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(184, 154, 106, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(184, 154, 106, 0); }
 }

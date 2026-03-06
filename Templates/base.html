@@ -1,39 +1,52 @@
 {% load static %}
-<!-- edit the footer here -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% block title %} <title> Odyce </title> {% endblock %}
-    <link href="{% static 'styles/base.css' %}?v=1" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>{% block title %}Odyce Perfumes{% endblock %}</title>
 
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="{% static 'styles/base.css' %}?v=2" rel="stylesheet"/>
+    {% block extra_head %}{% endblock %}
 </head>
 <body>
 
-    <!-- Header -->
-    <header>
-        <a href="{% url 'home' %}" class="logo-link">
-            <h1>ODYCE</h1>
-        </a>
-        <nav>
-            <a href="#">Fragrances</a>
-            <a href="#">Contact</a>
-            <a href="/profile">Profile</a>
-            <a href="/profile">Faq</a>
-        </nav>
+    <header class="main-header">
+        <div class="header-content">
+            <a href="{% url 'home' %}" class="logo-link">
+                <h1>ODYCE</h1>
+            </a>
+            <nav class="main-nav">
+                <a href="{% url 'home' %}">Shop</a>
+                <a href="{% url 'articles' %}">Journal</a>
+                <a href="{% url 'view_wishlist' %}">Wishlist</a>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'contact_us' %}">Support</a>
+            </nav>
+        </div>
     </header>
 
-    <!-- Block for content -->
-    <div>
+    <main class="content-wrapper">
         {% block content %}
         {% endblock %}
-    </div>
+    </main>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2024 Odyce Store | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    <footer class="main-footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>ODYCE</h3>
+                <p>Curated scents for the modern individual.</p>
+            </div>
+            <div class="footer-links">
+                <a href="{% url 'faq' %}">FAQ</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Odyce Store. All rights reserved.</p>
+        </div>
     </footer>
 
 </body>

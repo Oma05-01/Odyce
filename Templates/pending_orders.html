@@ -2,18 +2,49 @@
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/peding_O.css' %}">
-    <h1>Pending Orders by Location</h1>
+<link rel="stylesheet" href="{% static 'styles/peding_O.css' %}?v=2">
 
-    <div class="locations">
-        {% for location in locations %}
-        <div class="location">
-            <h2>{{ location }}</h2>
-            <div class="orders">
-
-            </div>
-        </div>
-        {% endfor %}
+<div class="pending-header">
+    <div class="header-text">
+        <h1>Pending Shipments</h1>
+        <p>Awaiting payment verification and dispatch.</p>
     </div>
+</div>
 
+<div class="locations-container">
+    {% for location_data in pending_orders_by_location %}
+    <div class="location-group">
+        <div class="location-banner">
+            <span class="pin">📍</span>
+            <h2>{{ location_data.billing_city }} <span>({{ location_data.count }} orders)</span></h2>
+            <a href="{% url 'orders_by_location' location_data.billing_city %}" class="view-all">Manage Region →</a>
+        </div>
+
+        <div class="order-grid">
+            {% for order in orders %}
+                {% if order.billing_city == location_data.billing_city %}
+                <div class="order-card">
+                    <div class="card-status">Pending</div>
+                    <div class="card-content">
+                        <h3>{{ order.billing_name }}</h3>
+                        <p class="order-id">ID: #ODY-{{ order.id }}</p>
+                        <p class="order-total">₦{{ order.total }}</p>
+                        <p class="order-qty">{{ order.quantity }} Item(s)</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'order_details' order.id %}" class="btn-detail">Process Order</a>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% empty %}
+    <div class="empty-state">
+        <span class="icon">🎉</span>
+        <h3>All caught up!</h3>
+        <p>There are no pending orders to process at the moment.</p>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}

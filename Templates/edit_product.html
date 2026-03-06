@@ -1,42 +1,71 @@
 {% extends 'dashboard.html' %}
 {% load static %}
-{% block title %}{{ post.title }}{% endblock %}
 
-<!-- set this to logged in admin -->
+{% block title %}Admin | Edit {{ product.name }}{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/edit_p.css' %}">
-<div class="container">
-    <h2>Edit Product </h2>
-    <form method="POST" action="{% url 'edit_product' product.id %}" enctype="multipart/form-data">
-        {% csrf_token %}
+<link rel="stylesheet" href="{% static 'styles/edit_p.css' %}?v=2">
 
-        <label for="name">Perfume Name:</label>
-        <input type="text" id="name" name="name" value="{{ product.name }}" required>
+<div class="edit-product-wrapper">
+    <div class="form-card">
+        <header class="card-header">
+            <h1>Modify Product</h1>
+            <p>Updating: <strong>{{ product.name }}</strong></p>
+        </header>
 
-        <label for="scent">Scent:</label>
-        <input type="text" id="scent" name="scent" value="{{ product.scent }}" required>
+        <form method="POST" action="{% url 'edit_product' product.id %}" enctype="multipart/form-data">
+            {% csrf_token %}
 
-        <label for="description">Description:</label>
-        <textarea id="description" name="description" rows="4" required>{{ product.description }}</textarea>
+            <div class="form-group">
+                <label for="name">Perfume Name</label>
+                <input type="text" id="name" name="name" value="{{ product.name }}" required>
+            </div>
 
-        <label for="price">Price:</label>
-        <input type="number" id="price" name="price" step="0.01" value="{{ product.price }}" required>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="scent">Scent Profile</label>
+                    <input type="text" id="scent" name="scent" value="{{ product.scent }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="price">Price (₦)</label>
+                    <input type="number" id="price" name="price" step="0.01" value="{{ product.price }}" required>
+                </div>
+            </div>
 
-        <label for="myfile">Upload Image in JPG format only:</label>
-        <input type="file" id="myfile" name="myfile" accept="image/*">
+            <div class="form-group">
+                <label for="description">Detailed Description</label>
+                <textarea id="description" name="description" rows="5" required>{{ product.description }}</textarea>
+            </div>
 
-        <button type="submit">Update Perfume</button>
-    </form>
+            <div class="form-group image-upload-section">
+                <label for="myfile">Product Image</label>
+                <div class="upload-container">
+                    {% if product.picurl %}
+                    <div class="current-image-preview">
+                        <img src="{{ product.picurl.url }}" alt="Current Scent">
+                        <span>Current Asset</span>
+                    </div>
+                    {% endif %}
+                    <div class="input-wrapper">
+                        <input type="file" id="myfile" name="myfile" accept="image/jpeg, image/jpg">
+                        <small>Leave empty to keep current JPG</small>
+                    </div>
+                </div>
+            </div>
 
-    <div id="message">
+            <div class="form-actions">
+                <button type="submit" class="btn-update">Save Changes</button>
+                <a href="{% url 'dashboard' %}" class="btn-cancel">Discard</a>
+            </div>
+        </form>
+
         {% if messages %}
+        <div class="message-area">
             {% for message in messages %}
-                <p>{{ message }}</p>
+                <div class="alert {{ message.tags }}">{{ message }}</div>
             {% endfor %}
+        </div>
         {% endif %}
     </div>
 </div>
-
-
 {% endblock %}

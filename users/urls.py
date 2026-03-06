@@ -7,17 +7,17 @@ urlpatterns = [
     path('', views.landing, name='landing'),  # Landing page
     path('register/', views.register, name='register'),  # Registration page
     path('kini/', views.kini, name='kini'),  # kini page
-    path('logout/', views.logout, name='logout'),
+    path('logout/', views.logout_user, name='logout'),
     path('login/', views.login_user, name='login'),  # Login page
     path('home/', views.home, name='home'),  # Home page
-    path('product/<int:product_id>/', views.product_detail, name='product_detail'),  # Product detail page
-    path('product/<int:product_id>/review/', views.product_review, name='product_review'),  # Product review page
-    path('buy_now/<int:product_id>/', views.buy_now, name='buy_now'),  # Buy now page
+    path('product/<str:product_type>/<int:product_id>/', views.product_detail, name='product_detail'),  # Product detail page
+    path('product/<str:product_type>/<int:product_id>/review/', views.product_review, name='product_review'),
+    path('buy_now/<str:product_type>/<int:product_id>/', views.buy_now, name='buy_now'),
     path('save-session-data/', views.save_session_data, name='save_session_data'),
     path('checkout/', views.checkout, name='checkout'),  # Checkout page
     path('become-distributor/', views.become_distributor, name='become_distributor'),  # Become a distributor page
-    path('buy-as-distributor/<int:product_id>/', views.buy_as_distributor, name='buy_as_distributor'),
-    path('distributor-checkout/', views.distributor_checkout, name='distributor_checkout'),
+    path('buy-as-distributor/<str:product_type>/<int:product_id>/', views.buy_as_distributor,
+         name='buy_as_distributor'),    path('distributor-checkout/', views.distributor_checkout, name='distributor_checkout'),
     path('confirm-payment/', views.confirm_payment, name='confirm_payment'),  # distributor checkout page
     path('success/', views.success_page, name='success_page'),  # distributor checkout page
     path('customer_orders/', views.customer_orders, name='customer_orders'),  # distributor checkout page
@@ -51,9 +51,9 @@ urlpatterns = [
 
     path('product/add-for-men/', views.add_for_men, name='add_for_men'),
     path('product/add-for-women/', views.add_for_women, name='add_for_women'),
-    path('dashboard/edit-product/<int:product_id>/', views.edit_product, name='edit_product'),
-    path('dashboard/product/<int:product_id>/', views.product_detail_back, name='product_detail_back'),
-    path('product/delete/<int:product_id>/', views.delete_product, name='delete_product'),
+    path('dashboard/edit-product/<str:product_type>/<int:product_id>/', views.edit_product, name='edit_product'),
+    path('dashboard/product/<str:product_type>/<int:product_id>/', views.product_detail_back,
+         name='product_detail_back'),    path('product/delete/<str:product_type>/<int:product_id>/', views.delete_product, name='delete_product'),
     path('product/men-list/', views.men_list, name='men_list'),
     path('product/women-list/', views.women_list, name='women_list'),
 
@@ -61,13 +61,15 @@ urlpatterns = [
     path('dashboard/order/<int:order_id>/', views.order_details, name='order_details'),
 
     path('wishlist/', views.view_wishlist, name='view_wishlist'),
-    path('add_to_wishlist/<int:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
+    path('add_to_wishlist/<str:product_type>/<int:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
     path('wishlist/remove/<int:item_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
 
-
+    path('order/invoice/<int:order_id>/', views.view_invoice, name='view_invoice'),
     path('profile/', views.profile, name='profile'),
     path('profile/change-password/', views.change_password, name='change_password'),
     path('profile/delete-account/', views.delete_account, name='delete_account'),
+    path('product/<int:product_id>/review/', views.submit_review, name='submit_review'),
+    path('wishlist/remove/<int:item_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
 ]
 
 if settings.DEBUG:

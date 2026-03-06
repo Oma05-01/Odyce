@@ -1,15 +1,69 @@
-<section class="order-history">
-    <h2>Your Orders</h2>
-    <div class="order">
-        <p><strong>Order #12345</strong></p>
-        <p><strong>Date:</strong> October 1, 2024</p>
-        <p><strong>Status:</strong> Shipped</p>
-        <p><strong>Track Order:</strong> <a href="#">Track Shipment</a></p>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Odyce | My Order History{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'styles/order_history.css' %}?v=2">
+
+<div class="history-wrapper">
+    <header class="history-header">
+        <h1>Order History</h1>
+        <p>Manage your past purchases and track current shipments.</p>
+    </header>
+
+    <div class="history-container">
+        {% if orders %}
+            <div class="table-responsive">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Confirmation Code</th>
+                            <th class="text-right">Total</th>
+                            <th> Receipts </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td class="order-id-cell">
+                                <strong>#ODY-{{ order.id }}</strong>
+                            </td>
+                            <td>{{ order.date_created|date:"M d, Y" }}</td>
+                            <td>
+                                {% if order.status == 'confirmed' %}
+                                    <span class="status-badge confirmed">Verified</span>
+                                {% elif order.status == 'pending' %}
+                                    <span class="status-badge pending">Awaiting Proof</span>
+                                {% else %}
+                                    <span class="status-badge shipped">In Transit</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <code class="code-text">{{ order.confirmed_order_code|default:"----" }}</code>
+                            </td>
+                            <td class="text-right price-text">
+                                ₦{{ order.total }}
+                            </td>
+                            <td>
+                                <a href="{% url 'view_invoice' order.id %}" target="_blank">View Receipt</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="empty-history">
+                <span class="icon">📦</span>
+                <h3>No orders yet</h3>
+                <p>Explore our collections and find your signature scent.</p>
+                <a href="{% url 'home' %}" class="btn-shop">Start Shopping</a>
+            </div>
+        {% endif %}
     </div>
-    <div class="order">
-        <p><strong>Order #12346</strong></p>
-        <p><strong>Date:</strong> October 10, 2024</p>
-        <p><strong>Status:</strong> Processing</p>
-    </div>
-    <!-- Add more orders as needed -->
-</section>
+</div>
+{% endblock %}

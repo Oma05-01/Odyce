@@ -1,28 +1,53 @@
 {% extends 'base.html' %}
 {% load static %}
 
-<!-- set this to logged in user -->
-
-{% block title %}Odyce - Product Reviews{% endblock %}
+{% block title %}Odyce | Customer Testimonials{% endblock %}
 
 {% block content %}
-<div class="container">
-    <header class="review-header">
-        <h1>Product Reviews</h1>
-        <p>Read what our customers are saying about our products.</p>
+<link rel="stylesheet" href="{% static 'styles/reviews.css' %}?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<div class="reviews-wrapper">
+    <header class="reviews-hero">
+        <h1>The Odyce Experience</h1>
+        <p>Honest impressions from our community of scent enthusiasts.</p>
     </header>
 
-    <section class="reviews">
-        <!-- Example Review -->
-        <div class="review-item">
-            <h2>Product Name</h2>
-            <p class="review-author">By <strong>Username</strong> on <span>Date</span></p>
-            <p class="review-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+    <div class="reviews-grid">
+        {% for review in reviews %}
+        <article class="review-card">
+            <div class="product-mini">
+                {% if review.product.picurl %}
+                    <img src="{{ review.product.picurl.url }}" alt="{{ review.product.name }}">
+                {% endif %}
+                <div class="product-info">
+                    <h3>{{ review.product.name }}</h3>
+                    <div class="star-rating">
+                        {% for i in "12345" %}
+                            <span class="star {% if forloop.counter <= review.rating %}filled{% endif %}">★</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <blockquote class="review-text">
+                "{{ review.content }}"
+            </blockquote>
+
+            <footer class="review-meta">
+                <div class="author-details">
+                    <span class="author-name">{{ review.user.first_name|default:review.user.username }}</span>
+                    <span class="verified-badge">✓ Verified Buyer</span>
+                </div>
+                <time class="review-date">{{ review.date_created|date:"M d, Y" }}</time>
+            </footer>
+        </article>
+        {% empty %}
+        <div class="no-reviews">
+            <p>Be the first to share your Odyce journey.</p>
+            <a href="{% url 'order_history' %}" class="btn-review-cta">Write a Review</a>
         </div>
-        <!-- Repeat for more reviews -->
-    </section>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
-
-
-

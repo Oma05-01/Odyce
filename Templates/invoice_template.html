@@ -1,0 +1,89 @@
+<link rel="stylesheet" href="{% static 'styles/invoice.css' %}">
+
+<div class="invoice-wrapper">
+    <div class="invoice-actions no-print">
+        <button onclick="window.print()" class="btn-print">Print Receipt</button>
+        <a href="{% url 'home' %}" class="btn-home">Back to Store</a>
+    </div>
+
+    <div class="invoice-card">
+        <header class="invoice-header">
+            <div class="brand-meta">
+                <h1 class="brand-logo">ODYCE</h1>
+                <p>Luxury Fragrance House</p>
+            </div>
+            <div class="invoice-meta">
+                <h2>Invoice</h2>
+                <p><strong>Order ID:</strong> #ODY-{{ order.id }}</p>
+                <p><strong>Date:</strong> {{ order.date_created|date:"M d, Y" }}</p>
+                <p><strong>Status:</strong> <span class="badge">{{ order.status|upper }}</span></p>
+            </div>
+        </header>
+
+        <hr class="divider">
+
+        <div class="address-grid">
+            <div class="address-col">
+                <h3>Billed To:</h3>
+                <p><strong>{{ order.billing_name }}</strong></p>
+                <p>{{ order.billing_address }}</p>
+                <p>{{ order.billing_city }}</p>
+                <p>{{ order.phone_number }}</p>
+            </div>
+            <div class="address-col">
+                <h3>Shipped From:</h3>
+                <p><strong>Odyce Logistics Hub</strong></p>
+                <p>Lekki Phase 1</p>
+                <p>Lagos, Nigeria</p>
+            </div>
+        </div>
+
+        <table class="invoice-table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th class="text-center">Qty</th>
+                    <th class="text-right">Price</th>
+                    <th class="text-right">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <strong>{{ order.product_name }}</strong>
+                        <p class="scent-tag">{{ order.scent_profile }}</p>
+                    </td>
+                    <td class="text-center">{{ order.quantity }}</td>
+                    <td class="text-right">₦{{ order.unit_price }}</td>
+                    <td class="text-right">₦{{ order.subtotal }}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2"></td>
+                    <td class="text-right label">Subtotal</td>
+                    <td class="text-right">₦{{ order.subtotal }}</td>
+                </tr>
+                {% if order.discount %}
+                <tr>
+                    <td colspan="2"></td>
+                    <td class="text-right label">Discount</td>
+                    <td class="text-right text-danger">-₦{{ order.discount }}</td>
+                </tr>
+                {% endif %}
+                <tr class="grand-total">
+                    <td colspan="2"></td>
+                    <td class="text-right">Total Paid</td>
+                    <td class="text-right">₦{{ order.total_price }}</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <footer class="invoice-footer">
+            <p>Thank you for choosing Odyce. Your signature scent is our passion.</p>
+            <div class="footer-note">
+                <p>For support, contact concierge@odyce.com</p>
+            </div>
+        </footer>
+    </div>
+</div>

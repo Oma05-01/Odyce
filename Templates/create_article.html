@@ -1,30 +1,41 @@
 {% extends 'dashboard.html' %}
 {% load static %}
 
-<!-- set this to logged in admin -->
-
-{% block title %}Create Article{% endblock %}
+{% block title %}Admin | Create Journal Entry{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/create_article.css' %}">
-    <h1>Create New Article</h1>
-    <form method="POST" enctype="multipart/form-data" action="{% url 'create_article' %}">
+<link rel="stylesheet" href="{% static 'styles/create_article.css' %}?v=2">
+
+<div class="admin-form-wrapper">
+    <div class="form-header">
+        <h1>Create New Journal Entry</h1>
+        <p>Write an engaging story for the Odyce community.</p>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" action="{% url 'create_article' %}" class="admin-styled-form">
         {% csrf_token %}
+
         <div class="form-group">
-            <label for="name">Title:</label>
-            <input type="text" id="name" name="name" required>
+            <label for="title">Article Title</label>
+            <input type="text" id="title" name="title" placeholder="e.g. The Chemistry of Musk" required>
         </div>
 
         <div class="form-group">
-            <label for="summary">Summary:</label>
-            <input id="summary" name="summary" required>
+            <label for="summary">Short Summary</label>
+            <input type="text" id="summary" name="summary" placeholder="A brief hook to catch the reader's eye" required>
+            <small class="field-help">This appears on the main journal list (max 255 chars).</small>
         </div>
 
         <div class="form-group">
-            <label for="content">Content:</label>
-            <textarea id="content" name="content" required></textarea>
+            <label for="content">Full Article Content</label>
+            <textarea id="content" name="content" placeholder="Tell your story here..." required></textarea>
+            <small class="field-help">You can use basic HTML tags for styling.</small>
         </div>
 
-        <button type="submit" class="btn btn-primary">Create Article</button>
+        <div class="form-actions">
+            <button type="submit" class="btn-create">Publish to Journal</button>
+            <a href="{% url 'articles' %}" class="btn-cancel">Cancel</a>
+        </div>
     </form>
+</div>
 {% endblock %}

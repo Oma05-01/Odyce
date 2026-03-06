@@ -1,183 +1,165 @@
 {% load static %}
-
-<!-- set this to logged in user -->
-{% if request.user.is_authenticated %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% block title %} <title> Odyces | Home </title> {% endblock %}
-    <link href="{% static 'styles/home.css' %}?v=1" rel="stylesheet"/>
+    <title>Odyce | Luxury Fragrance House</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="{% static 'styles/home.css' %}?v=9" rel="stylesheet"/>
 </head>
-
 <body>
-    <!-- Header -->
+
+{% if request.user.is_authenticated %}
     <header>
-        <div class="welcome">Welcome, User</div>
-        <a href="{% url 'home' %}"> <h1>ODYCE</h1> </a>
+        <div class="welcome">Welcome, {{ request.user.first_name|default:request.user.username }}</div>
+        <a href="{% url 'home' %}" class="odyce-home-link"><h1>ODYCE</h1></a>
         <nav>
-            <a href="#">Shop</a>
-            <a href="#">Fragrances</a>
+            <a href="{% url 'home' %}">Shop</a>
             <a href="{% url 'view_wishlist' %}">Wishlist</a>
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
         </nav>
     </header>
 
-    <!-- Sidebar Section -->
-        <div class="sidebar" id="sidebar">
-        <ul>
-            <li><a href="{% url 'user_activity' %}"><span class="icon">📊</span> <span class="label">User Activity</span></a></li>
-            <li><a href="{% url 'view_users' %}"><span class="icon">👤</span> <span class="label">View Users</span></a></li>
-            <li><a href="{% url 'reviews' %}"><span class="icon">...</span> <span class="label">Reviews</span></a></li>
-            <li><a href="{% url 'contact_us_messages' %}"><span class="icon">📊</span> <span class="label">Contact_Us-Messages</span></a></li>
-        </ul>
-    </div>
-    <button class="toggle-btn" id="toggle-btn">☰</button>
-
-    <!-- Main content -->
-    <div class="content" id="content">
-        <div class="split-container">
-            <!-- Men's Section -->
-            <div class="men-section">
-                <h2>For Him</h2>
-                <p>Bold, fresh, and powerful scents that define masculinity.</p>
-                <a href="{% url 'men' %}" id="ex-men">Explore Men's Perfumes</a>
-                <!-- Men's Carousel -->
-                <div class="carousel" id="men-carousel">
-                    <div class="carousel-inner">
-                        {% for product in men_perfumes %}
-                        <div class="carousel-item card" style="width: 18rem;">
-                            <a href="{% url 'product_detail' product.id %}">
-                                <img src="{{ product.picurl.url }}" alt="{{ product.name }}" class="card-img-top">
-                            </a>
-                            <div class="card-body">
-                                <h5 class="card-title">{{ product.name }}</h5>
-                            </div>
-                            <ul class="list-group ">
-                                <li class="list-group-item">Price: {{ product.price }}</li>
-                            </ul>
-                            <div class="card-body">
-                                <a href="{% url 'buy_now' product.id %}">
-                                    <button class="buy-now">Buy Now</button>
-                                </a>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-                <div class="carousel-nav">
-                    <button onclick="prevSlide('men-carousel')">&lt;</button>
-                    <button onclick="nextSlide('men-carousel')">&gt;</button>
-                </div>
-            </div>
+    {% if request.user.is_staff %}
+    <div class="fab-backdrop" id="fab-backdrop"></div>
+    <div class="fab-wrapper" id="fab-wrapper">
+        <button class="fab-main" id="fab-main">
+            <span class="fab-icon-bar"></span>
+            <span class="fab-icon-bar"></span>
+            <span class="fab-icon-bar"></span>
+        </button>
+        <div class="fab-items">
+            <a href="{% url 'contact_us_messages' %}" class="fab-item">
+                <span class="fab-item-label">Messages</span>
+                <span class="fab-item-btn">✉️</span>
+            </a>
+            <a href="{% url 'reviews' %}" class="fab-item">
+                <span class="fab-item-label">Reviews</span>
+                <span class="fab-item-btn">⭐</span>
+            </a>
+            <a href="{% url 'view_users' %}" class="fab-item">
+                <span class="fab-item-label">Users</span>
+                <span class="fab-item-btn">👤</span>
+            </a>
         </div>
+    </div>
+    {% endif %}
 
-            <!-- Women's Section -->
-            <div class="women-section">
-                <h2>For Her</h2>
-                <p>Elegant, soft, and floral perfumes that inspire femininity.</p>
-                <a href="{% url 'women' %}" id="ex-women">Explore Women's Perfumes</a>
-                <!-- Women's Carousel -->
-                <div class="carousel" id="women-carousel">
-                    <div class="carousel-inner">
-                        {% for product in women_perfumes %}
-                        <div class="carousel-item card" style="width: 18rem;">
-                        <a href="{% url 'product_detail' product.id %}">
-                            <img src="{{ product.picurl.url }}" alt="{{ product.name }}" class="card-img-top">
-                        </a>
-                        <div class="card-body">
-                            <h5 class="card-title">{{ product.name }}</h5>
+    <div class="content">
+        <div class="split-container">
+            <div class="men-section">
+                <p class="section-eyebrow">Collection</p>
+                <h2>For Him</h2>
+                <a href="{% url 'men' %}" class="explore-link">Explore Men's</a>
+                <div class="carousel" id="men-carousel">
+                    <div class="carousel-track-wrap">
+                        <div class="carousel-track">
+                            {% for product in men_perfumes %}
+                            <div class="card">
+                                <a href="{% url 'product_detail' 'men' product.id %}">
+                                    {% if product.picurl %}<img src="{{ product.picurl.url }}" alt="{{ product.name }}">{% endif %}
+                                </a>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ product.name }}</h5>
+                                    <p class="price-tag">₦{{ product.price }}</p>
+                                    <a href="{% url 'buy_now' 'men' product.id %}">
+                                        <button class="buy-now">Buy Now</button>
+                                    </a>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <p class="empty-msg">No perfumes available.</p>
+                            {% endfor %}
                         </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Price: {{ product.price }}</li>
-                        </ul>
-                        <div class="card-body">
-                            <a href="{% url 'buy_now' product.id %}">
-                                <button class="buy-now">Buy Now</button>
-                            </a>
-                        </div>
-                    </div>
-                        {% endfor %}
                     </div>
                     <div class="carousel-nav">
-                        <button onclick="prevSlide('women-carousel')">&lt;</button>
-                        <button onclick="nextSlide('women-carousel')">&gt;</button>
+                        <button data-dir="-1">‹</button>
+                        <button data-dir="1">›</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="women-section">
+                <p class="section-eyebrow">Collection</p>
+                <h2>For Her</h2>
+                <a href="{% url 'women' %}" class="explore-link">Explore Women's</a>
+                <div class="carousel" id="women-carousel">
+                    <div class="carousel-track-wrap">
+                        <div class="carousel-track">
+                            {% for product in women_perfumes %}
+                            <div class="card">
+                                <a href="{% url 'product_detail' 'women' product.id %}">
+                                    {% if product.picurl %}<img src="{{ product.picurl.url }}" alt="{{ product.name }}">{% endif %}
+                                </a>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ product.name }}</h5>
+                                    <p class="price-tag">₦{{ product.price }}</p>
+                                    <a href="{% url 'buy_now' 'women' product.id %}">
+                                        <button class="buy-now">Buy Now</button>
+                                    </a>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <p class="empty-msg">No perfumes available.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="carousel-nav">
+                        <button data-dir="-1">‹</button>
+                        <button data-dir="1">›</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-        <div class="article-container">
-            <div class="articles">
-                <!-- Example articles -->
-                <article class="article-item">
-                    <h2>Article Title 1</h2>
-                    <p class="article-date">Published on: <span>October 23, 2024</span></p>
-                    <p class="article-summary">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-                    <a href="#" class="read-more">Read More</a>
-                </article>
-                <article class="article-item">
-                    <h2>Article Title 2</h2>
-                    <p class="article-date">Published on: <span>October 23, 2024</span></p>
-                    <p class="article-summary">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-                    <a href="#" class="read-more">Read More</a>
-                </article>
-                <article class="article-item">
-                    <h2>Article Title 3</h2>
-                    <p class="article-date">Published on: <span>October 23, 2024</span></p>
-                    <p class="article-summary">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-                    <a href="#" class="read-more">Read More</a>
-                </article>
-            </div>
-        </div>
-    </div>
+    <footer><p>&copy; 2026 Odyce Store | <a href="#">Privacy Policy</a></p></footer>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2024 Odyce Store | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
-    </footer>
-
-    <!-- JavaScript for Carousel and Sidebar Toggle -->
-      <script>
-        // Sidebar Toggle
-            document.getElementById('toggle-btn').addEventListener('click', () => {
-                document.getElementById('sidebar').classList.toggle('expanded');
-            });
-
-            // Carousel Functionality
-            const slideIndex = {};
-
-            document.querySelectorAll('.carousel').forEach(carousel => {
-                const carouselId = carousel.id;
-                slideIndex[carouselId] = 0;
-                const items = carousel.querySelectorAll('.carousel-item');
-                const inner = carousel.querySelector('.carousel-inner');
-
-                function showSlide(index) {
-                    slideIndex[carouselId] = (index + items.length) % items.length;
-                    inner.style.transform = `translateX(-${slideIndex[carouselId] * 100}%)`;
-                }
-
-                carousel.querySelector('.carousel-nav').addEventListener('click', e => {
-                    if (e.target.tagName === 'BUTTON') {
-                        const direction = e.target.textContent === '>' ? 1 : -1;
-                        showSlide(slideIndex[carouselId] + direction);
-                    }
-                });
-            });
-      </script>
-</body>
-
-</html>
 {% else %}
-<!-- Simple 404-style message for unauthorized access -->
-    <div style="text-align: center; padding: 50px;">
-        <h2>404 - You're not logged in or lack access permissions</h2>
-        <p>Sorry, you need to be logged in as a distributor to view this page.</p>
-        <a href="{% url 'login' %}">
-            <button style="padding: 10px 20px; background-color: #ff7043; color: #fff; border: none; border-radius: 5px; cursor: pointer;">
-                Go to Login
-            </button>
-        </a>
+    <div class="access-denied">
+        <h2>Access Denied</h2>
+        <p>Authentication required to view the vault.</p>
+        <a href="{% url 'login' %}"><button>Enter Odyce</button></a>
     </div>
 {% endif %}
+
+    <script>
+        // --- FAB Toggle Logic ---
+        const fabMain = document.getElementById('fab-main');
+        const fabWrapper = document.getElementById('fab-wrapper');
+        const fabBackdrop = document.getElementById('fab-backdrop');
+
+        function toggleFab() {
+            const isOpen = fabWrapper.classList.toggle('open');
+            fabMain.classList.toggle('open');
+            if (fabBackdrop) {
+                fabBackdrop.classList.toggle('visible', isOpen);
+            }
+        }
+
+        if(fabMain) {
+            fabMain.addEventListener('click', toggleFab);
+        }
+
+        if(fabBackdrop) {
+            fabBackdrop.addEventListener('click', toggleFab);
+        }
+
+        // --- Carousel Logic ---
+        document.querySelectorAll('.carousel').forEach(carousel => {
+            const track = carousel.querySelector('.carousel-track');
+            const items = carousel.querySelectorAll('.card');
+            let current = 0;
+
+            carousel.querySelectorAll('.carousel-nav button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const dir = parseInt(btn.dataset.dir);
+                    current = (current + dir + items.length) % items.length;
+                    track.style.transform = `translateX(-${current * 100}%)`;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

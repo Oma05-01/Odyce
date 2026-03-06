@@ -1,24 +1,63 @@
 {% extends 'dashboard.html' %}
 {% load static %}
 
-<!-- set this to logged in admin -->
-
-{% block title %} View Users {% endblock %}
+{% block title %} Admin | User Directory {% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/view_users.css' %}">
-<section class="view-users-section">
-    <h1>Registered Users</h1>
-    <ul class="user-list">
-        {% for user in users %}
-            <li>
-                <a href="{% url 'user_detail' user.id %}">{{ user.first_name }} | {{ user.last_name }}</a>
-                <br>
-            </li>
-        {% endfor %}
-    </ul>
+<link rel="stylesheet" href="{% static 'styles/view_users.css' %}?v=4">
 
-</section>
+<div class="users-page-wrapper">
+    <header class="page-header">
+        <div class="header-text">
+            <h1>Registered Users</h1>
+            <p>Manage and view details for all Odyce customers and partners.</p>
+        </div>
+        <div class="header-stats">
+            <span class="stat-badge">Total Users: {{ users.count }}</span>
+        </div>
+    </header>
 
-
+    <section class="users-table-container">
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Email Address</th>
+                    <th>Role</th>
+                    <th class="text-right">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td class="user-cell">
+                        <div class="user-avatar">{{ user.first_name|slice:":1" }}</div>
+                        <div class="user-name">
+                            <strong>{{ user.first_name }} {{ user.last_name }}</strong>
+                            <span>@{{ user.user.username }}</span>
+                        </div>
+                    </td>
+                    <td>{{ user.user.email }}</td>
+                    <td>
+                        {% if user.is_distributor %}
+                            <span class="role-badge distributor">Distributor</span>
+                        {% elif user.user.is_staff %}
+                            <span class="role-badge staff">Staff</span>
+                        {% else %}
+                            <span class="role-badge customer">Customer</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-right">
+                        <a href="{% url 'user_detail' user.id %}" class="btn-view">Manage</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="empty-state">No users registered yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</div>
 {% endblock %}

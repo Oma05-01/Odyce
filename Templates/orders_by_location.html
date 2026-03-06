@@ -1,30 +1,57 @@
 {% extends "dashboard.html" %}
 {% load static %}
 
+{% block title %}Admin | Pending - {{ location }}{% endblock %}
+
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/orders_by_location.css' %}">
-<div class="pending-orders-container">
-    <h2>Pending Orders for {{ location }}</h2>
+<link rel="stylesheet" href="{% static 'styles/orders_by_location.css' %}?v=2">
+
+<div class="logistics-wrapper">
+    <header class="logistics-header">
+        <nav class="breadcrumb">
+            <a href="{% url 'dashboard' %}">Dashboard</a> / <span>Pending by Location</span>
+        </nav>
+        <div class="header-title">
+            <h1>Pending Orders: {{ location }}</h1>
+            <span class="order-count">{{ orders|length }} Awaiting Verification</span>
+        </div>
+    </header>
 
     {% if orders %}
-        <ul>
+        <div class="orders-queue">
             {% for order in orders %}
-                <li class="order-item">
-                    <p><strong>Order ID:</strong> {{ order.name }} | {{ order.quantity }}</p>
-                    <p><strong>Date:</strong> {{ order.date_created }}</p>
-                    <p><strong>Total:</strong> ${{ order.total }}</p>
-                    <p><strong>Billing Name:</strong> {{ order.billing_name }}</p>
-                    <p><strong>Billing Address:</strong> {{ order.billing_address }}</p>
-                    <p><strong>Phone Number:</strong> {{ order.phone_number }}</p>
-                    <a href="{% url 'order_details' order.id %}" class="btn btn-confirm">View Details</a>
-                </li>
+                <article class="order-card">
+                    <div class="card-status">
+                        <span class="pulse-dot"></span>
+                        <span class="status-text">Pending Proof</span>
+                    </div>
 
+                    <div class="card-content">
+                        <div class="primary-info">
+                            <h3 class="order-id">#ODY-{{ order.id|default:order.name }}</h3>
+                            <p class="order-product"><strong>{{ order.quantity }}x</strong> Premium Scent</p>
+                            <p class="order-total">₦{{ order.total }}</p>
+                        </div>
+
+                        <div class="customer-info">
+                            <p class="customer-name">👤 {{ order.billing_name }}</p>
+                            <p class="customer-address">📍 {{ order.billing_address }}</p>
+                            <p class="customer-phone">📞 {{ order.phone_number }}</p>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <span class="order-date">Placed: {{ order.date_created|date:"M d, Y" }}</span>
+                        <a href="{% url 'order_details' order.id %}" class="btn-inspect">Inspect Details</a>
+                    </div>
+                </article>
             {% endfor %}
-        </ul>
+        </div>
     {% else %}
-        <p>No pending orders for this location.</p>
+        <div class="empty-state">
+            <span class="empty-icon">📂</span>
+            <p>Great job! No pending orders for this location.</p>
+        </div>
     {% endif %}
 </div>
-
-
 {% endblock %}

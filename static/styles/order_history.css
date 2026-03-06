@@ -1,0 +1,120 @@
+:root {
+    --slate-900: #0f172a;
+    --slate-600: #475569;
+    --border: #e2e8f0;
+    --emerald: #10b981;
+    --amber: #f59e0b;
+}
+
+.history-wrapper {
+    max-width: 1000px;
+    margin: 100px auto 60px;
+    padding: 0 20px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.history-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.history-header h1 {
+    font-size: 2.2rem;
+    color: var(--slate-900);
+    font-weight: 700;
+}
+
+.history-header p {
+    color: var(--slate-600);
+    font-size: 1rem;
+}
+
+.history-container {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* Table Styling */
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.history-table th {
+    background: #f8fafc;
+    padding: 15px 20px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--slate-600);
+    border-bottom: 1px solid var(--border);
+}
+
+.history-table td {
+    padding: 20px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.95rem;
+    vertical-align: middle;
+}
+
+.order-id-cell strong {
+    color: var(--slate-900);
+}
+
+.price-text {
+    font-weight: 600;
+    color: var(--slate-900);
+}
+
+.code-text {
+    background: #f1f5f9;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: var(--slate-900);
+}
+
+/* Badges */
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-badge.confirmed { background: #ecfdf5; color: var(--emerald); }
+.status-badge.pending { background: #fffbeb; color: var(--amber); }
+.status-badge.shipped { background: #eff6ff; color: #3b82f6; }
+
+.text-right { text-align: right; }
+
+/* Empty State */
+.empty-history {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.empty-history .icon { font-size: 3rem; display: block; margin-bottom: 15px; }
+
+.btn-shop {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 30px;
+    background: var(--slate-900);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.btn-shop:hover { background: #000; }
+
+@media (max-width: 600px) {
+    .history-table th:nth-child(4), .history-table td:nth-child(4) { display: none; }
+}

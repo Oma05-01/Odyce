@@ -1,39 +1,75 @@
 {% extends 'dashboard.html' %}
+{% load static %}
 
-<!-- set this to logged in admin -->
+{% block title %}Admin | Logistics - {{ location_name }}{% endblock %}
 
-{% block dashboard_content %}
-<h2>Orders for {{ location_name }}</h2>
+{% block content %}
+<link rel="stylesheet" href="{% static 'styles/location_detail.css' %}?v=2">
 
-<table>
-    <thead>
-        <tr>
-            <th>Order ID</th>
-            <th>Product</th>
-            <th>Quantity</th>
-            <th>User</th>
-            <th>Receipt</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for order in orders %}
-        <tr>
-            <td>{{ order.id }}</td>
-            <td>{{ order.product.name }}</td>
-            <td>{{ order.quantity }}</td>
-            <td>{{ order.user.username }}</td>
-            <td>
-                {% if order.receipt %}
-                <a href="{{ order.receipt.url }}" target="_blank">View Receipt</a>
-                {% else %}
-                No Receipt
-                {% endif %}
-            </td>
-            <td><a href="{% url 'confirm_order' order.id %}">Confirm Order</a></td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="location-detail-wrapper">
+    <header class="location-header">
+        <div class="header-main">
+            <nav class="breadcrumb">
+                <a href="{% url 'dashboard' %}">Dashboard</a> / <span>Region Detail</span>
+            </nav>
+            <h1>Orders in {{ location_name }}</h1>
+            <p>Verification queue for regional distribution.</p>
+        </div>
+        <div class="stats-card">
+            <span class="count-label">Pending Verification</span>
+            <span class="count-value">{{ orders.count }}</span>
+        </div>
+    </header>
 
+    <div class="order-table-container">
+        <table class="logistics-table">
+            <thead>
+                <tr>
+                    <th>Invcoice</th>
+                    <th>Order Info</th>
+                    <th>Customer & Product</th>
+                    <th>Payment Proof</th>
+                    <th class="text-right">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>
+                        <a href="{% url 'view_invoice' order.id %}" class="btn-confirm">Inspect Invoice</a>
+                    </td>
+                    <td class="id-cell">
+                        <span class="order-number">#ODY-{{ order.id }}</span>
+                        <small class="order-date">{{ order.date_created|date:"M d, H:i" }}</small>
+                    </td>
+                    <td class="details-cell">
+                        <div class="product-user-info">
+                            <strong>{{ order.product.name }} (x{{ order.quantity }})</strong>
+                            <span>User: @{{ order.user.username }}</span>
+                        </div>
+                    </td>
+                    <td class="receipt-cell">
+                        {% if order.receipt %}
+                            <a href="{% url 'view_invoice' order.id %}" target="_blank" class="receipt-link">
+                                <span class="icon">📄</span> View Receipt
+                            </a>
+                        {% else %}
+                            <span class="no-receipt">Pending Upload</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-right">
+                        <a href="{% url 'confirm_order' order.id %}" class="btn-confirm">Verify & Confirm</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="empty-state">
+                        No pending orders for this location.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

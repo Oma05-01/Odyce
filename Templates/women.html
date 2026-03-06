@@ -1,26 +1,46 @@
 {% extends 'base.html' %}
-{% block title %}Women's Perfumes{% endblock %}
+{% load static %}
 
-<!-- set this to logged in user -->
+{% block title %}Odyce | Women's Collection{% endblock %}
 
 {% block content %}
-{% load static %}
-<link rel="stylesheet" href="{% static 'styles/women.css' %}">
-<br><br><br><br>
-<div class="perfume-container">
-    <h1>Women's Perfumes</h1>
-    <section class="perfume-list">
-        <!-- Loop through all women's perfumes from the context (backend will provide this) -->
-        {% for perfume in womens_perfumes %}
-        <article class="perfume-item">
-            <img src="{{ perfume.picurl.url }}" alt="{{ perfume.name }}" class="perfume-image"/>
-            <h2>{{ perfume.name }}</h2>
-            <p class="perfume-brand">{{ perfume.brand }}</p>
-            <p class="perfume-price">{{ perfume.price }}</p>
-            <a href="{% url 'product_detail' perfume.id %}" class="view-details">View Details</a>
-        </article>
-        {% endfor %}
-    </section>
-</div>
+<link rel="stylesheet" href="{% static 'styles/women.css' %}?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
+<div class="collection-wrapper">
+    <header class="collection-intro">
+        <span class="subtitle">The Art of Femininity</span>
+        <h1>Women's Fragrances</h1>
+        <p>Discover a curation of floral, oriental, and woody notes designed for the modern woman.</p>
+    </header>
+
+    <div class="perfume-grid">
+        {% for perfume in womens_perfumes %}
+        <article class="perfume-card">
+            <div class="image-area">
+                <img src="{{ perfume.picurl.url }}" alt="{{ perfume.name }}" class="main-img"/>
+                <div class="hover-actions">
+                    <a href="{% url 'product_detail' 'women' perfume.id %}" class="btn-explore">Explore Scent</a>                </div>
+
+            </div>
+
+            <div class="card-details">
+                <span class="brand-name">{{ perfume.brand|default:"Odyce" }}</span>
+                <h2 class="scent-name">{{ perfume.name }}</h2>
+
+                <div class="rating-preview">
+                    <span class="stars">★★★★★</span>
+                    <span class="review-count">(12 Reviews)</span>
+                </div>
+
+                <p class="scent-price">₦{{ perfume.price }}</p>
+            </div>
+        </article>
+        {% empty %}
+        <div class="no-products">
+            <p>Our feminine collection is currently being refreshed. Check back soon.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

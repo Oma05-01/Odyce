@@ -1,111 +1,157 @@
 {% extends 'base.html' %}
 {% load static %}
 
-<!-- set this to logged in user -->
-
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/perfume_details.css' %}?v=1">
-<br> <br>
-    <section class="product-details">
-    <h2>Signature Scent 1</h2>
-        <!-- use the for loop here -->
-    <div class="description-grid">
-        <div class="description-img">
-            <img src="{{ product.picurl.url }}" alt="Signature Scent 1 Image">
-        </div>
-        <div class="description-text">
-            <p><strong>Top Notes:</strong> {{ product.name }}</p>
-            <p><strong>Middle Notes:</strong> {{ product.description }} </p>
-            <p><strong>Base Notes:</strong> Musk, Amber</p>
-            <p><strong>Concentration:</strong> Eau de Parfum</p>
-            <p><strong>Recommended for:</strong> Everyday wear, Casual outings</p>
-            <span>
-                <a href="{% url 'buy_now' product.id %}">
-                <button class="buy-now">Buy Now</button>
-                <br><br>
-            </a>
-            <button onclick="addToWishlist({{ product.id }})" class="wishlist-btn">Add to Wishlist</button>
-            </span>
-        </div>
-    </div>
+<link rel="stylesheet" href="{% static 'styles/perfume_details.css' %}?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-    <hr>
-    <h3>Reviews</h3>
-    <div class="reviews">
-        {% for review in reviews %}
-            <div class="review">
-                <p><strong>{{ review.user.first_name }}:</strong> {{ review.comment }}</p>
-                <span> Rating: {{ review.rating }} Stars</span>
-                <p>{{ review.comment }}</p>
-                <small>{{ review.created_at }}</small>
+<div class="details-wrapper">
+    <section class="product-container">
+        <div class="product-visuals">
+            <div class="main-image-card">
+                {% if product.picurl %}
+                    <img src="{{ product.picurl.url }}" alt="{{ product.name }}">
+                {% endif %}
+                <span class="category-tag">{{ product.product_type|title }}</span>
             </div>
-        {% empty %}
-            <p>No reviews yet. Be the first to review this product!</p>
-        {% endfor %}
-    </div>
+        </div>
 
-    <hr>
-    {% if user.is_authenticated %}
-        <h3>Leave a Review</h3>
-        <form method="post">
-            {% csrf_token %}
-            <label for="rating" >Rating:</label>
-            <div class="star-rating">
-                {% for i in "54321" %}
-                    <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}">
-                    <label for="star{{ i }}">&#9733;</label>
+        <div class="product-info-panel">
+            <nav class="breadcrumb">
+                <a href="{% url 'home' %}">Shop</a> /
+                <a href="{% url product.product_type %}">{{ product.product_type|title }}</a> /
+                <span>{{ product.name }}</span>
+            </nav>
+
+            <h1 class="product-title">{{ product.name }}</h1>
+            <p class="product-price">₦{{ product.price }}</p>
+
+            <div class="scent-description">
+                <h3>The Experience</h3>
+                <p>{{ product.description }}</p>
+            </div>
+
+            <div class="scent-profile-grid">
+                <div class="note-item">
+                    <span class="note-label">Scent Family</span>
+                    <span class="note-value">{{ product.scent }}</span>
+                </div>
+                <div class="note-item">
+                    <span class="note-label">Concentration</span>
+                    <span class="note-value">Eau de Parfum</span>
+                </div>
+            </div>
+
+            <div class="purchase-actions">
+                <a href="{% url 'buy_now' product.product_type product.id %}" class="btn-buy">
+                    Buy Now
+                </a>
+                <button onclick="addToWishlist('{{ product.product_type }}', {{ product.id }})" class="btn-wishlist">
+                    <span class="icon">♡</span> Add to Wishlist
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="feedback-section">
+        <div class="section-header">
+            <h2>Customer Reflections</h2>
+            <p>What others are saying about {{ product.name }}</p>
+        </div>
+
+        <div class="reviews-grid">
+            <div class="reviews-list">
+                {% for review in reviews %}
+                    <div class="review-card">
+                        <div class="review-header">
+                            <span class="reviewer-name">{{ review.user.user.first_name|default:"Odyce Customer" }}</span>
+                            <div class="stars">
+                                {% for i in "12345" %}
+                                    <span class="star {% if forloop.counter <= review.rating %}filled{% endif %}">★</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <p class="review-text">"{{ review.comment }}"</p>
+                        <span class="review-date">{{ review.created_at|date:"M d, Y" }}</span>
+                    </div>
+                {% empty %}
+                    <div class="empty-reviews">
+                        <p>No reflections yet. Be the first to share your experience.</p>
+                    </div>
                 {% endfor %}
             </div>
-            <br>
-            <label for="comment">Comment:</label>
-            <textarea name="comment" id="comment" rows="4"></textarea>
-            <button type="submit">Submit Review</button>
-        </form>
-    {% else %}
-        <p><a href="{% url 'login' %}">Log in</a> to leave a review.</p>
-    {% endif %}
 
-</section>
+            {% if user.is_authenticated %}
+            <div class="review-form-container">
+                <h3>Share Your Thoughts</h3>
+                <form method="post" class="styled-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>Your Rating</label>
+                        <div class="star-rating">
+                            {% for i in "54321" %}
+                                <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}" required>
+                                <label for="star{{ i }}">&#9733;</label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="comment">Your Review</label>
+                        <textarea name="comment" id="comment" placeholder="Tell us about the longevity, sillage, and notes..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">Post Review</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+</div>
 
 <script>
-  function addToWishlist(productId) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "{% url 'add_to_wishlist' product_id=0 %}".replace('0', productId), true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));  // CSRF protection
-
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        var response = JSON.parse(xhr.responseText);
-        if (response.status === "success") {
-          alert(response.message);  // Success alert
-        } else {
-          alert(response.message);  // Error alert
+        // 1. Django requires a CSRF token for POST requests to prevent security exploits.
+        // This function grabs it securely from the browser's cookies.
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
         }
-      } else {
-        alert("Something went wrong. Please try again.");
-      }
-    };
 
-    var data = JSON.stringify({ product_id: productId });
-    xhr.send(data);
-  }
+        // 2. The actual function triggered by your button click
+        function addToWishlist(productType, productId) {
+            // We use a placeholder URL and swap in the real variables so Django's template engine doesn't crash
+            const baseUrl = "{% url 'add_to_wishlist' 'TYPE' 0 %}";
+            const finalUrl = baseUrl.replace('TYPE', productType).replace('0', productId);
 
-  function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== "") {
-      var cookies = document.cookie.split(";");
-      for (var i = 0; i < cookies.length; i++) {
-        var cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === (name + "=")) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
+            fetch(finalUrl, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": getCookie('csrftoken'),
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the success or error message returned by your views.py
+                if(data.status === 'success') {
+                    alert("✨ " + data.message);
+                } else {
+                    alert("⚠️ " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Could not connect to the server.");
+            });
         }
-      }
-    }
-    return cookieValue;
-  }
-</script>
+    </script>
 
 {% endblock %}
-

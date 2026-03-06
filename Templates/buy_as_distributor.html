@@ -2,69 +2,105 @@
 {% load static %}
 {% load math_filters %}
 
-<!-- set this to logged in user -->
-
-{% block title %} Odyce - Purchase as Distributor {% endblock %}
+{% block title %} Odyce | Wholesale Distribution {% endblock %}
 
 {% block content %}
-<br><br><br><br><br>
-<link rel="stylesheet" href="{% static 'styles/buy_as_distributor.css' %}">
-<section class="distributor-purchase-section">
-    <h2>Purchase as Distributor</h2>
+<link rel="stylesheet" href="{% static 'styles/buy_as_distributor.css' %}?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <!-- Display Product in Units of 20 -->
-    <div class="product-details">
-        <img src="{{ product.picurl.url }}" alt="Product Image">
-        <h3>{{ product.name }} (Pack of 20 Units)</h3>
-        <p class="price">$<span id="unit-price">{{ product.price|multiply:20 }}</span> per pack</p>
-    </div>
+<div class="distributor-purchase-wrapper">
+    <section class="distributor-card">
+        <header class="distributor-header">
+            <h1>Bulk Wholesale Order</h1>
+            <p>Order in increments of 20 units for exclusive distributor pricing.</p>
+        </header>
 
-    <!-- Form for Distributor Billing Information -->
-    <form action="{% url 'checkout' %}" method="POST" class="order-form">
-        {% csrf_token %}
+        <div class="purchase-grid">
+            <div class="product-preview-box">
+                {% if product.picurl %}
+                    <img src="{{ product.picurl.url }}" alt="{{ product.name }}">
+                {% endif %}
+                <div class="batch-badge">Wholesale Pack (20 Units)</div>
+                <h3>{{ product.name }}</h3>
+                <div class="price-breakdown">
+                    <span class="label">Unit Price:</span> ₦{{ product.price }}<br>
+                    <span class="label">Pack Total:</span> ₦<span id="pack-base-price">{{ product.price|multiply:20 }}</span>
+                </div>
+            </div>
 
-        <div class="form-group">
-            <label for="billing-name">Full Name:</label>
-            <input type="text" id="billing-name" name="billing-name" required>
-        </div>
-        <div class="form-group">
-            <label for="billing-address">Address:</label>
-            <input type="text" id="billing-address" name="billing-address" required>
-        </div>
-        <div class="form-group">
-            <label for="billing-city">City:</label>
-            <select id="billing-city" name="billing-city" required>
-                <option value="" disabled selected>Select your city</option>
-                {% for city in cities %}
-                    <option value="{{ city }}">{{ city }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="phone-number">Phone Number:</label>
-            <input type="text" id="phone-number" name="phone-number" required>
-        </div>
-        <div class="form-group">
-            <label for="quantity">Quantity (in packs of 20):</label>
-            <input type="number" id="quantity" name="quantity" min="20" value="20" required>
-        </div>
-        <div class="form-group">
-            <label for="discount-code">Discount Code:</label>
-            <input type="text" id="discount-code" name="discount-code">
-        </div>
+            <form id="distributor-form" class="order-form">
+                {% csrf_token %}
+                <div class="form-section">
+                    <h3>Shipping Details</h3>
+                    <div class="form-group">
+                        <label for="billing-name">Full Name / Business Name</label>
+                        <input type="text" id="billing-name" name="billing-name" placeholder="Contact person or company" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="billing-address">Warehouse/Store Address</label>
+                        <input type="text" id="billing-address" name="billing-address" placeholder="Full delivery address" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="billing-city">City</label>
+                            <select id="billing-city" name="billing-city" required>
+                                <option value="" disabled selected>Select city</option>
+                                {% for city in cities %}
+                                    <option value="{{ city }}">{{ city }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone-number">Phone Number</label>
+                            <input type="text" id="phone-number" name="phone-number" placeholder="Primary contact" required>
+                        </div>
+                    </div>
+                </div>
 
-        <button type="submit" class="checkout-btn" onclick="setSessionData(event, {{ product.id }})">Buy and Proceed to Checkout</button>
-    </form>
-</section>
+                <div class="form-section">
+                    <h3>Volume Selection</h3>
+                    <div class="form-group">
+                        <label for="quantity">Number of Units (Min 20, Multiples of 20)</label>
+                        <input type="number" id="quantity" name="quantity" min="20" step="20" value="20" required>
+                    </div>
+
+                    <div class="total-calculation">
+                        <div class="calc-row">
+                            <span>Subtotal:</span>
+                            <span class="calc-val">₦<span id="display-total">{{ product.price|multiply:20 }}</span></span>
+                        </div>
+                        <div class="calc-row discount">
+                            <span>Distributor Discount:</span>
+                            <span class="calc-val">- ₦0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" class="checkout-btn" onclick="setSessionData(event, '{{ product.product_type }}', {{ product.id }})">
+                    Continue to Payment Verification
+                </button>
+            </form>
+        </div>
+    </section>
+</div>
 
 <script>
-    function setSessionData(event, productId) {
-        event.preventDefault();
-        const quantity = document.getElementById('quantity').value;
+    const unitPrice = parseFloat("{{ product.price }}");
+    const quantityInput = document.getElementById('quantity');
+    const displayTotal = document.getElementById('display-total');
 
-        // Check if quantity is a multiple of 20
-        if (quantity % 20 !== 0) {
-            alert("Please enter a quantity in multiples of 20.");
+    quantityInput.addEventListener('input', () => {
+        const qty = parseInt(quantityInput.value) || 20;
+        const total = qty * unitPrice;
+        displayTotal.innerText = total.toLocaleString();
+    });
+
+    function setSessionData(event, productType, productId) {
+        event.preventDefault();
+        const qty = parseInt(quantityInput.value);
+
+        if (qty < 20 || qty % 20 !== 0) {
+            alert("Distributor orders must be in multiples of 20 units.");
             return;
         }
 
@@ -73,10 +109,10 @@
             'billing_address': document.getElementById('billing-address').value,
             'billing_city': document.getElementById('billing-city').value,
             'phone-number': document.getElementById('phone-number').value,
-            'quantity': quantity,
-            'finalPrice': document.getElementById('unit-price').innerText,
-            'discountCode': document.getElementById('discount-code').value,
-            'product_id': productId
+            'quantity': qty,
+            'finalPrice': (qty * unitPrice).toString(),
+            'product_id': productId,
+            'product_type': productType
         };
 
         fetch("{% url 'save_session_data' %}", {
@@ -92,14 +128,9 @@
             if (data.status === 'success') {
                 window.location.href = "{% url 'checkout' %}";
             } else {
-                alert("Failed to save session data.");
+                alert("Failed to process order details.");
             }
-        })
-        .catch(error => {
-            console.error("Error:", error);
         });
     }
 </script>
-
-
 {% endblock %}

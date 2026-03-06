@@ -1,60 +1,55 @@
 {% extends 'base.html' %}
 {% load static %}
 
-<!-- set this to logged in user -->
-
-{% block title %} Odyce - Wishlist {% endblock %}
+{% block title %} Odyce | My Curated Wishlist {% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/wishlist.css' %}">
-<section class="wishlist-section">
-    <br><br>
-    <h2>Your Wishlist</h2>
-    <br><br>
-    <br><br>
-    <div class="wishlist-container">
+<link rel="stylesheet" href="{% static 'styles/wishlist.css' %}?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+
+<div class="wishlist-wrapper">
+    <header class="wishlist-header">
+        <h1>My Wishlist</h1>
+        <p>Your curated selection of signature scents and future favorites.</p>
+    </header>
+
+    <div class="wishlist-content">
         {% if wishlist_items %}
-            <ul class="wishlist-list">
+            <div class="wishlist-grid">
                 {% for item in wishlist_items %}
-                    <li class="wishlist-item">
-                        <div class="item-details">
-                            <img src="{{ item.product.picurl.url  }}" alt="{{ item.product_name }}">
-                            <div class="item-info">
+                    <article class="wishlist-card">
+                        <div class="image-box">
+                            {% if item.product.picurl %}
+                                <img src="{{ item.product.picurl.url }}" alt="{{ item.product.name }}">
+                            {% endif %}
+                            <a href="{% url 'remove_from_wishlist' item.id %}" class="btn-remove-overlay" title="Remove from wishlist">×</a>
+                        </div>
+
+                        <div class="card-details">
+                            <div class="meta">
                                 <h3>{{ item.product.name }}</h3>
-                                <p>Price: ${{ item.product.price }}</p>
-                                <p>Quantity: {{ item.quantity }}</p>
-                                <a href="{% url 'remove_from_wishlist' item.id %}" class="remove-btn">Remove</a>
+                                <p class="price">₦{{ item.product.price }}</p>
+                            </div>
+
+                            <div class="actions">
+                                <a href="{% url 'buy_now' item.product_type item.product.id %}" class="btn-buy">Buy Now</a>
+                                <a href="{% url 'product_detail' item.product_type item.product.id %}" class="btn-view">View Detail</a>
                             </div>
                         </div>
-                    </li>
+                    </article>
                 {% endfor %}
-            </ul>
+            </div>
         {% else %}
-            <p>Your wishlist is currently empty.</p>
+            <div class="empty-wishlist">
+                <span class="icon">✨</span>
+                <h3>Your wishlist is empty</h3>
+                <p>Browse our collections and save the scents that speak to you.</p>
+                <div class="empty-actions">
+                    <a href="{% url 'men' %}" class="btn-explore">Men's Collection</a>
+                    <a href="{% url 'women' %}" class="btn-explore">Women's Collection</a>
+                </div>
+            </div>
         {% endif %}
     </div>
-</section>
-
-<script>
-    function addToWishlist(productId) {
-    fetch(`/wishlist/add/${productId}/`, {
-        method: "GET",
-        headers: {
-            "X-Requested-With": "XMLHttpRequest",
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === "success") {
-            alert(data.message);
-        } else {
-            alert("Failed to add item to wishlist.");
-        }
-    })
-    .catch(error => console.error("Error:", error));
-}
-
-</script>
-
-
+</div>
 {% endblock %}

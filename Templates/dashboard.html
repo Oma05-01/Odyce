@@ -1,144 +1,157 @@
 {% load static %}
-
-
-<!-- set this to logged in admin -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="{% static 'styles/dashboard.css' %}?v=1">
-
-
+    <title>Odyce | Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'styles/dashboard.css' %}?v=4">
     {% block head %}{% endblock %}
 </head>
 <body>
-    <div class="sidebar" id="sidebar">
-        <ul>
-            <li><a href="{% url 'dashboard' %}"><span class="icon">🖥️</span> <span class="label">Dashboard</span></a></li>
-            <li>
-                <a href="javascript:void(0)" class="collapsible">
-                    <span class="icon">📦</span> <span class="label">Pending Orders</span>
+    {% if request.user.is_staff %}
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <span class="brand-logo">O<span>·</span>A</span>
+            <span class="brand-tag">Admin Panel</span>
+        </div>
+
+        <ul class="sidebar-nav">
+            <li class="nav-item">
+                <a href="{% url 'dashboard' %}" class="nav-link" id="nav-overview">
+                    <span class="icon">🖥️</span>
+                    <span class="label">Overview</span>
                 </a>
-                <ul class="nested">
+            </li>
+
+            <li class="nav-section">Sales & Orders</li>
+
+            <li class="nav-item">
+                <a href="javascript:void(0)" class="nav-link collapsible">
+                    <span class="icon">📦</span>
+                    <span class="label">Pending</span>
+                </a>
+                <ul class="nested-nav">
                     {% if pending_orders_by_location %}
                         {% for location in pending_orders_by_location %}
-                            <li>
-                                <a href="{% url 'orders_by_location' location=location.billing_city %}">
-                                    {{ location.billing_city }} ({{ location.count|default:"0" }})
-                                </a>
-                            </li>
+                            <li><a href="{% url 'orders_by_location' location=location.billing_city %}">{{ location.billing_city }} ({{ location.count }})</a></li>
                         {% endfor %}
                     {% else %}
-                        <li>No Pending Orders</li>
+                        <li class="empty">No pending orders</li>
                     {% endif %}
                 </ul>
             </li>
-            <li>
-                <a href="javascript:void(0)" class="collapsible">
-                    <span class="icon">✅</span> <span class="label">Confirmed Orders</span>
+
+            <li class="nav-item">
+                <a href="javascript:void(0)" class="nav-link collapsible">
+                    <span class="icon">✅</span>
+                    <span class="label">Confirmed</span>
                 </a>
-                <ul class="nested">
+                <ul class="nested-nav">
                     {% if confirmed_orders_locations %}
-                    {% for loc in confirmed_orders_locations %}
-                        <li>
-                            <a href="{% url 'confirmed_orders_by_location' location=loc.billing_city %}">
-                                {{ loc.billing_city }} ({{ loc.count|default:"0" }})
-                            </a>
-                        </li>
-                    {% endfor %}
+                        {% for loc in confirmed_orders_locations %}
+                            <li><a href="{% url 'confirmed_orders_by_location' location=loc.billing_city %}">{{ loc.billing_city }} ({{ loc.count }})</a></li>
+                        {% endfor %}
                     {% else %}
-                        <li>No Confirmed Orders</li>
+                        <li class="empty">No confirmed orders</li>
                     {% endif %}
                 </ul>
             </li>
-            <li><a href="{% url 'user_activity' %}"><span class="icon">📊</span> <span class="label">User Activity</span></a></li>
-            <li><a href="{% url 'view_users' %}"><span class="icon">👤</span> <span class="label">View Users</span></a></li>
-            <li><a href="{% url 'reviews' %}"><span class="icon">...</span> <span class="label">Reviews</span></a></li>
-            <li><a href="{% url 'contact_us_messages' %}"><span class="icon"> 📞✉️ </span> <span class="label">Contact_Us-Messages</span></a></li>
-            <li>
-                <a href="javascript:void(0)" class="collapsible">
-                    <span class="icon">➕</span> <span class="label">Add Product</span>
+
+            <li class="nav-section">Inventory</li>
+
+            <li class="nav-item">
+                <a href="javascript:void(0)" class="nav-link collapsible">
+                    <span class="icon">➕</span>
+                    <span class="label">Manage Products</span>
                 </a>
-                <ul class="nested">
+                <ul class="nested-nav">
                     <li><a href="{% url 'add_for_men' %}">Add for Men</a></li>
                     <li><a href="{% url 'add_for_women' %}">Add for Women</a></li>
+                    <li><a href="{% url 'men_list' %}">Men's Catalog</a></li>
+                    <li><a href="{% url 'women_list' %}">Women's Catalog</a></li>
                 </ul>
             </li>
-            <li>
-                <a href="javascript:void(0)" class="collapsible">
-                    <span class="icon">📃</span> <span class="label">Product List</span>
-                </a>
-                <ul class="nested">
-                    <li><a href="{% url 'men_list' %}">Men's List</a></li>
-                    <li><a href="{% url 'women_list' %}">Women's List</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="javascript:void(0)" class="collapsible">
-                    <span class="icon"> 📰📚</span> <span class="label">Articles</span>
-                </a>
-                <ul class="nested">
-                    <li><a href="{% url 'create_article' %}"> Create Article </a></li>
-                    <li><a href="{% url 'articles' %}"> List of Articles </a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-    <button class="toggle-btn" id="toggle-btn">☰</button>
-    <div class="content" id="content">
-        <div class="container">
-            {% block content %}{% endblock %}
-        </div>
-    </div>
 
+            <li class="nav-section">Platform</li>
+            <li class="nav-item"><a href="{% url 'user_activity' %}" class="nav-link"><span class="icon">📊</span><span class="label">Activity</span></a></li>
+            <li class="nav-item"><a href="{% url 'view_users' %}" class="nav-link"><span class="icon">👤</span><span class="label">Users</span></a></li>
+            <li class="nav-item"><a href="{% url 'reviews' %}" class="nav-link"><span class="icon">⭐</span><span class="label">Reviews</span></a></li>
+            <li class="nav-item"><a href="{% url 'contact_us_messages' %}" class="nav-link"><span class="icon">✉️</span><span class="label">Messages</span></a></li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <a href="{% url 'logout' %}" style="color: #ff4d4d;">
+                <span class="icon">⬅</span>
+                <span class="label">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-wrapper" id="main-content">
+        <header class="top-bar">
+            <button class="menu-toggle" id="toggle-btn">☰</button>
+            <div class="top-bar-right">
+                <a href="{% url 'home' %}" class="view-site" target="_blank">Visit Store ↗</a>
+                <div class="admin-profile">
+                    <div class="admin-avatar">{{ request.user.username|slice:":2"|upper }}</div>
+                    <span class="admin-name">{{ request.user.username }}</span>
+                </div>
+            </div>
+        </header>
+
+        <section class="page-content">
+            {% block content %}{% endblock %}
+        </section>
+    </main>
 
     <script>
-    // JavaScript for sidebar toggle and collapsible links
-    const sidebar = document.getElementById('sidebar');
-    const content = document.getElementById('content');
-    const toggleBtn = document.getElementById('toggle-btn');
-    const collapsibles = document.querySelectorAll('.collapsible');
-    const nestedLists = document.querySelectorAll('.nested'); // Select all nested lists
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+        const toggleBtn = document.getElementById('toggle-btn');
 
-    // Sidebar toggle functionality
-    toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('collapsed');
-        content.classList.toggle('collapsed');
-
-        // Collapse all nested lists when the sidebar is collapsed
-        if (sidebar.classList.contains('collapsed')) {
-            nestedLists.forEach(nestedList => {
-                nestedList.style.display = 'none'; // Hide all nested lists
-            });
-        }
-    });
-
-    // Collapsible sections functionality
-    collapsibles.forEach(item => {
-        item.addEventListener('click', (event) => {
-            // Check if sidebar is collapsed
-            if (sidebar.classList.contains('collapsed')) {
-                // If collapsed, expand it
-                sidebar.classList.remove('collapsed');
-                content.classList.remove('collapsed');
-
-                // After expanding the sidebar, ensure the nested list is toggled
-                const nestedList = item.nextElementSibling;
-                nestedList.style.display = 'block'; // Show the nested list
-            } else {
-                // If sidebar is not collapsed, toggle the nested list normally
-                const nestedList = item.nextElementSibling;
-                nestedList.style.display = nestedList.style.display === 'block' ? 'none' : 'block';
-            }
-
-            event.stopPropagation(); // Prevent the event from bubbling up
+        // Sidebar Toggle Logic
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
         });
-    });
 
-</script>
+        // Dropdown Toggle Logic
+        document.querySelectorAll('.collapsible').forEach(item => {
+            item.addEventListener('click', () => {
+                if (sidebar.classList.contains('collapsed')) {
+                    sidebar.classList.remove('collapsed');
+                    mainContent.classList.remove('expanded');
+                }
+                const nested = item.nextElementSibling;
+                nested.classList.toggle('show');
+                item.classList.toggle('open');
+            });
+        });
 
+        // Active Link Highlighting & Persistence
+        const currentPath = window.location.pathname;
+        document.querySelectorAll('.sidebar-nav a').forEach(link => {
+            const linkPath = link.getAttribute('href');
+
+            if (linkPath === currentPath && !link.classList.contains('collapsible')) {
+                link.classList.add('active');
+
+                // If the link is inside a dropdown, keep the dropdown open
+                const parentNav = link.closest('.nested-nav');
+                if (parentNav) {
+                    parentNav.classList.add('show');
+                    parentNav.previousElementSibling.classList.add('open');
+                }
+            }
+        });
+    </script>
+    {% else %}
+    <div style="height: 100vh; display: flex; align-items: center; justify-content: center; font-family: sans-serif;">
+        <p>Access Denied. Redirecting to Odyce home...</p>
+    </div>
+    <script>window.location.href = "{% url 'home' %}";</script>
+    {% endif %}
 </body>
 </html>

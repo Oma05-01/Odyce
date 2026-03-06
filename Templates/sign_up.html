@@ -4,71 +4,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - Odyce</title>
-    <link rel="stylesheet" href="{% static 'styles/sign_up.css' %}">
-
-
+    <title>Odyce | Create Account</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'styles/sign_up.css' %}?v=2">
 </head>
 <body>
 
-    <div class="signup-container">
-        <h2>Join Odyce</h2>
-        <form id="signup-form" action="{% url 'register' %}" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="text" id="firstname" name="firstname" placeholder="First Name" required>
-            <input type="text" id="lastname" name="lastname" placeholder="Last Name" required>
-            <input type="email" id="email"  name="email" placeholder="Email Address" required>
-            <input type="number" id="phone_number" name="phone_number" placeholder="Phone Number" required>
-            <input type="password" id="password" name="password" placeholder="Password" required>
-            <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
-            <button type="submit">Sign Up</button>
-        </form>
-        <p>Already have an account? <a href="{% url 'login' %}">Log in here</a></p>
+    <div class="auth-wrapper">
+        <div class="signup-card">
+            <header class="auth-header">
+                <a href="{% url 'landing' %}" class="auth-logo">ODYCE</a>
+                <h2>Create Your Account</h2>
+                <p>Join our community of scent enthusiasts.</p>
+            </header>
+
+            <form id="signup-form" action="{% url 'register' %}" method="POST">
+                {% csrf_token %}
+
+                <div class="input-grid">
+                    <div class="input-group">
+                        <input type="text" id="firstname" name="firstname" placeholder="First Name" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="lastname" name="lastname" placeholder="Last Name" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <input type="email" id="email" name="email" placeholder="Email Address" required>
+                </div>
+
+                <div class="input-group">
+                    <input type="tel" id="phone_number" name="phone_number" placeholder="Phone Number" required>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" id="password" name="password" placeholder="Create Password" required>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
+                </div>
+
+                <button type="submit" class="btn-submit">Sign Up</button>
+            </form>
+
+            <footer class="auth-footer">
+                <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+            </footer>
+        </div>
     </div>
 
-    <div id="popup" class="popup">
-        <span id="popup-message"></span>
-        <button onclick="closePopup()">Close</button>
+    <div id="toast" class="toast">
+        <span id="toast-message"></span>
     </div>
 
-<script>
-        // Function to display the popup with the message
-        function showPopup(message) {
-            const popup = document.getElementById('popup');
-            const popupMessage = document.getElementById('popup-message');
-            popupMessage.innerText = message;
-            popup.style.display = 'block';
+    <script>
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+
+        function showToast(message, type = 'error') {
+            toastMessage.innerText = message;
+            toast.className = `toast show ${type}`;
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 4000);
         }
 
-        // Function to close the popup
-        function closePopup() {
-            document.getElementById('popup').style.display = 'none';
-        }
-
-        // AJAX form submission with popup for error messages
         document.getElementById('signup-form').addEventListener('submit', function(event) {
-            event.preventDefault();  // Prevent form from submitting normally
-
+            event.preventDefault();
             let formData = new FormData(this);
 
             fetch("{% url 'register' %}", {
                 method: 'POST',
                 body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
             })
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'error') {
-                    showPopup(data.msg);  // Show error message in popup
+                    showToast(data.msg, 'error');
                 } else if (data.status === 'success') {
-                    showPopup(data.msg);  // Show success message in popup
-                    setTimeout(() => {
-                        window.location.href = "{% url 'login' %}";  // Redirect to login after showing success
-                    }, 2000);  // Delay redirection for user to read success message
+                    showToast(data.msg, 'success');
+                    setTimeout(() => { window.location.href = "{% url 'login' %}"; }, 2000);
                 }
             })
+            .catch(err => showToast("Connection error. Please try again.", 'error'));
         });
     </script>
 </body>

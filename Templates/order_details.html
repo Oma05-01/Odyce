@@ -1,33 +1,83 @@
 {% extends "dashboard.html" %}
 {% load static %}
 
-<!-- set this to logged in admin -->
-
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/order_details.css' %}">
-    <h1>Order Details</h1>
+<link rel="stylesheet" href="{% static 'styles/order_details.css' %}?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <div class="order-container">
-        <p><strong>Order ID:</strong> {{ order.id }}</p>
-        <p><strong>Date Created:</strong> {{ order.date_created }}</p>
-        <p><strong>Billing Name:</strong> {{ order.billing_name }}</p>
-        <p><strong>Billing Address:</strong> {{ order.billing_address }}</p>
-        <p><strong>Status:</strong> <span class="status {{ order.status }}">{{ order.status|title }}</span></p>
-        <p><strong>Total:</strong> ${{ order.total }}</p>
-
-        {% if order.receipt %}
-            <p><strong>Receipt:</strong> <a href="{{ order.receipt.url }}" class="receipt-link">View Receipt</a></p>
-        {% else %}
-            <p>No receipt uploaded.</p>
-        {% endif %}
-
-        {% if request.user.is_staff and order.status == 'pending' %}
-            <form method="POST" action="{% url 'confirm_order' order.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-confirm">Confirm Payment</button>
-            </form>
-        {% endif %}
+<div class="order-detail-wrapper">
+    <div class="detail-header">
+        <a href="{% url 'pending_orders' %}" class="back-nav">← Back to Orders</a>
+        <h1>Order Review #ODY-{{ order.id }}</h1>
     </div>
 
+    <div class="detail-grid">
+        <div class="info-column">
+            <div class="detail-card">
+                <h3>Customer Information</h3>
+                <div class="data-row">
+                    <span class="label">Name</span>
+                    <span class="value">{{ order.billing_name }}</span>
+                </div>
+                <div class="data-row">
+                    <span class="label">Address</span>
+                    <span class="value">{{ order.billing_address }}, {{ order.billing_city }}</span>
+                </div>
+                <div class="data-row">
+                    <span class="label">Phone</span>
+                    <span class="value">{{ order.phone_number }}</span>
+                </div>
+            </div>
 
+            <div class="detail-card">
+                <h3>Transaction Details</h3>
+                <div class="data-row">
+                    <span class="label">Status</span>
+                    <span class="status-pill {{ order.status }}">{{ order.status|title }}</span>
+                </div>
+                <div class="data-row">
+                    <span class="label">Date</span>
+                    <span class="value">{{ order.date_created|date:"F d, Y H:i" }}</span>
+                </div>
+                <div class="data-row total-row">
+                    <span class="label">Grand Total</span>
+                    <span class="value price">₦{{ order.total }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="receipt-column">
+            <div class="detail-card receipt-card">
+                <h3>Payment Verification</h3>
+                {% if order.receipt %}
+                    <div class="receipt-preview">
+                        <img src="{{ order.receipt.url }}" alt="Payment Receipt" id="receipt-image">
+                        <div class="receipt-overlay">
+                            <a href="{{ order.receipt.url }}" target="_blank" class="btn-zoom">🔍 View Full Size</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="no-receipt">
+                        <p>No proof of payment has been uploaded yet.</p>
+                    </div>
+                {% endif %}
+
+                {% if request.user.is_staff and order.status == 'pending' %}
+                    <div class="action-zone">
+                        <p class="warning-text">Confirming this order will generate a confirmation code and notify the customer.</p>
+                        <form method="POST" action="{% url 'confirm_order' order.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-confirm-final">Approve & Confirm Order</button>
+                        </form>
+                    </div>
+                {% elif order.status == 'confirmed' %}
+                    <div class="confirmed-badge">
+                        <span class="icon">✅</span>
+                        <p><strong>Confirmed Code:</strong> {{ order.confirmed_order_code }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

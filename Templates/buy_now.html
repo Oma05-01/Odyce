@@ -1,169 +1,179 @@
 {% extends 'base.html' %}
 {% load static %}
 
-<!-- set this to logged in user -->
-{% block title %} Odyce - Buy Now {% endblock %}
+{% block title %} Odyce | Secure Checkout {% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/buy_now.css' %}">
-<section class="buy-now-section">
-    <br><br>
-    <h2>Buy Now</h2>
-    <div class="product-details">
-        <img src="{{ product.picurl.url }}" alt="Product Image">  <!-- Use the image URL from the product -->
-        <h3>{{ product.name }}</h3>
-        <p class="price" id="price-display">$<span id="final-price">{{ product.price }}</span></p>  <!-- Show product price -->
+<link rel="stylesheet" href="{% static 'styles/buy_now.css' %}?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-        {% if customer.coupon_code %}
-            <p>You have a coupon code available!</p>
-        {% endif %}
-    </div>
+<div class="checkout-wrapper">
+    <div class="checkout-container">
+        <header class="checkout-header">
+            <h1>Complete Your Order</h1>
+            <p>You're just one step away from your new fragrance.</p>
+        </header>
 
-    <!-- New Buttons -->
-    <div class="action-buttons">
-        <button onclick="addToWishlist({{ product.id }})" class="wishlist-btn">Add to Wishlist</button>
-        <div class="supplier-button">
-            {% if request.user.customer.is_distributor %}
-                <a href="{% url 'buy_as_distributor' product.id %}"><button type="submit" class="button">Purchase as a Distributor</button></a>
-            {% else %}
-                <form action="{% url 'become_distributor' %}" method="post">
+        <div class="checkout-grid">
+            <aside class="order-summary-card">
+                <div class="product-preview">
+                    {% if product.picurl %}
+                        <img src="{{ product.picurl.url }}" alt="{{ product.name }}">
+                    {% endif %}
+                    <div class="product-info">
+                        <h3>{{ product.name }}</h3>
+                        <p class="category-tag">{{ product.product_type|title }} Collection</p>
+                    </div>
+                </div>
+
+                <div class="pricing-panel">
+                    <div class="price-row">
+                        <span>Unit Price</span>
+                        <span>₦{{ product.price }}</span>
+                    </div>
+                    <div class="price-row total">
+                        <span>Total Due</span>
+                        <span class="final-amt">₦<span id="final-price">{{ product.price }}</span></span>
+                    </div>
+                </div>
+
+                {% if request.user.customer.coupon_code %}
+                    <div class="promo-available">
+                        <p>🎁 <strong>Your Personal Code:</strong> <code>{{ request.user.customer.coupon_code }}</code></p>
+                    </div>
+                {% endif %}
+
+                <div class="upsell-actions">
+                    <button onclick="addToWishlist('{{ product.product_type }}', {{ product.id }})" class="btn-outline">
+                        Save for Later
+                    </button>
+                    {% if request.user.customer.is_distributor %}
+                        <a href="{% url 'buy_as_distributor' product.product_type product.id %}" class="btn-link">Distributor Portal →</a>
+                    {% else %}
+                        <form action="{% url 'become_distributor' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-text">Interested in distributing? Join here.</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </aside>
+
+            <main class="shipping-details">
+                <form action="{% url 'checkout' %}" method="POST" id="order-form">
                     {% csrf_token %}
-                    <button type="submit" class="button">Become a Distributor</button>
+                    <h2 class="section-title">Shipping & Billing</h2>
+
+                    <div class="form-group">
+                        <label for="billing-name">Full Name</label>
+                        <input type="text" id="billing-name" name="billing-name" placeholder="Name of recipient" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="billing-address">Delivery Address</label>
+                        <input type="text" id="billing-address" name="billing-address" placeholder="e.g. 123 Luxury Ave, Victoria Island" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="billing-city">City</label>
+                            <select id="billing-city" name="billing-city" required>
+                                <option value="" disabled selected>Select city</option>
+                                {% for city in cities %}
+                                    <option value="{{ city }}">{{ city }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone-number">Phone Number</label>
+                            <input type="tel" id="phone-number" name="phone-number" placeholder="+234..." required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" id="quantity" name="quantity" value="1" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="discount-code">Promo Code</label>
+                            <input type="text" id="discount-code" name="discount-code" placeholder="Enter code">
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-checkout" onclick="setSessionData(event, '{{ product.product_type }}', {{ product.id }})">
+                        Proceed to Payment Verification
+                    </button>
                 </form>
-            {% endif %}
+            </main>
         </div>
     </div>
-
-    <!-- Form for Billing Information -->
-    <form action="{% url 'checkout' %}" method="POST" class="order-form">
-        {% csrf_token %}
-        <h3>Billing Information</h3>
-        <div class="form-group">
-            <label for="billing-name">Full Name:</label>
-            <input type="text" id="billing-name" name="billing-name" placeholder="Name of person receiving this product" required>
-        </div>
-        <div class="form-group">
-            <label for="billing-address">Address:</label>
-            <input type="text" id="billing-address" name="billing-address" placeholder="Your address" required>
-        </div>
-        <div class="form-group">
-            <label for="billing-city">City:</label>
-            <select id="billing-city" name="billing-city" required>
-                <option value="" disabled selected>Select your city</option>
-                {% for city in cities %}
-                    <option value="{{ city }}">{{ city }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="phone-number">Phone Number:</label>
-            <input type="text" id="phone-number" name="phone-number" placeholder="Phone number of the person receiving this product" required>
-        </div>
-
-        <div class="form-group">
-            <label for="quantity">Quantity:</label>
-            <input type="number" id="quantity" name="quantity" value="1" min="1" required>
-        </div>
-        <div class="form-group">
-            <label for="discount-code">Discount Code:</label>
-            <input type="text" id="discount-code" name="discount-code">
-        </div>
-
-        <button type="submit" class="place-order-btn" onclick="setSessionData(event, {{ product.id }})">Complete Order</button>
-    </form>
-</section>
+</div>
 
 <script>
-    const basePrice = {{ product.price }}; // Dynamic price from the product
-    const discountRate = 0.05; // Discount rate
-    let couponApplied = false;
+    // JavaScript logic remains consistent with your previous implementation
+    // Ensure all IDs match the new structure
+    const basePrice = parseFloat("{{ product.price }}");
+    const discountRate = 0.05;
 
     document.getElementById("quantity").addEventListener("input", updatePrice);
+    document.getElementById("discount-code").addEventListener("input", updatePrice);
 
     function updatePrice() {
-        const quantity = document.getElementById("quantity").value;
+        const quantity = parseInt(document.getElementById("quantity").value) || 1;
         let totalPrice = basePrice * quantity;
+        const discountCode = document.getElementById("discount-code").value.trim();
+        const userCoupon = "{{ request.user.customer.coupon_code }}";
 
-        const discountCode = document.getElementById("discount-code").value;
-        if (discountCode && !couponApplied) {
+        if (discountCode === userCoupon && userCoupon !== "") {
             totalPrice *= (1 - discountRate);
-            couponApplied = true;
         }
-
-        document.getElementById("final-price").innerText = totalPrice.toFixed(2);
+        document.getElementById("final-price").innerText = totalPrice.toLocaleString('en-NG', {minimumFractionDigits: 2});
     }
 
-    function setSessionData(event, productId) {
-    event.preventDefault(); // Stops form submission
-    const formData = {
-        'billing_name': document.getElementById('billing-name').value,
-        'billing_address': document.getElementById('billing-address').value,
-        'billing_city': document.getElementById('billing-city').value,
-        'phone-number': document.getElementById('phone-number').value,
-        'quantity': document.getElementById('quantity').value,
-        'finalPrice': document.getElementById('final-price').innerText,
-        'discountCode': document.getElementById('discount-code').value,
-        'product_id': productId  // Passes product_id to backend
-    };
-
-    fetch("{% url 'save_session_data' %}", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": "{{ csrf_token }}"
-        },
-        body: JSON.stringify(formData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            window.location.href = "{% url 'checkout' %}";
-        } else {
-            alert("Failed to save session data.");
+    function setSessionData(event, productType, productId) {
+        event.preventDefault();
+        const form = document.getElementById('order-form');
+        if(!form.checkValidity()) {
+            form.reportValidity();
+            return;
         }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-    });
-}
 
-    function addToWishlist(productId) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "{% url 'add_to_wishlist' product_id=0 %}".replace('0', productId), true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));  // CSRF protection
+        const formData = {
+            'billing_name': document.getElementById('billing-name').value,
+            'billing_address': document.getElementById('billing-address').value,
+            'billing_city': document.getElementById('billing-city').value,
+            'phone-number': document.getElementById('phone-number').value,
+            'quantity': document.getElementById('quantity').value,
+            'finalPrice': document.getElementById('final-price').innerText.replace(/,/g, ''),
+            'discountCode': document.getElementById('discount-code').value,
+            'product_id': productId,
+            'product_type': productType
+        };
 
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        var response = JSON.parse(xhr.responseText);
-        if (response.status === "success") {
-          alert(response.message);  // Success alert
-        } else {
-          alert(response.message);  // Error alert
-        }
-      } else {
-        alert("Something went wrong. Please try again.");
-      }
-    };
-
-    var data = JSON.stringify({ product_id: productId });
-    xhr.send(data);
-  }
-
-  function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== "") {
-      var cookies = document.cookie.split(";");
-      for (var i = 0; i < cookies.length; i++) {
-        var cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === (name + "=")) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
+        fetch("{% url 'save_session_data' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                window.location.href = "{% url 'checkout' %}";
+            }
+        });
     }
-    return cookieValue;
-  }
+
+    function addToWishlist(productType, productId) {
+        var baseUrl = "{% url 'add_to_wishlist' 'TYPE' 0 %}";
+        var finalUrl = baseUrl.replace('TYPE', productType).replace('0', productId);
+        fetch(finalUrl, {
+            method: "POST",
+            headers: { "X-CSRFToken": "{{ csrf_token }}", "Content-Type": "application/json" }
+        })
+        .then(r => r.json()).then(d => alert(d.message));
+    }
 </script>
-
 {% endblock %}

@@ -4,76 +4,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Odyce </title>
+    <title>Odyce | Elevate Your Scent</title>
     <link href="{% static 'styles/landing.css' %}" rel="stylesheet"/>
 </head>
 <body>
 
-    <!-- Header -->
     <header class="header-container">
         <h1>ODYCE</h1>
         <nav>
-            <a href="#">Shop</a>
-            <a href="#">Fragrances</a>
-            <a href="#">Contact</a>
+            <a href="{% url 'home' %}">Shop</a>
+            <a href="{% url 'home' %}">Fragrances</a>
+            <a href="{% url 'contact_us' %}">Contact</a>
         </nav>
         <div class="auth-links">
-            <a href="/register/" class="button">Sign Up</a>
-            <a href="/login/" class="button">Loginss</a>
+            <a href="{% url 'register' %}" class="button">Sign Up</a>
+            <a href="{% url 'login' %}" class="button">Login</a>
         </div>
     </header>
 
     <br><br><br>
-    <!-- Hero Section -->
+
     <div class="hero">
         <h2>Elevate Your Scent</h2>
-        <p>Discover a collection of timeless, gender - perfumes for all occasions.</p>
-        <a href="#">Explore Now</a>
+        <p>Discover a collection of timeless perfumes for all occasions.</p>
+        <a href="{% url 'home' %}" class="button">Explore Now</a>
     </div>
 
-    <!-- Products Section -->
     <section class="products">
         <h2>Our Recent Fragrances</h2>
-        <!-- using a for loop here to display all perfumes from most recent  -->
+
         <div class="product-grid">
-            <!-- Product 1 -->
-            <div class="product">
-                <img src="perfume1.jpg" alt="Unisex Perfume 1">
-                <h3>Signature Scent 1</h3>
-                <p>A refreshing blend of citrus and musk for everyday wear.</p>
-                <button>Buy Now</button>
-            </div>
+            {% for product in recent_perfumes %}
+                <div class="product">
+                    <div class="product-image-wrapper">
+                        {% if product.picurl %}
+                            <img src="{{ product.picurl.url }}" alt="{{ product.name }}">
+                        {% endif %}
+                    </div>
 
-            <!-- Product 2 -->
-            <div class="product">
-                <img src="perfume2.jpg" alt="Unisex Perfume 2">
-                <h3>Signature Scent 2</h3>
-                <p>An elegant mix of floral and earthy tones.</p>
-                <button>Buy Now</button>
-            </div>
+                    <div class="product-info">
+                        <h3>{{ product.name }}</h3>
+                        <p>{{ product.description|truncatechars:60 }}</p>
 
-            <!-- Product 3 -->
-            <div class="product">
-                <img src="perfume3.jpg" alt="Unisex Perfume 3">
-                <h3>Signature Scent 3</h3>
-                <p>Fresh oceanic notes with a subtle hint of spice.</p>
-                <button>Buy Now</button>
+                        <a href="{% url 'product_detail' product.product_type product.id %}">
+                            <button>View Details</button>
+                        </a>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No recent fragrances available at the moment.</p>
+            {% endfor %}
             </div>
-
-            <!-- Product 4 -->
-            <div class="product">
-                <img src="perfume4.jpg" alt="Unisex Perfume 4">
-                <h3>Signature Scent 4</h3>
-                <p>Warm amber and vanilla with delicate floral touches.</p>
-                <button>Buy Now</button>
-            </div>
-        </div>
     </section>
 
-
-    <!-- add styling for this, about us, contact us... basically replicating stuff form thescentsstore.com -->
     <footer>
-        <p>&copy; 2024 Odyce Store | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        <p>&copy; 2026 Odyce Store | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
     </footer>
 
 </body>

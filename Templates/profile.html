@@ -1,32 +1,65 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Profile - Odyce{% endblock %}
 
-
-<!-- set this to logged in user -->
+{% block title %}Odyce | My Account{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/profile.css' %}">
-<section class="profile-section">
-    <h1>User Profile</h1>
-    <div class="profile-details">
-        <p><strong>Username:</strong> {{ user.username }}</p>
-        <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>First Name:</strong> {{ user.first_name }}</p>
-        <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+<link rel="stylesheet" href="{% static 'styles/profile.css' %}?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<div class="profile-wrapper">
+    <header class="profile-header">
+        <nav class="breadcrumb">
+            <a href="{% url 'home' %}">Home</a> / <span>My Profile</span>
+        </nav>
+        <h1>Account Overview</h1>
+    </header>
+
+    <div class="profile-grid">
+        <section class="profile-card identity-section">
+            <div class="user-id-header">
+                <div class="avatar-large">{{ user.first_name|slice:":1" }}</div>
+                <div class="user-meta">
+                    <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+                    <p class="role-badge">Verified Member</p>
+                </div>
+            </div>
+
+            <div class="detail-group">
+                <div class="detail-item">
+                    <label>Username</label>
+                    <p>@{{ user.username }}</p>
+                </div>
+                <div class="detail-item">
+                    <label>Email Address</label>
+                    <p>{{ user.email }}</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="profile-card security-section">
+            <h3>Account Security</h3>
+            <p class="security-hint">Keep your account secure by updating your password regularly.</p>
+
+            <div class="action-stack">
+                <a href="{% url 'change_password' %}" class="btn-security">
+                    <span class="icon">🔒</span> Change Password
+                </a>
+
+                <hr class="action-divider">
+
+                <div class="danger-zone">
+                    <p>Once you delete your account, there is no going back. Please be certain.</p>
+                    <button class="btn-delete" onclick="confirmDelete()">Permanently Delete Account</button>
+                </div>
+            </div>
+        </section>
     </div>
-
-    <div class="profile-actions">
-        <a href="{% url 'change_password' %}" class="btn">Change Password</a>
-        <button class="btn delete-account-btn" onclick="confirmDelete()">Delete Account</button>
-    </div>
-</section>
-
-
+</div>
 
 <script>
     function confirmDelete() {
-        if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+        if (confirm("This will permanently remove your Odyce history. Are you sure?")) {
             fetch("{% url 'delete_account' %}", {
                 method: 'POST',
                 headers: {
@@ -36,7 +69,6 @@
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    alert(data.message);
                     window.location.href = "{% url 'home' %}";
                 } else {
                     alert(data.message);

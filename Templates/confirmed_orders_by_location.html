@@ -1,33 +1,58 @@
 {% extends "dashboard.html" %}
 {% load static %}
 
-<!-- set this to logged in admin -->
+{% block title %}Admin | Confirmed - {{ location }}{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/confirmed_orders_by_location.css' %}">
-<div class="pending-orders-container">
-    <h2>Confirmed Orders for {{ location }}</h2>
+<link rel="stylesheet" href="{% static 'styles/confirmed_orders_by_location.css' %}?v=2">
+
+<div class="confirmed-location-wrapper">
+    <header class="location-header">
+        <nav class="breadcrumb">
+            <a href="{% url 'dashboard' %}">Dashboard</a> / <span>Confirmed Shipments</span>
+        </nav>
+        <h1>Orders in {{ location }}</h1>
+        <p>Verified transactions ready for fulfillment.</p>
+    </header>
 
     {% if orders %}
-        <ul>
+        <div class="orders-stack">
             {% for order in orders %}
-                <li class="order-item">
-                    <p><strong>Order ID:</strong> {{ order.name }} | {{ order.quantity }}</p>
-                    <p><strong>Date:</strong> {{ order.date_created }}</p>
-                    <p><strong>Total:</strong> ${{ order.total }}</p>
-                    <p><strong>Billing Name:</strong> {{ order.billing_name }}</p>
-                    <p><strong>Billing Address:</strong> {{ order.billing_address }}</p>
-                    <p><strong>Phone Number:</strong> {{ order.phone_number }}</p>
-                    <p><strong>Order confirmation code:</strong> {{ order.confirmed_order_code }}</p>
-                    <a href="{% url 'order_details' order.id %}" class="btn btn-confirm">View Details</a>
-                </li>
+                <div class="confirmed-order-card">
+                    <div class="card-header">
+                        <span class="order-id">#ODY-{{ order.id }}</span>
+                        <span class="verified-badge">✓ Verified</span>
+                    </div>
 
+                    <div class="card-body">
+                        <div class="info-group">
+                            <p class="customer-name">{{ order.billing_name }}</p>
+                            <p class="customer-contact">{{ order.phone_number }}</p>
+                            <p class="customer-address">{{ order.billing_address }}</p>
+                        </div>
+
+                        <div class="transaction-group">
+                            <p class="order-summary">{{ order.name }} | <strong>{{ order.quantity }} Unit(s)</strong></p>
+                            <p class="order-total">₦{{ order.total }}</p>
+                            <div class="code-box">
+                                <small>Confirmation Code:</small>
+                                <strong>{{ order.confirmed_order_code }}</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <span class="timestamp">Confirmed on {{ order.date_created|date:"M d, Y" }}</span>
+                        <a href="{% url 'order_details' order.id %}" class="btn-manage">View Full Details</a>
+                    </div>
+                </div>
             {% endfor %}
-        </ul>
+        </div>
     {% else %}
-        <p>No Confirmed orders for this location.</p>
+        <div class="empty-location">
+            <p>No confirmed orders found for <strong>{{ location }}</strong>.</p>
+            <a href="{% url 'dashboard' %}" class="btn-back">Return to Dashboard</a>
+        </div>
     {% endif %}
 </div>
-
-
 {% endblock %}

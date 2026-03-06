@@ -1,0 +1,110 @@
+:root {
+    --danger-crimson: #ef4444;
+    --danger-dark: #b91c1c;
+    --slate-900: #0f172a;
+    --slate-600: #475569;
+    --border-color: #e2e8f0;
+}
+
+.delete-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    font-family: 'Inter', sans-serif;
+}
+
+.delete-card {
+    background: white;
+    max-width: 500px;
+    width: 100%;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--border-color);
+}
+
+.warning-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.warning-header h1 {
+    font-size: 1.5rem;
+    color: var(--slate-900);
+    font-weight: 700;
+}
+
+.warning-body p {
+    color: var(--slate-600);
+    font-size: 0.95rem;
+    margin-top: 15px;
+}
+
+.product-highlight {
+    background: #fef2f2;
+    border: 1px solid #fee2e2;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 25px 0;
+}
+
+.category-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--danger-crimson);
+    font-weight: 700;
+}
+
+.product-title {
+    font-size: 1.25rem;
+    color: var(--slate-900);
+    margin: 5px 0 0;
+}
+
+.danger-notice {
+    font-weight: 600;
+    color: var(--danger-dark) !important;
+}
+
+/* Actions */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.btn-confirm {
+    background-color: var(--danger-crimson);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-confirm:hover {
+    background-color: var(--danger-dark);
+}
+
+.btn-cancel {
+    text-decoration: none;
+    color: var(--slate-600);
+    padding: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+    background: var(--slate-900);
+    color: white;
+}

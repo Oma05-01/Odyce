@@ -1,80 +1,62 @@
 {% extends 'base.html' %}
 {% load static %}
 
-<!-- set this to logged in admin -->
-<!-- check which template it inherits from -->
-
-{% block title %}Order History{% endblock %}
+{% block title %}Odyce | My Order History{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/customer_order_h.css' %}">
-<br><br><br>
-<div class="order-history-container">
-    <h1>Order History</h1>
+<link rel="stylesheet" href="{% static 'styles/customer_order_h.css' %}?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
-    {% if orders %}
-        <div class="order-list">
-            {% for order in orders %}
-                <div class="order-item">
-                    <h2>Order #{{ order.id }}</h2>
-                    <p><strong>Date:</strong> {{ order.date_created|date:"F d, Y" }}</p>
-                    <p><strong>Status:</strong> {{ order.status|title }}</p>
-                    <p><strong>Total Price:</strong> ${{ order.total }}</p>
-                    <a href="#" class="details-button">View Details</a>
-                </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <p>You have no past orders.</p>
-    {% endif %}
+<div class="history-wrapper">
+    <div class="history-container">
+        <header class="history-header">
+            <h1>Your Orders</h1>
+            <p>Review and track your fragrance purchases.</p>
+        </header>
+
+        {% if orders %}
+            <div class="order-timeline">
+                {% for order in orders %}
+                    <div class="order-card">
+                        <div class="order-meta">
+                            <span class="order-number">Order #ODY-{{ order.id }}</span>
+                            <span class="order-date">{{ order.date_created|date:"F d, Y" }}</span>
+                        </div>
+
+                        <div class="order-body">
+                            <div class="order-main-info">
+                                <p class="total-price">₦{{ order.total }}</p>
+                                <p class="item-count">{{ order.quantity }} Item(s) Purchased</p>
+                            </div>
+
+                            <div class="order-status-box">
+                                <span class="status-badge {{ order.status }}">
+                                    {{ order.status|title }}
+                                </span>
+                                {% if order.confirmed_order_code %}
+                                    <div class="confirmation-code">
+                                        <small>Confirmation Code:</small>
+                                        <strong>{{ order.confirmed_order_code }}</strong>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="order-footer">
+                            <a href="#" class="btn-invoice">Download Receipt</a>
+                            <a href="#" class="btn-track">Track Details</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-history">
+                <div class="empty-icon">🛍️</div>
+                <h3>No orders yet</h3>
+                <p>Your scent journey is just beginning.</p>
+                <a href="{% url 'home' %}" class="shop-now-btn">Start Shopping</a>
+            </div>
+        {% endif %}
+    </div>
 </div>
-
-<style>
-    .order-history-container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    .order-history-container h1 {
-        text-align: center;
-        font-size: 32px;
-        color: #333333;
-        margin-bottom: 30px;
-    }
-    .order-list {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-    .order-item {
-        background-color: #f9f9f9;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .order-item h2 {
-        font-size: 24px;
-        color: #555555;
-        margin-bottom: 10px;
-    }
-    .order-item p {
-        font-size: 16px;
-        color: #777777;
-        margin-bottom: 8px;
-    }
-    .details-button {
-        display: inline-block;
-        margin-top: 15px;
-        padding: 10px 20px;
-        font-size: 16px;
-        font-weight: bold;
-        color: #ffffff;
-        background-color: #007bff;
-        text-decoration: none;
-        border-radius: 6px;
-    }
-    .details-button:hover {
-        background-color: #0056b3;
-    }
-</style>
 {% endblock %}

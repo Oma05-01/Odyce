@@ -1,35 +1,41 @@
-{% extends 'dashboard.html'%}
+{% extends 'dashboard.html' %}
+{% load static %}
 
-<!-- set this to logged in admin -->
+{% block title %}Admin | Confirm Deletion{% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirm Delete</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
-</head>
+<link rel="stylesheet" href="{% static 'styles/confirm_delete.css' %}?v=2">
 
+<div class="delete-wrapper">
+    <div class="delete-card">
+        <div class="warning-header">
+            <span class="warning-icon">⚠️</span>
+            <h1>Confirm Deletion</h1>
+        </div>
 
-<body>
-    <div class="container mt-5">
-        <h3>Are you sure you want to delete "{{ product.name }}"?</h3>
-        <p>This action cannot be undone.</p>
+        <div class="warning-body">
+            <p>You are about to permanently remove the following fragrance from the Odyce catalog:</p>
 
-        <form method="POST" action="{% url 'delete_product' product.id %}">
+            <div class="product-highlight">
+                <span class="category-label">{% if product.is_for_men %}Men's Collection{% else %}Women's Collection{% endif %}</span>
+                <h2 class="product-title">{{ product.name }}</h2>
+            </div>
+
+            <p class="danger-notice">This action is irreversible. All associated data and images will be purged.</p>
+        </div>
+
+        <form method="POST" action="{% url 'delete_product' product.id %}" class="delete-form">
             {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Yes, Delete</button>
-            {% if product.is_for_men%}
-                <a href="{% url 'product_list' %}" class="btn btn-secondary">Cancel</a>
-            {% else %}
-                <a href="{% url 'product_list' %}" class="btn btn-secondary">Cancel</a>
-            {% endif %}
+            <div class="action-buttons">
+                <button type="submit" class="btn-confirm">Yes, Delete Permanently</button>
+
+                {% if product.is_for_men %}
+                    <a href="{% url 'men_list' %}" class="btn-cancel">Cancel, Keep Product</a>
+                {% else %}
+                    <a href="{% url 'women_list' %}" class="btn-cancel">Cancel, Keep Product</a>
+                {% endif %}
+            </div>
         </form>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+</div>
 {% endblock %}

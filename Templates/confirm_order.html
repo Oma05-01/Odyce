@@ -1,39 +1,63 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Odyce - Confirm Order{% endblock %}
-
-<!-- set this to logged in user -->
+{% block title %}Odyce | Confirm Your Selection{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/confirm_order.css' %}">
-<div class="checkout-container">
-    <header class="checkout-header">
-        <h1>Confirm Order</h1>
-        <p>Please review the order before confirming.</p>
-    </header>
+<link rel="stylesheet" href="{% static 'styles/confirm_order.css' %}?v=3">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 
-    <section class="order-summary">
-        <h2>Billing Information</h2>
-        <p><strong>Name:</strong> {{ billing_name }}</p>
-        <p><strong>Address:</strong> {{ billing_address }}</p>
-        <p><strong>City:</strong> {{ billing_city }}</p>
-        <p><strong>Phone Number:</strong> {{ phone_number }}</p>
-    </section>
+<div class="confirm-wrapper">
+    <div class="review-card">
+        <header class="review-header">
+            <span class="eyebrow">Final Step</span>
+            <h1>Review Your Selection</h1>
+            <div class="header-line"></div>
+        </header>
 
-    <section class="order-details">
-        <h2>Order Details</h2>
-        <p><strong>Quantity:</strong> {{ quantity }}</p>
-        <p><strong>Total Price:</strong> ${{ final_price }}</p>
-        <p><strong> Download Receipt: </strong> {{ final_price }} </p>
-    </section>
+        <div class="review-grid">
+            <section class="review-section">
+                <h2 class="section-heading">Destination</h2>
+                <div class="data-group">
+                    <label>Recipient</label>
+                    <p>{{ billing_name }}</p>
+                </div>
+                <div class="data-group">
+                    <label>Shipping Address</label>
+                    <p>{{ billing_address }}<br>{{ billing_city }}</p>
+                </div>
+                <div class="data-group">
+                    <label>Contact</label>
+                    <p>{{ phone_number }}</p>
+                </div>
+            </section>
 
-    <form method="POST" action="{% url 'confirm_order' %}">
-        {% csrf_token %}
-        <div class="confirm-buttons">
-            <button type="submit" class="button confirm-btn">Confirm order</button>
+            <section class="review-section">
+                <h2 class="section-heading">Order Summary</h2>
+                <div class="data-group">
+                    <label>Quantity</label>
+                    <p>{{ quantity }} Unit(s)</p>
+                </div>
+
+                <div class="grand-total-box">
+                    <label>Total Investment</label>
+                    <span class="currency">₦</span><span class="price">{{ final_price }}</span>
+                </div>
+            </section>
         </div>
-    </form>
-</div>
 
+        <footer class="review-footer">
+            <form method="POST" action="{% url 'confirm_order' %}">
+                {% csrf_token %}
+                <div class="button-group">
+                    <button type="submit" class="btn-primary-odyce">Confirm & Place Order</button>
+                    <a href="javascript:history.back()" class="btn-secondary-odyce">Modify Details</a>
+                </div>
+            </form>
+            <p class="secure-checkout">
+                <span class="lock-icon">🔒</span> Secure Encryption Active
+            </p>
+        </footer>
+    </div>
+</div>
 {% endblock %}

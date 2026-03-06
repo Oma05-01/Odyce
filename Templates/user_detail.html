@@ -1,37 +1,79 @@
 {% extends 'dashboard.html' %}
 {% load static %}
 
-<!-- set this to logged in admin -->
-
-{% block title %} User Details {% endblock %}
+{% block title %} Admin | User Profile - {{ user.first_name }} {% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/user_detail.css' %}">
-<br> <br> <br>
-<section class="user-details-section">
-    <h1>User Details</h1>
-    <div class="user-info">
-        <p><strong>First Name:</strong> {{ user.first_name }}</p>
-        <p><strong>Last Name:</strong> {{ user.last_name }}</p>
-        <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>Phone Number:</strong> {{ user.phone_number }}</p>
-        <p><strong>Date Created:</strong> {{ user.date_created }}</p>
-        <p><strong>Is Distributor:</strong> {{ user.is_distributor }}</p>
+<link rel="stylesheet" href="{% static 'styles/user_detail.css' %}?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<div class="user-profile-wrapper">
+    <div class="profile-header">
+        <a href="{% url 'view_users' %}" class="back-link">← Back to User Directory</a>
+        <div class="header-main">
+            <div class="profile-avatar large">{{ user.first_name|slice:":1" }}</div>
+            <div class="profile-title">
+                <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+                <p>Member since {{ user.date_created|date:"F Y" }}</p>
+            </div>
+            <div class="profile-status">
+                {% if user.is_distributor %}
+                    <span class="badge distributor">Distributor Partner</span>
+                {% else %}
+                    <span class="badge customer">Retail Customer</span>
+                {% endif %}
+            </div>
+        </div>
     </div>
 
-    <h2>Order History</h2>
-    <ul class="order-list">
-        {% for order in orders %}
-            <li>
-                <strong>Order ID:</strong> {{ order.id }}<br>
-                <strong>Date:</strong> {{ order.date_created }}<br>
-                <strong>Status:</strong> {{ order.status }}<br>
-                <strong>Total:</strong> ${{ order.total }}
-            </li>
-        {% empty %}
-            <p>No orders found for this user.</p>
-        {% endfor %}
-    </ul>
-</section>
+    <div class="profile-grid">
+        <section class="profile-card">
+            <h3>Contact Information</h3>
+            <div class="info-list">
+                <div class="info-item">
+                    <span class="label">Email Address</span>
+                    <span class="value">{{ user.user.email }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Phone Number</span>
+                    <span class="value">{{ user.phone_number|default:"Not provided" }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Shipping Address</span>
+                    <span class="value">{{ user.billing_address|default:"No saved address" }}</span>
+                </div>
+            </div>
+        </section>
 
+        <section class="profile-card orders-wide">
+            <h3>Purchase History</h3>
+            <div class="table-container">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th class="text-right">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td><strong>#ODY-{{ order.id }}</strong></td>
+                            <td>{{ order.date_created|date:"M d, Y" }}</td>
+                            <td><span class="status-dot {{ order.status }}"></span> {{ order.status|title }}</td>
+                            <td class="text-right">₦{{ order.total }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="empty-state">This user hasn't placed any orders yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</div>
 {% endblock %}

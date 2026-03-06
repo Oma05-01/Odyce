@@ -1,47 +1,168 @@
+:root {
+    --primary: #2c3e50;
+    --accent: #ff9e80;
+    --success: #27ae60;
+    --pending: #f39c12;
+    --bg-light: #f8fafc;
+}
 
-    .order-history-container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    .order-history-container h1 {
-        text-align: center;
-        font-size: 32px;
-        color: #333333;
-        margin-bottom: 30px;
-    }
-    .order-list {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-    .order-item {
-        background-color: #f9f9f9;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .order-item h2 {
-        font-size: 24px;
-        color: #555555;
-        margin-bottom: 10px;
-    }
-    .order-item p {
-        font-size: 16px;
-        color: #777777;
-        margin-bottom: 8px;
-    }
-    .details-button {
-        display: inline-block;
-        margin-top: 15px;
-        padding: 10px 20px;
-        font-size: 16px;
-        font-weight: bold;
-        color: #ffffff;
-        background-color: #007bff;
-        text-decoration: none;
-        border-radius: 6px;
-    }
-    .details-button:hover {
-        background-color: #0056b3;
-    }
+.history-wrapper {
+    background-color: var(--bg-light);
+    min-height: 100vh;
+    padding: 100px 20px 60px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.history-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.history-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.history-header h1 {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+
+.history-header p {
+    color: #64748b;
+}
+
+/* Order Cards */
+.order-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.order-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #edf2f7;
+    transition: transform 0.3s ease;
+}
+
+.order-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.order-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.order-number {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.order-date {
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+.order-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.total-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.item-count {
+    color: #64748b;
+    font-size: 0.95rem;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-badge.pending { background: #fff7ed; color: var(--pending); }
+.status-badge.confirmed { background: #ecfdf5; color: var(--success); }
+
+.confirmation-code {
+    margin-top: 10px;
+    text-align: right;
+}
+
+.confirmation-code strong {
+    display: block;
+    color: var(--success);
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+/* Footer Buttons */
+.order-footer {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-invoice, .btn-track {
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.btn-invoice {
+    background: #f1f5f9;
+    color: var(--primary);
+}
+
+.btn-invoice:hover { background: #e2e8f0; }
+
+.btn-track {
+    background: var(--primary);
+    color: #fff;
+}
+
+.btn-track:hover { background: #000; }
+
+/* Empty State */
+.empty-history {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.empty-icon { font-size: 4rem; margin-bottom: 20px; }
+
+.shop-now-btn {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 15px 40px;
+    background: var(--accent);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 600;
+}
+
+@media (max-width: 600px) {
+    .order-body { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .order-card { padding: 20px; }
+}

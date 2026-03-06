@@ -1,42 +1,102 @@
 {% extends 'base.html' %}
 {% load static %}
 
-<!-- set this to logged in user -->
-<!-- check the url here -->
-
-{% block title %} Odyce - Contact Us {% endblock %}
+{% block title %} Odyce | Contact Us {% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<link rel="stylesheet" href="{% static 'styles/contact_us.css' %}">
-</head>
-<body>
+<link rel="stylesheet" href="{% static 'styles/contact_us.css' %}?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
 
-<div class="contact-container">
-    <h1>Contact Us</h1>
+<div class="contact-wrapper">
+    <div class="contact-grid">
 
-    <form action="{% url 'contact_us_messages' %}" method="post">
-        <div class="form-group">
-            <label for="name">Your Name</label>
-            <input type="text" id="name" name="name" required>
-        </div>
+        <aside class="contact-sidebar">
+            <header class="sidebar-header">
+                <h1>Get in Touch</h1>
+                <p>We’d love to hear from you. Reach out for inquiries, partnerships, or just to say hello.</p>
+            </header>
 
-        <div class="form-group">
-            <label for="email">Your Email</label>
-            <input type="email" id="email" name="email" required>
-        </div>
+            <div class="contact-methods">
+                <div class="method-item">
+                    <span class="icon">📍</span>
+                    <div class="method-text">
+                        <h3>Our Studio</h3>
+                        <p>123 Fragrance Lane, Lagos, Nigeria</p>
+                    </div>
+                </div>
+                <div class="method-item">
+                    <span class="icon">✉️</span>
+                    <div class="method-text">
+                        <h3>Email Us</h3>
+                        <p>concierge@odyce.com</p>
+                    </div>
+                </div>
+                <div class="method-item">
+                    <span class="icon">📞</span>
+                    <div class="method-text">
+                        <h3>Call Support</h3>
+                        <p>+234 (0) 800-ODYCE</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
 
-        <div class="form-group">
-            <label for="message">Your Message</label>
-            <textarea id="message" name="message" required></textarea>
-        </div>
+        <section class="contact-form-card">
+            <form id="contact-form" action="{% url 'contact_us' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="full_name">Your Name</label>
+                    <input type="text" id="full_name" name="full_name" placeholder="Enter your full name" required>
+                </div>
 
-        <button type="submit" class="submit-btn">Send Message</button>
-    </form>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="email@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Your Message</label>
+                    <textarea id="message" name="message" placeholder="How can we assist you?" required></textarea>
+                </div>
+
+                <button type="submit" class="btn-send">Send Message</button>
+            </form>
+        </section>
+    </div>
 </div>
 
-</body>
-</html>
+<div id="toast" class="toast">
+    <span id="toast-message"></span>
+</div>
+
+<script>
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
+
+    function showToast(message, type = 'success') {
+        toastMessage.innerText = message;
+        toast.className = `toast show ${type}`;
+        setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 4000);
+    }
+
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        let formData = new FormData(this);
+
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                showToast("Message sent! We'll be in touch soon.", 'success');
+                this.reset();
+            } else {
+                showToast("Oops! Something went wrong. Please try again.", 'error');
+            }
+        });
+    });
+</script>
 {% endblock %}

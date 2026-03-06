@@ -1,25 +1,49 @@
 {% extends 'dashboard.html' %}
 {% load static %}
-{% block title %}Messages{% endblock %}
 
-<!-- edit this page to make it better -->
-<!-- set this to logged in admin -->
+{% block title %}Admin | Customer Inquiries{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/contact-us_messages.css' %}">
-<div class="all-posts-container">
-    <h1>All Messages</h1>
-    <section class="all-articles">
-        <!-- Add loop here to display all posts from database -->
+<link rel="stylesheet" href="{% static 'styles/contact-us_messages.css' %}?v=2">
+
+<div class="messages-page-container">
+    <div class="page-header">
+        <h1>Customer Messages</h1>
+        <p>Manage and respond to inquiries from the "Contact Us" form.</p>
+    </div>
+
+    <section class="messages-list">
         {% for item in messages_ %}
-        <article class="article-item">
-            <h1> Message from {{ item.full_name }}</h1>
-            <h2>{{ item.message }}</h2>
-            <p class="article-date">Published on: <span>{{ item.date_sent }}</span></p>
-            <p class="article-summary">{{ item.summary }}</p>
-        </article>
+        <div class="message-card">
+            <div class="message-meta">
+                <div class="sender-info">
+                    <span class="avatar-circle">{{ item.full_name|slice:":1" }}</span>
+                    <div>
+                        <h2 class="sender-name">{{ item.full_name }}</h2>
+                        <p class="sender-email">{{ item.email|default:"No email provided" }}</p>
+                    </div>
+                </div>
+                <div class="date-badge">
+                    {{ item.date_sent|date:"M d, Y" }} <small>{{ item.date_sent|time:"H:i" }}</small>
+                </div>
+            </div>
+
+            <div class="message-body">
+                <p>"{{ item.message }}"</p>
+            </div>
+
+            <div class="message-actions">
+                <a href="mailto:{{ item.email }}" class="btn-reply">Reply via Email</a>
+                <button class="btn-mark-read">Mark as Resolved</button>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-inbox">
+            <span class="icon">📬</span>
+            <h3>Inbox is empty</h3>
+            <p>You have no new messages from customers at this time.</p>
+        </div>
         {% endfor %}
     </section>
 </div>
-
 {% endblock %}

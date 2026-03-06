@@ -1,61 +1,109 @@
+:root {
+    --text-primary: #1a1a1a;
+    --text-secondary: #64748b;
+    --accent: #ff9e80;
+    --bg-journal: #ffffff;
+}
 
-    .post-container {
-        padding: 40px;
-        max-width: 800px;
-        margin: 20px auto;
-        background-color: #f8f9fa;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+.journal-wrapper {
+    max-width: 750px; /* Narrower width for better reading focus */
+    margin: 60px auto;
+    padding: 0 20px;
+    font-family: 'Poppins', sans-serif;
+}
 
-    .post-container h1 {
-        font-size: 36px;
-        color: #333;
-        margin-bottom: 10px;
-    }
+.article-hero {
+    text-align: center;
+    margin-bottom: 50px;
+}
 
-    .article-date {
-        font-size: 14px;
-        color: #6c757d;
-        margin-bottom: 20px;
-    }
+.breadcrumb {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
 
-    .post-content {
-        font-size: 18px;
-        line-height: 1.6;
-        color: #333;
-    }
+.breadcrumb a { color: var(--accent); text-decoration: none; }
 
-    .button-group {
-        margin-top: 20px;
-        display: flex;
-        gap: 10px;
-    }
+.article-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
 
-    .btn {
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        text-decoration: none;
-        border: none;
-        border-radius: 5px;
-        transition: background-color 0.3s ease;
-    }
+.article-meta {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-style: italic;
+}
 
-    .edit-btn {
-        background-color: #007bff;
-        color: #fff;
-    }
+.article-meta .dot { margin: 0 10px; }
 
-    .edit-btn:hover {
-        background-color: #0056b3;
-    }
+/* Content Styling */
+.article-body {
+    font-family: 'Lora', serif; /* Classic serif for a literary feel */
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #2d3748;
+}
 
-    .delete-btn {
-        background-color: #dc3545;
-        color: #fff;
-    }
+.post-content p {
+    margin-bottom: 25px;
+}
 
-    .delete-btn:hover {
-        background-color: #c82333;
-    }
+/* Admin Toolbar Styling */
+.admin-toolbar {
+    margin-top: 80px;
+    padding: 30px;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.admin-toolbar h3 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+.btn-admin {
+    display: inline-block;
+    padding: 12px 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.3s;
+    border: none;
+}
+
+.edit {
+    background-color: var(--text-primary);
+    color: white;
+    margin-right: 10px;
+}
+
+.delete {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+.delete:hover { background-color: #dc2626; color: white; }
+
+.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 60px;
+    color: var(--text-secondary);
+    text-decoration: none;
+}
+
+@media (max-width: 600px) {
+    .article-title { font-size: 2.2rem; }
+}

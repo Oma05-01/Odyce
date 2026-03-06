@@ -1,67 +1,133 @@
+:root {
+    --slate-900: #0f172a;
+    --slate-700: #334155;
+    --slate-200: #e2e8f0;
+    --accent-pink: #f472b6; /* Subtle distinction for women's section */
+    --white: #ffffff;
+}
 
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
+.admin-form-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
 
-        .container {
-            max-width: 600px; /* Adjust max width of the form */
-            margin: 50px auto; /* Center the form */
-            padding: 20px; /* Add padding */
-            background-color: #ffffff; /* White background */
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
-            border-radius: 8px; /* Rounded corners */
-        }
+.form-header {
+    margin-bottom: 30px;
+}
 
-        h2 {
-            text-align: center; /* Center align title */
-            color: #333; /* Darker text color */
-            margin-bottom: 20px; /* Space below title */
-        }
+.breadcrumb {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--slate-700);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+}
 
-        form {
-            display: flex; /* Flexbox for better layout */
-            flex-direction: column; /* Stack elements vertically */
-            gap: 15px; /* Space between elements */
-        }
+.breadcrumb .current {
+    color: var(--accent-pink);
+    font-weight: 600;
+}
 
-        label {
-            font-weight: bold; /* Bold labels */
-            color: #555; /* Dark gray color for labels */
-        }
+.form-header h1 {
+    font-size: 1.75rem;
+    color: var(--slate-900);
+}
 
-        input[type="text"],
-        input[type="file"],
-        input[type="number"],
-        textarea {
-            padding: 10px; /* Inner padding */
-            font-size: 16px; /* Font size */
-            border: 1px solid #ccc; /* Light border */
-            border-radius: 5px; /* Rounded corners for inputs */
-            width: 100%; /* Full width */
-            box-sizing: border-box; /* Include padding in width */
-            resize: vertical; /* Allow vertical resizing */
-        }
+.admin-card-form {
+    background: var(--white);
+    padding: 40px;
+    border-radius: 12px;
+    border: 1px solid var(--slate-200);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
 
-        textarea {
-            min-height: 100px; /* Minimum height for the textarea */
-            max-height: 300px; /* Maximum height for the textarea */
-            overflow: auto; /* Show scrollbar if needed */
-        }
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
 
-        button[type="submit"] {
-            padding: 10px; /* Inner padding */
-            font-size: 16px; /* Font size */
-            color: #fff; /* White text */
-            background-color: #333; /* Dark background */
-            border: none; /* Remove default border */
-            border-radius: 5px; /* Rounded corners */
-            cursor: pointer; /* Pointer cursor on hover */
-            transition: background-color 0.3s ease; /* Smooth transition */
-        }
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
 
-        button[type="submit"]:hover {
-            background-color: #555; /* Darker on hover */
-        }
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--slate-700);
+}
+
+.form-group input, 
+.form-group textarea {
+    padding: 12px;
+    border: 1px solid var(--slate-200);
+    border-radius: 8px;
+    font-family: inherit;
+    background: #f8fafc;
+}
+
+.form-group input:focus, 
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent-pink);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.1);
+}
+
+/* Custom File Upload */
+.custom-file-upload input[type="file"] {
+    display: none;
+}
+
+.file-drop-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+    border: 2px dashed var(--slate-200);
+    border-radius: 8px;
+    cursor: pointer;
+    background: #f8fafc;
+}
+
+.file-drop-zone:hover {
+    border-color: var(--accent-pink);
+}
+
+.btn-save {
+    background: var(--slate-900);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-save:hover {
+    background: #000;
+    transform: translateY(-1px);
+}
+
+.btn-back {
+    text-decoration: none;
+    color: var(--slate-700);
+    font-size: 0.9rem;
+    margin-left: 20px;
+}
+
+.alert {
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.alert-success { background: #ecfdf5; color: #065f46; }
+
+@media (max-width: 768px) {
+    .form-row { grid-template-columns: 1fr; }
+}

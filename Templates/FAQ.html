@@ -1,62 +1,80 @@
 {% extends 'base.html' %}
 {% load static %}
 
-<!-- set this to logged in user -->
-
-{% block title %} Odyce - FAQ {% endblock %}
+{% block title %} Odyce | Frequently Asked Questions {% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link href="{% static 'styles/faq.css' %}" rel="stylesheet"/>
-</head>
-<body>
+<link href="{% static 'styles/faq.css' %}?v=2" rel="stylesheet"/>
 
-<div class="faq-container">
-    <h1>Frequently Asked Questions</h1>
+<div class="faq-wrapper">
+    <header class="faq-header">
+        <h1>How can we help?</h1>
+        <p>Everything you need to know about the Odyce experience.</p>
+    </header>
 
-    <div class="faq-item">
-        <h3>What is Odyce Perfume?</h3>
-        <p>Odyce is a luxury perfume brand offering a wide range of scents for both men and women, carefully curated to suit different personalities and preferences.</p>
-    </div>
+    <div class="faq-accordion">
+        <div class="faq-section">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What is Odyce Perfume?</h3>
+                    <span class="plus-icon"></span>
+                </div>
+                <div class="faq-answer">
+                    <p>Odyce is a luxury fragrance house dedicated to artisanal scent creation. Our collection is curated to suit diverse personalities, utilizing premium oils to ensure longevity and a unique sillage.</p>
+                </div>
+            </div>
+        </div>
 
-    <div class="faq-item">
-        <h3>How can I order a product?</h3>
-        <p>You can browse our collection on the homepage or use the navigation bar to explore the categories. Once you've selected a product, click on "Buy Now" and follow the checkout process.</p>
-    </div>
+        <div class="faq-section">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How do I place an order?</h3>
+                    <span class="plus-icon"></span>
+                </div>
+                <div class="faq-answer">
+                    <p>Browse our digital gallery and select your desired fragrance. Once on the product page, click <strong>"Buy Now"</strong>. For distributors, please ensure you are logged in to access bulk pricing.</p>
+                </div>
+            </div>
 
-    <div class="faq-item">
-        <h3>What is your return policy?</h3>
-        <p>If you're not satisfied with your purchase, you may return the product within 30 days for a full refund, provided the product is unopened and in its original condition.</p>
-    </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Do you offer international shipping?</h3>
+                    <span class="plus-icon"></span>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, Odyce ships globally. We utilize premium couriers to ensure your scent arrives safely. Delivery times and fees vary based on your international location.</p>
+                </div>
+            </div>
+        </div>
 
-    <div class="faq-item">
-        <h3>Do you offer international shipping?</h3>
-        <p>Yes, we offer international shipping to selected countries. Shipping fees may vary based on location.</p>
-    </div>
-
-    <div class="faq-item">
-        <h3>How do I track my order?</h3>
-        <p>Once your order is shipped, you will receive a tracking number via email. You can use this number to track your package on our website or the shipping provider’s website.</p>
-    </div>
-
-    <div class="faq-item">
-        <h3>Can I modify my order after placing it?</h3>
-        <p>Orders can only be modified within 24 hours of placement. After that, we process your order, and changes are no longer possible.</p>
+        <div class="faq-section">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What is your return policy?</h3>
+                    <span class="plus-icon"></span>
+                </div>
+                <div class="faq-answer">
+                    <p>Due to the personal nature of fragrances, we accept returns within 30 days only if the security seal is intact and the product is in its original, unopened packaging.</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
-    const faqItems = document.querySelectorAll('.faq-item h3');
+    const questions = document.querySelectorAll('.faq-question');
 
-    faqItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const parent = item.parentNode;
-            parent.classList.toggle('active');
+    questions.forEach(question => {
+        question.addEventListener('click', () => {
+            const item = question.parentElement;
+
+            // Close other open items (Optional: remove this if you want multiple open)
+            document.querySelectorAll('.faq-item').forEach(otherItem => {
+                if (otherItem !== item) otherItem.classList.remove('active');
+            });
+
+            item.classList.toggle('active');
         });
     });
 </script>
-</body>
-</html>
 {% endblock %}

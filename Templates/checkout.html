@@ -3,79 +3,100 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'styles/checkout.css' %}?v=1">
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
-<br><br><br>
-<div class="checkout-container">
-        <h1>Checkout</h1>
-        <p>Please review your order before confirming.</p>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
-    <br><br>
+<div class="checkout-page-wrapper">
+    <div class="checkout-container">
+        <header class="checkout-header">
+            <h1>Review Your Order</h1>
+            <p>Almost there! Please verify your details before proceeding to payment.</p>
+        </header>
 
-    <section class="order-summary">
-        <h2>Billing Information</h2>
-        <p><strong>Name:</strong> {{ billing_name }}</p>
-        <p><strong>Address:</strong> {{ billing_address }}</p>
-        <p><strong>City:</strong> {{ billing_city }}</p>
-        <p><strong>Phone Number:</strong> {{ phone_number }}</p>
-    </section>
+        <div class="checkout-grid">
+            <section class="info-card">
+                <div class="card-header">
+                    <span class="icon">📍</span>
+                    <h2>Shipping & Billing</h2>
+                </div>
+                <div class="card-body">
+                    <p><strong>Recipient:</strong> {{ billing_name }}</p>
+                    <p><strong>Address:</strong> {{ billing_address }}</p>
+                    <p><strong>City:</strong> {{ billing_city }}</p>
+                    <p><strong>Contact:</strong> {{ phone_number }}</p>
+                </div>
+            </section>
 
-    <section class="order-details">
-        <h2>Order Details</h2>
-        <p><strong>Quantity:</strong> {{ quantity }}</p>
-        <p><strong>Total Price:</strong> ${{ final_price }}</p>
-        {% if discount_code %}
-            <p id="discount-message">Discount Applied: <em>{{ discount_code }}</em></p>
-        {% endif %}
-    </section>
-
-    <form method="POST" action="{% url 'checkout' %}">
-        {% csrf_token %}
-        <div class="confirm-buttons">
-            <button type="submit" class="button confirm-btn">Confirm and Proceed to Payment</button>
-            <p class="or-text">Or</p>
-            <button onclick="addToWishlist({{ product_id }})" class="wishlist-btn">Add to Wishlist</button>
+            <section class="info-card">
+                <div class="card-header">
+                    <span class="icon">🛍️</span>
+                    <h2>Order Summary</h2>
+                </div>
+                <div class="card-body">
+                    <p><strong>Quantity:</strong> {{ quantity }} units</p>
+                    {% if discount_code %}
+                        <div id="discount-badge">
+                            Code Applied: <span>{{ discount_code }}</span>
+                        </div>
+                    {% endif %}
+                    <div class="price-highlight">
+                        <span>Total to Pay:</span>
+                        <span class="amount">₦{{ final_price }}</span>
+                    </div>
+                </div>
+            </section>
         </div>
-    </form>
+
+        <form method="POST" action="{% url 'checkout' %}">
+            {% csrf_token %}
+            <div class="confirm-buttons">
+                <button type="submit" class="confirm-btn">Confirm & Pay Now</button>
+                <div class="secondary-actions">
+                    <button type="button" onclick="addToWishlist('{{ product_type }}', {{ product_id }})" class="wishlist-btn">
+                        Save to Wishlist for Later
+                    </button>
+                    <a href="{% url 'home' %}" class="back-link">Cancel and Return to Shop</a>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script>
-    function addToWishlist(productId) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "{% url 'add_to_wishlist' product_id=0 %}".replace('0', productId), true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));  // CSRF protection
+    function addToWishlist(productType, productId) {
+        // Updated to use the new product_type routing
+        const baseUrl = "{% url 'add_to_wishlist' 'TYPE' 0 %}";
+        const finalUrl = baseUrl.replace('TYPE', productType).replace('0', productId);
 
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        var response = JSON.parse(xhr.responseText);
-        if (response.status === "success") {
-          alert(response.message);  // Success alert
-        } else {
-          alert(response.message);  // Error alert
-        }
-      } else {
-        alert("Something went wrong. Please try again.");
-      }
-    };
-
-    var data = JSON.stringify({ product_id: productId });
-    xhr.send(data);
-  }
-
-  function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== "") {
-      var cookies = document.cookie.split(";");
-      for (var i = 0; i < cookies.length; i++) {
-        var cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === (name + "=")) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
+        fetch(finalUrl, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": getCookie('csrftoken'),
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("Could not update wishlist.");
+        });
     }
-    return cookieValue;
-  }
-</script>
 
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+            const cookies = document.cookie.split(";");
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + "=")) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
 {% endblock %}

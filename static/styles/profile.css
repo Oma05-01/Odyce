@@ -1,64 +1,144 @@
+:root {
+    --slate-900: #0f172a;
+    --slate-600: #475569;
+    --slate-100: #f1f5f9;
+    --danger: #ef4444;
+    --border: #e2e8f0;
+}
 
-  /* Profile Section Styling */
-.profile-section {
-    max-width: 600px;
-    margin: 30px auto;
-    padding: 20px;
-    background-color: #fafafa;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+.profile-wrapper {
+    max-width: 900px;
+    margin: 80px auto;
+    padding: 0 20px;
+    font-family: 'Poppins', sans-serif;
 }
-.profile-section h1 {
-    font-size: 26px;
-    margin-bottom: 20px;
-    color: #333;
+
+.profile-header {
+    margin-bottom: 40px;
 }
-.profile-details p {
-    font-size: 18px;
-    margin: 10px 0;
-    color: #555;
+
+.breadcrumb {
+    font-size: 0.8rem;
+    color: var(--slate-600);
+    margin-bottom: 10px;
 }
-.profile-actions {
+
+.breadcrumb a { text-decoration: none; color: var(--slate-900); }
+
+.profile-header h1 {
+    font-size: 2.2rem;
+    color: var(--slate-900);
+    font-weight: 700;
+}
+
+/* Profile Layout */
+.profile-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+.profile-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+/* Identity Styles */
+.user-id-header {
     display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 40px;
 }
-.btn {
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+
+.avatar-large {
+    width: 80px;
+    height: 80px;
+    background: var(--slate-900);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.user-meta h2 { font-size: 1.5rem; color: var(--slate-900); }
+.role-badge { font-size: 0.8rem; color: #10b981; font-weight: 600; }
+
+.detail-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 25px;
+}
+
+.detail-item label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--slate-600);
+    margin-bottom: 5px;
+}
+
+.detail-item p {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--slate-900);
+}
+
+/* Security Styles */
+.security-section h3 { margin-bottom: 15px; }
+.security-hint { font-size: 0.9rem; color: var(--slate-600); margin-bottom: 30px; }
+
+.btn-security {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     text-decoration: none;
-}
-.btn:hover {
-    background-color: #0056b3;
-}
-.delete-account-btn {
-    background-color: #e74c3c;
-}
-.delete-account-btn:hover {
-    background-color: #c0392b;
+    color: var(--slate-900);
+    font-weight: 600;
+    padding: 12px 20px;
+    background: var(--slate-100);
+    border-radius: 10px;
+    transition: 0.3s;
 }
 
-/* Change Password Section Styling */
-.change-password-section {
-    max-width: 600px;
-    margin: 30px auto;
-    padding: 20px;
-    background-color: #fafafa;
+.btn-security:hover { background: var(--border); }
+
+.action-divider {
+    margin: 40px 0;
+    border: 0;
+    border-top: 1px solid var(--border);
+}
+
+.danger-zone p {
+    font-size: 0.85rem;
+    color: var(--slate-600);
+    margin-bottom: 15px;
+}
+
+.btn-delete {
+    background: transparent;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    padding: 10px 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
 }
-.change-password-section h1 {
-    font-size: 26px;
-    margin-bottom: 20px;
-    color: #333;
+
+.btn-delete:hover {
+    background: var(--danger);
+    color: white;
 }
-.change-password-section form {
-    display: flex;
-    flex-direction: column;
+
+@media (max-width: 600px) {
+    .user-id-header { flex-direction: column; text-align: center; }
 }

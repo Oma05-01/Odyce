@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Odyce | Review {{ product.name }}{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'styles/submit_review.css' %}">
+
+<div class="review-submit-wrapper">
+    <div class="review-form-card">
+        <header class="form-header">
+            <h1>The Scent Journey</h1>
+            <p>How did <strong>{{ product.name }}</strong> make you feel?</p>
+            <span class="category-tag">{{ model_name|title }} Collection</span>
+        </header>
+
+        <form method="POST" action="{% url 'submit_review' model_name product.id %}" class="odyce-form">
+            {% csrf_token %}
+
+            <div class="rating-group">
+                <label>Your Rating</label>
+                <div class="star-input">
+                    {% for i in "54321" %}
+                    <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}" required />
+                    <label for="star{{ i }}">★</label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="comment">Tell us more...</label>
+                <textarea id="comment" name="comment" rows="5" placeholder="Longevity, projection, or the compliments you received..." required></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit-review">Publish Impression</button>
+                <a href="javascript:history.back()" class="btn-back">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

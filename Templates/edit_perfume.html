@@ -1,49 +1,78 @@
 {% extends 'dashboard.html' %}
+{% load static %}
 
-<!-- set this to logged in admin -->
-
-{% block title %}Edit Product{% endblock %}
+{% block title %}Admin | Edit {{ product.name }}{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'styles/edit_perfume.css' %}">
-<div class="product-edit-container">
-    <h1>Edit Product</h1>
-    <form method="POST" enctype="multipart/form-data" action="{% url 'edit_product' product.id %}">
-        {% csrf_token %}
+<link rel="stylesheet" href="{% static 'styles/edit_perfume.css' %}?v=2">
 
-        <div class="form-group">
-            <label for="name">Product Name:</label>
-            <input type="text" id="name" name="name" value="{{ product.name }}" required>
-        </div>
+<div class="edit-page-wrapper">
+    <header class="edit-header">
+        <nav class="breadcrumb">
+            <a href="{% url 'dashboard' %}">Dashboard</a> /
+            <a href="{% url 'men_list' %}">Inventory</a> /
+            <span>Edit Product</span>
+        </nav>
+        <h1>Modify Fragrance Details</h1>
+    </header>
 
-        <div class="form-group">
-            <label for="description">Description:</label>
-            <textarea id="description" name="description" required>{{ product.description }}</textarea>
-        </div>
+    <div class="edit-grid">
+        <section class="form-card">
+            <form method="POST" enctype="multipart/form-data" action="{% url 'edit_product' product.id %}">
+                {% csrf_token %}
 
-        <div class="form-group">
-            <label for="price">Price:</label>
-            <input type="number" id="price" name="price" step="0.01" value="{{ product.price }}" required>
-        </div>
-
-        <div class="form-group">
-            <label for="quantity">Quantity:</label>
-            <input type="number" id="quantity" name="quantity" value="{{ product.quantity }}" required>
-        </div>
-
-        <div class="form-group">
-            <label for="image">Product Image:</label>
-            <input type="file" id="image" name="image" accept="image/*">
-            {% if product.image %}
-                <div class="image-preview">
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}" width="100">
+                <div class="form-group">
+                    <label for="name">Product Name</label>
+                    <input type="text" id="name" name="name" value="{{ product.name }}" required>
                 </div>
-            {% endif %}
-        </div>
 
-        <button type="submit" class="btn-primary">Save Changes</button>
-    </form>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="price">Price (₦)</label>
+                        <input type="number" id="price" name="price" step="0.01" value="{{ product.price }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Stock Quantity</label>
+                        <input type="number" id="quantity" name="quantity" value="{{ product.quantity }}" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Fragrance Description</label>
+                    <textarea id="description" name="description" rows="6" required>{{ product.description }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Replace Product Image</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="image" name="image" accept="image/*">
+                        <p class="file-hint">Leave blank to keep the current image. JPG/PNG supported.</p>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-save">Update Fragrance</button>
+                    <a href="javascript:history.back()" class="btn-cancel">Discard Changes</a>
+                </div>
+            </form>
+        </section>
+
+        <aside class="preview-sidebar">
+            <div class="sticky-preview">
+                <h3>Current Visual</h3>
+                <div class="current-image-card">
+                    {% if product.picurl %}
+                        <img src="{{ product.picurl.url }}" alt="{{ product.name }}">
+                    {% else %}
+                        <div class="no-image-placeholder">No Image Available</div>
+                    {% endif %}
+                    <div class="image-meta">
+                        <p><strong>{{ product.name }}</strong></p>
+                        <p class="price-tag">₦{{ product.price }}</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
 </div>
-
-
 {% endblock %}
